@@ -10,28 +10,131 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Dashboard View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="DashboardViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="16:20" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GHI-05-G5q">
+                                <rect key="frame" x="156.5" y="20" width="101" height="48"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lr7-cF-YJe">
+                                <rect key="frame" x="20" y="78" width="374" height="1"/>
+                                <color key="backgroundColor" red="0.16862745098039217" green="0.16862745098039217" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="bz9-7I-wl5"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n5o-Gn-O8T">
+                                <rect key="frame" x="20" y="79" width="374" height="300"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="mOu-hP-Tdn"/>
+                                </constraints>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cDx-If-GVq">
+                                <rect key="frame" x="20" y="378" width="374" height="1"/>
+                                <color key="backgroundColor" red="0.16862745098039217" green="0.16862745098039217" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="D2K-rl-7Uv"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aqua Air 1200 Marine" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CfR-Uv-V7K">
+                                <rect key="frame" x="125.5" y="674" width="163.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lex-yX-F7W">
+                                <rect key="frame" x="20" y="664.5" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="OHr-Ed-IiS"/>
+                                    <constraint firstAttribute="height" constant="40" id="tcw-fL-6tl"/>
+                                </constraints>
+                                <state key="normal" image="arrow_left"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AdW-Nh-9Ec">
+                                <rect key="frame" x="354" y="664.5" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Gc1-lN-Iw9"/>
+                                    <constraint firstAttribute="width" constant="40" id="W01-ra-GI0"/>
+                                </constraints>
+                                <state key="normal" image="arrow_right"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Devices" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Do-WH-C5H">
+                                <rect key="frame" x="172" y="625" width="70" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fyR-4h-Y3a">
+                                <rect key="frame" x="20" y="379" width="374" height="100"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="xzB-aL-m2P"/>
+                                </constraints>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QsY-ff-hMI">
+                                <rect key="frame" x="20" y="478" width="374" height="1"/>
+                                <color key="backgroundColor" red="0.16862745100000001" green="0.16862745100000001" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="3cY-tF-O87"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="fyR-4h-Y3a" firstAttribute="top" secondItem="cDx-If-GVq" secondAttribute="bottom" id="17u-Q0-p7g"/>
+                            <constraint firstItem="fyR-4h-Y3a" firstAttribute="top" secondItem="n5o-Gn-O8T" secondAttribute="bottom" id="1nU-cH-PQV"/>
+                            <constraint firstItem="GHI-05-G5q" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="3Hc-vN-aoo"/>
+                            <constraint firstItem="GHI-05-G5q" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="4xo-Kn-dNE"/>
+                            <constraint firstItem="n5o-Gn-O8T" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="F3C-Jo-sSH"/>
+                            <constraint firstItem="lex-yX-F7W" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Fhe-on-J1C"/>
+                            <constraint firstItem="lex-yX-F7W" firstAttribute="centerY" secondItem="CfR-Uv-V7K" secondAttribute="centerY" id="JKW-vc-BJv"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Lr7-cF-YJe" secondAttribute="trailing" constant="20" id="KFf-fJ-zUm"/>
+                            <constraint firstItem="n5o-Gn-O8T" firstAttribute="top" secondItem="Lr7-cF-YJe" secondAttribute="bottom" id="MAS-ks-Rpo"/>
+                            <constraint firstItem="cDx-If-GVq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="PzS-hX-nsh"/>
+                            <constraint firstItem="Lr7-cF-YJe" firstAttribute="top" secondItem="GHI-05-G5q" secondAttribute="bottom" constant="10" id="RTR-08-ziR"/>
+                            <constraint firstItem="CfR-Uv-V7K" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="SJT-dA-fNy"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="n5o-Gn-O8T" secondAttribute="trailing" constant="20" id="WPK-4T-5Qq"/>
+                            <constraint firstItem="QsY-ff-hMI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="XrK-FS-Lby"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="AdW-Nh-9Ec" secondAttribute="trailing" constant="20" id="bQe-kd-loH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="CfR-Uv-V7K" secondAttribute="bottom" constant="30" id="bhV-8m-7OI"/>
+                            <constraint firstItem="AdW-Nh-9Ec" firstAttribute="centerY" secondItem="CfR-Uv-V7K" secondAttribute="centerY" id="eKS-Sa-eMT"/>
+                            <constraint firstItem="8Do-WH-C5H" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="heW-rJ-sBd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fyR-4h-Y3a" secondAttribute="trailing" constant="20" id="l9o-lU-Zos"/>
+                            <constraint firstAttribute="trailing" secondItem="QsY-ff-hMI" secondAttribute="trailing" constant="20" id="m5C-zH-gJQ"/>
+                            <constraint firstItem="Lr7-cF-YJe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="mo5-70-33T"/>
+                            <constraint firstAttribute="trailing" secondItem="cDx-If-GVq" secondAttribute="trailing" constant="20" id="o3t-kb-bxn"/>
+                            <constraint firstItem="fyR-4h-Y3a" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="ofP-TA-lRg"/>
+                            <constraint firstItem="QsY-ff-hMI" firstAttribute="bottom" secondItem="fyR-4h-Y3a" secondAttribute="bottom" id="qYn-Sm-f5c"/>
+                            <constraint firstItem="CfR-Uv-V7K" firstAttribute="top" secondItem="8Do-WH-C5H" secondAttribute="bottom" constant="25" id="r87-cW-3MO"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="Onh-Ol-Po4"/>
+                    <connections>
+                        <outlet property="barView" destination="n5o-Gn-O8T" id="nc1-FF-IMa"/>
+                        <outlet property="btnView" destination="fyR-4h-Y3a" id="33q-Ob-ncu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1957.9710144927537" y="117.85714285714285"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Base Tab Bar Controller-->
         <scene sceneID="6AT-HJ-C0S">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="3ka-Om-ITT" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="3ka-Om-ITT" customClass="BaseTabBarController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9RQ-AH-PTU">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="9RQ-AH-PTU">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -49,10 +152,10 @@
         <!--Dashboard-->
         <scene sceneID="2GG-Ws-1sP">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aC0-ZX-bnH" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Dashboard" id="EeF-WA-RR7"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aC0-ZX-bnH" customClass="BaseNavigationController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="1" title="Dashboard" image="bottom_normal_Dashboard" selectedImage="bottom_pressed_Dashboard" id="EeF-WA-RR7"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qLX-zG-eHO">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="qLX-zG-eHO">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -68,10 +171,10 @@
         <!--Effects-->
         <scene sceneID="J1r-2o-vzF">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gD4-s0-bDl" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Effects" id="XIg-3q-lCe"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gD4-s0-bDl" customClass="BaseNavigationController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="3" title="Effects" image="bottom_normal_effects" selectedImage="bottom_pressed_effects" id="XIg-3q-lCe"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OKh-Up-USL">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="OKh-Up-USL">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -89,7 +192,7 @@
             <objects>
                 <viewController id="TNV-6C-85F" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jXK-OL-ePF">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="hFK-Vo-b9j"/>
@@ -105,7 +208,7 @@
             <objects>
                 <viewController id="bFa-rj-GJa" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xP8-vp-3m9">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="aH0-J2-YA8"/>
@@ -119,10 +222,10 @@
         <!--Control-->
         <scene sceneID="fua-1I-Jhn">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7wh-uW-a2Y" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Control" id="BWK-ST-3B0"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7wh-uW-a2Y" customClass="BaseNavigationController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="2" title="Control" image="bottom_normal_contral" selectedImage="bottom_pressed_contral" id="BWK-ST-3B0"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="TMh-gH-WMY">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="TMh-gH-WMY">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -138,16 +241,16 @@
         <!--Settings-->
         <scene sceneID="GWg-Jv-3B5">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8SQ-21-eSJ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Settings" id="5Vd-fq-ava"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8SQ-21-eSJ" customClass="BaseNavigationController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="4" title="Settings" image="bottom_normal_setting" selectedImage="bottom_pressed_setting" id="5Vd-fq-ava"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YeZ-uh-EfF">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="YeZ-uh-EfF">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="e13-kH-a0c" kind="relationship" relationship="rootViewController" id="wIr-BX-xBF"/>
+                        <segue destination="e13-kH-a0c" kind="relationship" relationship="rootViewController" id="9gg-ID-JNX"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="m5A-vS-MpK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -159,7 +262,7 @@
             <objects>
                 <viewController id="e13-kH-a0c" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jyo-Wg-Zyc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Q9b-GF-iN1"/>
@@ -171,4 +274,16 @@
             <point key="canvasLocation" x="1958" y="-587"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="arrow_left" width="10" height="14"/>
+        <image name="arrow_right" width="10" height="14"/>
+        <image name="bottom_normal_Dashboard" width="22" height="22"/>
+        <image name="bottom_normal_contral" width="26" height="22"/>
+        <image name="bottom_normal_effects" width="24" height="22"/>
+        <image name="bottom_normal_setting" width="22" height="22"/>
+        <image name="bottom_pressed_Dashboard" width="22" height="22"/>
+        <image name="bottom_pressed_contral" width="26" height="22"/>
+        <image name="bottom_pressed_effects" width="24" height="22"/>
+        <image name="bottom_pressed_setting" width="22" height="22"/>
+    </resources>
 </document>

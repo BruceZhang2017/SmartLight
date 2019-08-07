@@ -1,0 +1,6 @@
+module Pods_SmartLight {
+  umbrella header "Pods-SmartLight-umbrella.h"
+
+  export *
+  module * { export * }
+}

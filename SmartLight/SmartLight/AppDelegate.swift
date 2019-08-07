@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        setupBase()
         return true
     }
 
@@ -45,11 +45,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        self.saveContext()
+        if #available(iOS 10.0, *) {
+            self.saveContext()
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
     // MARK: - Core Data stack
 
+    @available(iOS 10.0, *)
     lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
@@ -78,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     // MARK: - Core Data Saving support
-
+    @available(iOS 10.0, *)
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -93,5 +98,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+}
+
+extension AppDelegate {
+    private func setupBase() {
+        UINavigationBar.appearance().barTintColor = Color.main
+        UITabBar.appearance().barTintColor = Color.main
+        UITabBar.appearance().tintColor = Color.yellow
+        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: Color.yellow], for: .selected)
+        UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+    }
+}
+
+extension AppDelegate {
+    /// 判断是否为IphoneX系列
+    static func isSameToIphoneX() -> Bool {
+        if #available(iOS 11.0, *) {
+            if let window = UIApplication.shared.delegate?.window {
+                if (window?.safeAreaInsets.bottom ?? 0) > 0 {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
 }
 

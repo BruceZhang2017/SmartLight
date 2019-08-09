@@ -44,6 +44,10 @@ extension BaseTabBarController: UITabBarControllerDelegate {
                 let storyboard = UIStoryboard(name: String.kSBNameSettings, bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: .kSBIDSettings)
                 (viewControllers?[currentItemTag - 1] as? BaseNavigationController)?.pushViewController(vc, animated: true)
+            } else if viewController.tabBarItem.tag == 3 {
+                let storyboard = UIStoryboard(name: String.kSBNameEffects, bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: .kSBIDEffects)
+                (viewControllers?[currentItemTag - 1] as? BaseNavigationController)?.pushViewController(vc, animated: true)
             }
             return false
         }

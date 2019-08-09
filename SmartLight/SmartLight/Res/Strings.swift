@@ -16,7 +16,17 @@ extension String {
     static let kBarValueView = "BarValueView"
     
     static let kSBNameSettings = "Settings"
+    static let kSBNamePublic = "Public"
+    static let kSBNameEffects = "Effects"
     static let kSBIDSettings = "SettingsTableViewController"
+    static let kSBIDDatePicker = "DatePickerViewController"
+    static let kSBIDEffects = "EffectsTableViewController"
+    static let kSBSegueEffectsSetting = "effectsSetting"
     
     static let kCellIdentifier = "Cell"
+    static let kCellBIdentifier = "CellB"
+    static let kCellCIdentifier = "CellC"
+    static let kEffectsSettingTableViewCell = "EffectsSettingTableViewCell"
+    static let kEffectsSettingBTableViewCell = "EffectsSettingBTableViewCell"
+    static let kEffectsSettingCTableViewCell = "EffectsSettingCTableViewCell"
 }

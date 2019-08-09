@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import SafariServices
 
 class SettingsTableViewController: UITableViewController {
 
@@ -21,6 +22,15 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+    }
+    
+    private func currentDate() -> String {
+        let dateFormate = DateFormatter()
+        dateFormate.dateStyle = .medium
+        dateFormate.timeStyle = .medium
+        let date = Date()
+        let stringOfDate = dateFormate.string(from: date)
+        return stringOfDate
     }
     
     // MARK: - tableView Datasource & delegate
@@ -37,12 +47,37 @@ class SettingsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
         cell.textLabel?.text = Arrays.settingTitles[indexPath.section][indexPath.row]
         cell.accessoryType = indexPath.section == 0 ? .disclosureIndicator : .none
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                cell.detailTextLabel?.text = currentDate()
+            } else if indexPath.row == 2 {
+                cell.detailTextLabel?.text = "English"
+            } else if indexPath.row == 3 {
+                
+            }
+        }
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        if indexPath.section > 0 {
+            return
+        }
+        switch indexPath.row {
+        case 0:
+            let storyboard = UIStoryboard(name: .kSBNamePublic, bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDatePicker) as! DatePickerViewController
+            viewController.modalTransitionStyle = .crossDissolve
+            viewController.modalPresentationStyle = .overCurrentContext
+            present(viewController, animated: false, completion: nil)
+        case 3:
+            let url = URL(string: "https://www.micmol.com/apphelps/")
+            let safariVC = SFSafariViewController(url: url!)
+            present(safariVC, animated: true)
+        default:
+            print(0)
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

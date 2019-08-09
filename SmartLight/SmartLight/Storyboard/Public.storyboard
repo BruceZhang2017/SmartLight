@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Date Picker View Controller-->
+        <scene sceneID="H9u-X2-apy">
+            <objects>
+                <viewController storyboardIdentifier="DatePickerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="50n-U8-L5O" customClass="DatePickerViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="WdT-IP-B5b">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MC6-eu-Qwo">
+                                <rect key="frame" x="0.0" y="596" width="414" height="300"/>
+                                <subviews>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="c1t-VU-pgc">
+                                        <rect key="frame" x="0.0" y="40" width="414" height="216"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="586884473.07156301">
+                                            <!--2019-08-07 15:27:53 +0000-->
+                                        </date>
+                                        <connections>
+                                            <action selector="valueChanged:" destination="50n-U8-L5O" eventType="valueChanged" id="4bk-R4-V55"/>
+                                        </connections>
+                                    </datePicker>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kV-eE-cnT">
+                                        <rect key="frame" x="357" y="5" width="37" height="30"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="done:" destination="50n-U8-L5O" eventType="touchUpInside" id="fwl-GP-Qxd"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="3kV-eE-cnT" firstAttribute="top" secondItem="MC6-eu-Qwo" secondAttribute="top" constant="5" id="EmI-hp-gQY"/>
+                                    <constraint firstAttribute="trailing" secondItem="3kV-eE-cnT" secondAttribute="trailing" constant="20" id="GKQ-Y2-T59"/>
+                                    <constraint firstItem="c1t-VU-pgc" firstAttribute="leading" secondItem="MC6-eu-Qwo" secondAttribute="leading" id="oT8-qJ-yyw"/>
+                                    <constraint firstAttribute="height" constant="300" id="tRF-h4-0GD"/>
+                                    <constraint firstAttribute="trailing" secondItem="c1t-VU-pgc" secondAttribute="trailing" id="uuU-22-lKy"/>
+                                    <constraint firstAttribute="bottom" secondItem="c1t-VU-pgc" secondAttribute="bottom" constant="44" id="ztF-dT-CIm"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="MC6-eu-Qwo" firstAttribute="leading" secondItem="YKK-Iv-3DJ" secondAttribute="leading" id="Z7p-rv-6MP"/>
+                            <constraint firstItem="MC6-eu-Qwo" firstAttribute="trailing" secondItem="YKK-Iv-3DJ" secondAttribute="trailing" id="aka-US-35o"/>
+                            <constraint firstAttribute="bottom" secondItem="MC6-eu-Qwo" secondAttribute="bottom" id="jVV-3q-ru1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="YKK-Iv-3DJ"/>
+                    </view>
+                    <connections>
+                        <outlet property="datePicker" destination="c1t-VU-pgc" id="Eil-z0-cNX"/>
+                        <outlet property="doneButton" destination="3kV-eE-cnT" id="qpM-B5-5Dz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aWE-6s-O3I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="156.52173913043478" y="215.625"/>
+        </scene>
+    </scenes>
+</document>

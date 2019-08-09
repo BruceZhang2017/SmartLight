@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="EffectsSettingCTableViewCell" customModule="SmartLight" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQI-Wj-UT6">
+                        <rect key="frame" x="20" y="22" width="0.0" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MgF-KQ-Efd">
+                        <rect key="frame" x="300" y="22" width="0.0" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="mm6-RD-jCs">
+                        <rect key="frame" x="28" y="7" width="264" height="31"/>
+                        <connections>
+                            <action selector="valueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="3qR-Bw-Ci6"/>
+                        </connections>
+                    </slider>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="mm6-RD-jCs" firstAttribute="leading" secondItem="hQI-Wj-UT6" secondAttribute="trailing" constant="10" id="26r-dD-kB1"/>
+                    <constraint firstAttribute="trailing" secondItem="MgF-KQ-Efd" secondAttribute="trailing" constant="20" id="MYv-Rq-ik8"/>
+                    <constraint firstItem="hQI-Wj-UT6" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Mi2-r3-TmV"/>
+                    <constraint firstItem="MgF-KQ-Efd" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="aF9-Qv-2pp"/>
+                    <constraint firstItem="hQI-Wj-UT6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="cbY-Mn-Wtd"/>
+                    <constraint firstItem="mm6-RD-jCs" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="eNf-XN-6hV"/>
+                    <constraint firstItem="MgF-KQ-Efd" firstAttribute="leading" secondItem="mm6-RD-jCs" secondAttribute="trailing" constant="10" id="xEB-9Z-Eua"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="leftLabel" destination="hQI-Wj-UT6" id="uo8-Ro-Rkp"/>
+                <outlet property="mSlider" destination="mm6-RD-jCs" id="Yhh-Kd-aQF"/>
+                <outlet property="rightLabel" destination="MgF-KQ-Efd" id="El3-Aq-mon"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

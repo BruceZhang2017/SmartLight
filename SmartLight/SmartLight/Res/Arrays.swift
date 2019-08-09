@@ -17,4 +17,5 @@ class Arrays: NSObject {
     static let btnTitles = ["Schedule", "All ON", "ACLM", "Lunnar", "Lightning", "Cloudy"]
     static let settingTitles = [["Date&Time", "Networks", "Language", "Help"], ["Firmware Version"]]
     static let settingHeadTitles = ["", "Device Information"]
+    static let effects = ["Acclimation", "Lunnar", "Lightning", "Cloudy"]
 }

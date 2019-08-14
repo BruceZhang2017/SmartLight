@@ -43,7 +43,9 @@ class DashboardViewController: BaseViewController {
     // MARK: - Action
     
     @objc private func pushToMenu() {
-        
+        let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceList) as! DeviceListViewController
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func pushToQRCode() {

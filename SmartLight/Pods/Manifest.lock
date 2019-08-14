@@ -1,20 +1,24 @@
 PODS:
   - SnapKit (4.2.0)
   - Then (2.5.0)
+  - Toaster (2.2.0)
 
 DEPENDENCIES:
   - SnapKit
   - Then
+  - Toaster
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - SnapKit
     - Then
+    - Toaster
 
 SPEC CHECKSUMS:
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   Then: 0157115e883545c77967b452fe74a1d25fb796e1
+  Toaster: c1a81b376edcc2470157b4d1ee1e9341d3b96455
 
-PODFILE CHECKSUM: f0b9ae6fe44e5e97f18425540684b99d9ab82946
+PODFILE CHECKSUM: 98828353ece11b321baa104406d36436f7d36752
 
 COCOAPODS: 1.7.2

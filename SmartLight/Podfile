@@ -4,5 +4,6 @@ target "SmartLight" do
 
 pod 'SnapKit'
 pod 'Then'
+pod 'Toaster'
 
 end

@@ -17,6 +17,17 @@
 		9A101B7022F5C9410033E96B /* SmartLightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101B6F22F5C9410033E96B /* SmartLightTests.swift */; };
 		9A101B7B22F5C9410033E96B /* SmartLightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101B7A22F5C9410033E96B /* SmartLightUITests.swift */; };
 		9A101FFC22FDBEDE000F36D7 /* BashboardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101FFB22FDBEDE000F36D7 /* BashboardCollectionViewCell.swift */; };
+		9A101FFF23004017000F36D7 /* DeviceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101FFE23004017000F36D7 /* DeviceListViewController.swift */; };
+		9A10200123004035000F36D7 /* Device.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A10200023004035000F36D7 /* Device.storyboard */; };
+		9A10200323005CD5000F36D7 /* SearchDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10200223005CD5000F36D7 /* SearchDeviceViewController.swift */; };
+		9A10200523005F58000F36D7 /* WIFIListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10200423005F57000F36D7 /* WIFIListViewController.swift */; };
+		9A1020072300660E000F36D7 /* DeviceListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1020062300660E000F36D7 /* DeviceListTableViewCell.swift */; };
+		9A10200A230066BF000F36D7 /* DeviceListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A102009230066BF000F36D7 /* DeviceListModel.swift */; };
+		9A10200C23006703000F36D7 /* DeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10200B23006703000F36D7 /* DeviceModel.swift */; };
+		9A1020112302F296000F36D7 /* ControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1020102302F296000F36D7 /* ControlViewController.swift */; };
+		9A1020132302F38D000F36D7 /* Control.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A1020122302F38D000F36D7 /* Control.storyboard */; };
+		9A10201523030026000F36D7 /* TouchBarValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201423030026000F36D7 /* TouchBarValueView.swift */; };
+		9A10201723030031000F36D7 /* TouchBarValueView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A10201623030031000F36D7 /* TouchBarValueView.xib */; };
 		9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8022F830A600A24DB1 /* Images.swift */; };
 		9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8222F836C800A24DB1 /* BarValueView.swift */; };
 		9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8422F836E500A24DB1 /* BarValueView.xib */; };
@@ -86,6 +97,17 @@
 		9A101B7A22F5C9410033E96B /* SmartLightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartLightUITests.swift; sourceTree = "<group>"; };
 		9A101B7C22F5C9410033E96B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9A101FFB22FDBEDE000F36D7 /* BashboardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BashboardCollectionViewCell.swift; sourceTree = "<group>"; };
+		9A101FFE23004017000F36D7 /* DeviceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListViewController.swift; sourceTree = "<group>"; };
+		9A10200023004035000F36D7 /* Device.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Device.storyboard; sourceTree = "<group>"; };
+		9A10200223005CD5000F36D7 /* SearchDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDeviceViewController.swift; sourceTree = "<group>"; };
+		9A10200423005F57000F36D7 /* WIFIListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WIFIListViewController.swift; sourceTree = "<group>"; };
+		9A1020062300660E000F36D7 /* DeviceListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListTableViewCell.swift; sourceTree = "<group>"; };
+		9A102009230066BF000F36D7 /* DeviceListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListModel.swift; sourceTree = "<group>"; };
+		9A10200B23006703000F36D7 /* DeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModel.swift; sourceTree = "<group>"; };
+		9A1020102302F296000F36D7 /* ControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlViewController.swift; sourceTree = "<group>"; };
+		9A1020122302F38D000F36D7 /* Control.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Control.storyboard; sourceTree = "<group>"; };
+		9A10201423030026000F36D7 /* TouchBarValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBarValueView.swift; sourceTree = "<group>"; };
+		9A10201623030031000F36D7 /* TouchBarValueView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TouchBarValueView.xib; sourceTree = "<group>"; };
 		9A3E1E8022F830A600A24DB1 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		9A3E1E8222F836C800A24DB1 /* BarValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarValueView.swift; sourceTree = "<group>"; };
 		9A3E1E8422F836E500A24DB1 /* BarValueView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BarValueView.xib; sourceTree = "<group>"; };
@@ -223,8 +245,40 @@
 				9A3E1EA422F87CC900A24DB1 /* Settings.storyboard */,
 				9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */,
 				9AA1AC3622FC49420000F6D2 /* Effects.storyboard */,
+				9A10200023004035000F36D7 /* Device.storyboard */,
+				9A1020122302F38D000F36D7 /* Control.storyboard */,
 			);
 			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		9A101FFD23003FC8000F36D7 /* Deivce */ = {
+			isa = PBXGroup;
+			children = (
+				9A101FFE23004017000F36D7 /* DeviceListViewController.swift */,
+				9A1020062300660E000F36D7 /* DeviceListTableViewCell.swift */,
+				9A10200223005CD5000F36D7 /* SearchDeviceViewController.swift */,
+				9A10200423005F57000F36D7 /* WIFIListViewController.swift */,
+			);
+			path = Deivce;
+			sourceTree = "<group>";
+		};
+		9A102008230066AD000F36D7 /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				9A102009230066BF000F36D7 /* DeviceListModel.swift */,
+				9A10200B23006703000F36D7 /* DeviceModel.swift */,
+			);
+			path = Device;
+			sourceTree = "<group>";
+		};
+		9A10200F2302F278000F36D7 /* Control */ = {
+			isa = PBXGroup;
+			children = (
+				9A1020102302F296000F36D7 /* ControlViewController.swift */,
+				9A10201423030026000F36D7 /* TouchBarValueView.swift */,
+				9A10201623030031000F36D7 /* TouchBarValueView.xib */,
+			);
+			path = Control;
 			sourceTree = "<group>";
 		};
 		9A3E1E8822F858F700A24DB1 /* Base */ = {
@@ -300,10 +354,12 @@
 		9A79F64022F66FE100487DC5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9A10200F2302F278000F36D7 /* Control */,
+				9A101FFD23003FC8000F36D7 /* Deivce */,
+				9A3E1E8822F858F700A24DB1 /* Base */,
 				9AA1AC2E22FA997E0000F6D2 /* Public */,
 				9A3E1EA122F8744E00A24DB1 /* Settings */,
 				9AA1AC3322FC490C0000F6D2 /* Effects */,
-				9A3E1E8822F858F700A24DB1 /* Base */,
 				9A79F64122F66FF200487DC5 /* Main */,
 			);
 			path = View;
@@ -346,6 +402,7 @@
 		9AA1AC4A22FD0BAD0000F6D2 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9A102008230066AD000F36D7 /* Device */,
 				9AA1AC4B22FD0BCD0000F6D2 /* Effects */,
 			);
 			path = Model;
@@ -479,9 +536,12 @@
 				9A101B6222F5C9410033E96B /* Assets.xcassets in Resources */,
 				9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */,
 				9AA1AC4322FC67160000F6D2 /* EffectsSettingBTableViewCell.xib in Resources */,
+				9A1020132302F38D000F36D7 /* Control.storyboard in Resources */,
 				9A101B5D22F5C9400033E96B /* Main.storyboard in Resources */,
 				9AA1AC3722FC49420000F6D2 /* Effects.storyboard in Resources */,
 				9A3E1EA522F87CC900A24DB1 /* Settings.storyboard in Resources */,
+				9A10201723030031000F36D7 /* TouchBarValueView.xib in Resources */,
+				9A10200123004035000F36D7 /* Device.storyboard in Resources */,
 				9AA1AC3222FA9BE00000F6D2 /* Public.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,6 +593,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A3E1E9822F85AF700A24DB1 /* UDPClient.swift in Sources */,
+				9A10200A230066BF000F36D7 /* DeviceListModel.swift in Sources */,
+				9A10200C23006703000F36D7 /* DeviceModel.swift in Sources */,
+				9A10200523005F58000F36D7 /* WIFIListViewController.swift in Sources */,
 				9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */,
 				9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */,
 				9A3E1E8A22F8590500A24DB1 /* BaseViewController.swift in Sources */,
@@ -549,18 +612,23 @@
 				9A101B6022F5C9400033E96B /* SmartLight.xcdatamodeld in Sources */,
 				9A3E1E9722F85AF700A24DB1 /* yudpsocket.c in Sources */,
 				9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */,
+				9A10201523030026000F36D7 /* TouchBarValueView.swift in Sources */,
 				9A3E1EA022F86E4300A24DB1 /* BaseTabBarController.swift in Sources */,
 				9A79F63F22F66E8600487DC5 /* Dimension.swift in Sources */,
+				9A1020112302F296000F36D7 /* ControlViewController.swift in Sources */,
 				9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */,
+				9A10200323005CD5000F36D7 /* SearchDeviceViewController.swift in Sources */,
 				9A3E1E9C22F85C2600A24DB1 /* Arrays.swift in Sources */,
 				9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */,
 				9A101B5822F5C9400033E96B /* AppDelegate.swift in Sources */,
 				9AA1AC4D22FD0C130000F6D2 /* EffectsSettingModel.swift in Sources */,
 				9AA1AC4822FC68870000F6D2 /* EffectsSettingCTableViewCell.swift in Sources */,
 				9A3E1E9522F85AF700A24DB1 /* ytcpsocket.c in Sources */,
+				9A101FFF23004017000F36D7 /* DeviceListViewController.swift in Sources */,
 				9A79F63A22F668F100487DC5 /* UIKit+Extension.swift in Sources */,
 				9A101FFC22FDBEDE000F36D7 /* BashboardCollectionViewCell.swift in Sources */,
 				9A3E1EA322F8752D00A24DB1 /* SettingsTableViewController.swift in Sources */,
+				9A1020072300660E000F36D7 /* DeviceListTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

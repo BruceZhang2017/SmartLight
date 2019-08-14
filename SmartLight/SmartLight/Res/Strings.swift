@@ -14,14 +14,19 @@ import UIKit
 
 extension String {
     static let kBarValueView = "BarValueView"
+    static let kTouchBarValueView = "TouchBarValueView"
     
     static let kSBNameSettings = "Settings"
     static let kSBNamePublic = "Public"
     static let kSBNameEffects = "Effects"
+    static let kSBNameDevice = "Device"
     static let kSBIDSettings = "SettingsTableViewController"
     static let kSBIDDatePicker = "DatePickerViewController"
     static let kSBIDEffects = "EffectsTableViewController"
     static let kSBSegueEffectsSetting = "effectsSetting"
+    static let kSBIDDeviceList = "DeviceListViewController"
+    static let kSBIDDeviceSearch = "SearchDeviceViewController"
+    static let kSBSegueWIFIList = "WIFIList"
     
     static let kCellIdentifier = "Cell"
     static let kCellBIdentifier = "CellB"

@@ -5,5 +5,7 @@ target "SmartLight" do
 pod 'SnapKit'
 pod 'Then'
 pod 'Toaster'
+pod 'EFQRCode', '~> 5.0.0'
+#pod 'swiftScan'
 
 end

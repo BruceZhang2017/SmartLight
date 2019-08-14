@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import EFQRCode
 
 class DashboardViewController: BaseViewController {
     
@@ -49,7 +50,22 @@ class DashboardViewController: BaseViewController {
     }
     
     @objc private func pushToQRCode() {
+        var style = LBXScanViewStyle()
+        style.centerUpOffset = 44
+        style.photoframeAngleStyle = LBXScanViewPhotoframeAngleStyle.Inner
+        style.photoframeLineW = 2
+        style.photoframeAngleW = 18
+        style.photoframeAngleH = 18
+        style.isNeedShowRetangle = false
         
+        style.anmiationStyle = LBXScanViewAnimationStyle.LineMove
+        style.colorAngle = UIColor(red: 0.0/255, green: 200.0/255.0, blue: 20.0/255.0, alpha: 1.0)
+        style.animationImage = UIImage(named: "CodeScan.bundle/qrcode_Scan_weixin_Line")
+        let vc = LBXScanViewController()
+        vc.scanStyle = style
+        vc.scanResultDelegate = self
+        vc.hidesBottomBarWhenPushed = true 
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
 }
@@ -78,6 +94,12 @@ extension DashboardViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+}
+
+extension DashboardViewController: LBXScanViewControllerDelegate {
+    func scanFinished(scanResult: LBXScanResult, error: String?) {
+        NSLog("scanResult:\(scanResult)")
     }
 }
 

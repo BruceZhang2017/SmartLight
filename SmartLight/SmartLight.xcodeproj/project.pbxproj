@@ -28,6 +28,14 @@
 		9A1020132302F38D000F36D7 /* Control.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A1020122302F38D000F36D7 /* Control.storyboard */; };
 		9A10201523030026000F36D7 /* TouchBarValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201423030026000F36D7 /* TouchBarValueView.swift */; };
 		9A10201723030031000F36D7 /* TouchBarValueView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A10201623030031000F36D7 /* TouchBarValueView.xib */; };
+		9A1020202303D26C000F36D7 /* LBXScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1020192303D26C000F36D7 /* LBXScanViewController.swift */; };
+		9A1020212303D26C000F36D7 /* LBXScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201A2303D26C000F36D7 /* LBXScanView.swift */; };
+		9A1020222303D26C000F36D7 /* LBXScanNetAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201B2303D26C000F36D7 /* LBXScanNetAnimation.swift */; };
+		9A1020232303D26C000F36D7 /* LBXScanWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201C2303D26C000F36D7 /* LBXScanWrapper.swift */; };
+		9A1020242303D26C000F36D7 /* LBXScanLineAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201D2303D26C000F36D7 /* LBXScanLineAnimation.swift */; };
+		9A1020252303D26C000F36D7 /* LBXScanViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201E2303D26C000F36D7 /* LBXScanViewStyle.swift */; };
+		9A1020262303D26C000F36D7 /* LBXPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201F2303D26C000F36D7 /* LBXPermissions.swift */; };
+		9A1020282303D506000F36D7 /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A1020272303D506000F36D7 /* CodeScan.bundle */; };
 		9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8022F830A600A24DB1 /* Images.swift */; };
 		9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8222F836C800A24DB1 /* BarValueView.swift */; };
 		9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8422F836E500A24DB1 /* BarValueView.xib */; };
@@ -108,6 +116,14 @@
 		9A1020122302F38D000F36D7 /* Control.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Control.storyboard; sourceTree = "<group>"; };
 		9A10201423030026000F36D7 /* TouchBarValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBarValueView.swift; sourceTree = "<group>"; };
 		9A10201623030031000F36D7 /* TouchBarValueView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TouchBarValueView.xib; sourceTree = "<group>"; };
+		9A1020192303D26C000F36D7 /* LBXScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanViewController.swift; sourceTree = "<group>"; };
+		9A10201A2303D26C000F36D7 /* LBXScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanView.swift; sourceTree = "<group>"; };
+		9A10201B2303D26C000F36D7 /* LBXScanNetAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanNetAnimation.swift; sourceTree = "<group>"; };
+		9A10201C2303D26C000F36D7 /* LBXScanWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanWrapper.swift; sourceTree = "<group>"; };
+		9A10201D2303D26C000F36D7 /* LBXScanLineAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanLineAnimation.swift; sourceTree = "<group>"; };
+		9A10201E2303D26C000F36D7 /* LBXScanViewStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanViewStyle.swift; sourceTree = "<group>"; };
+		9A10201F2303D26C000F36D7 /* LBXPermissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXPermissions.swift; sourceTree = "<group>"; };
+		9A1020272303D506000F36D7 /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
 		9A3E1E8022F830A600A24DB1 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		9A3E1E8222F836C800A24DB1 /* BarValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarValueView.swift; sourceTree = "<group>"; };
 		9A3E1E8422F836E500A24DB1 /* BarValueView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BarValueView.xib; sourceTree = "<group>"; };
@@ -281,6 +297,20 @@
 			path = Control;
 			sourceTree = "<group>";
 		};
+		9A1020182303D18F000F36D7 /* Scan */ = {
+			isa = PBXGroup;
+			children = (
+				9A10201F2303D26C000F36D7 /* LBXPermissions.swift */,
+				9A10201D2303D26C000F36D7 /* LBXScanLineAnimation.swift */,
+				9A10201B2303D26C000F36D7 /* LBXScanNetAnimation.swift */,
+				9A10201A2303D26C000F36D7 /* LBXScanView.swift */,
+				9A1020192303D26C000F36D7 /* LBXScanViewController.swift */,
+				9A10201E2303D26C000F36D7 /* LBXScanViewStyle.swift */,
+				9A10201C2303D26C000F36D7 /* LBXScanWrapper.swift */,
+			);
+			path = Scan;
+			sourceTree = "<group>";
+		};
 		9A3E1E8822F858F700A24DB1 /* Base */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +324,7 @@
 		9A3E1E8B22F85ACE00A24DB1 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9A1020182303D18F000F36D7 /* Scan */,
 				9A3E1E8C22F85AE300A24DB1 /* Socket */,
 			);
 			path = Vendor;
@@ -342,6 +373,7 @@
 		9A79F63B22F669A300487DC5 /* Res */ = {
 			isa = PBXGroup;
 			children = (
+				9A1020272303D506000F36D7 /* CodeScan.bundle */,
 				9A79F63C22F669BD00487DC5 /* Colors.swift */,
 				9A3E1E8022F830A600A24DB1 /* Images.swift */,
 				9A79F63E22F66E8600487DC5 /* Dimension.swift */,
@@ -535,6 +567,7 @@
 				9AA1AC3F22FC64C80000F6D2 /* EffectsSettingTableViewCell.xib in Resources */,
 				9A101B6222F5C9410033E96B /* Assets.xcassets in Resources */,
 				9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */,
+				9A1020282303D506000F36D7 /* CodeScan.bundle in Resources */,
 				9AA1AC4322FC67160000F6D2 /* EffectsSettingBTableViewCell.xib in Resources */,
 				9A1020132302F38D000F36D7 /* Control.storyboard in Resources */,
 				9A101B5D22F5C9400033E96B /* Main.storyboard in Resources */,
@@ -598,6 +631,7 @@
 				9A10200523005F58000F36D7 /* WIFIListViewController.swift in Sources */,
 				9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */,
 				9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */,
+				9A1020222303D26C000F36D7 /* LBXScanNetAnimation.swift in Sources */,
 				9A3E1E8A22F8590500A24DB1 /* BaseViewController.swift in Sources */,
 				9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */,
 				9A3E1E9A22F85AF700A24DB1 /* Socket.swift in Sources */,
@@ -606,9 +640,13 @@
 				9AA1AC3922FC60E70000F6D2 /* EffectsSettingTableViewController.swift in Sources */,
 				9AA1AC3E22FC64C80000F6D2 /* EffectsSettingTableViewCell.swift in Sources */,
 				9A3E1E9622F85AF700A24DB1 /* TCPClient.swift in Sources */,
+				9A1020252303D26C000F36D7 /* LBXScanViewStyle.swift in Sources */,
+				9A1020232303D26C000F36D7 /* LBXScanWrapper.swift in Sources */,
 				9A3E1E9E22F86DBE00A24DB1 /* BaseNavigationController.swift in Sources */,
 				9A3E1E8722F8573300A24DB1 /* Strings.swift in Sources */,
+				9A1020202303D26C000F36D7 /* LBXScanViewController.swift in Sources */,
 				9A3E1E9922F85AF700A24DB1 /* Result.swift in Sources */,
+				9A1020242303D26C000F36D7 /* LBXScanLineAnimation.swift in Sources */,
 				9A101B6022F5C9400033E96B /* SmartLight.xcdatamodeld in Sources */,
 				9A3E1E9722F85AF700A24DB1 /* yudpsocket.c in Sources */,
 				9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */,
@@ -616,6 +654,8 @@
 				9A3E1EA022F86E4300A24DB1 /* BaseTabBarController.swift in Sources */,
 				9A79F63F22F66E8600487DC5 /* Dimension.swift in Sources */,
 				9A1020112302F296000F36D7 /* ControlViewController.swift in Sources */,
+				9A1020262303D26C000F36D7 /* LBXPermissions.swift in Sources */,
+				9A1020212303D26C000F36D7 /* LBXScanView.swift in Sources */,
 				9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */,
 				9A10200323005CD5000F36D7 /* SearchDeviceViewController.swift in Sources */,
 				9A3E1E9C22F85C2600A24DB1 /* Arrays.swift in Sources */,

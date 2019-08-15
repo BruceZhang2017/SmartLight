@@ -1,7 +1,114 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13142" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12042"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <scenes/>
+    <scenes>
+        <!--Preset View Controller-->
+        <scene sceneID="Lc2-4H-ok0">
+            <objects>
+                <viewController storyboardIdentifier="PresetViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="XUi-CR-zVK" customClass="PresetViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aft-FH-BaS">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="zaz-xc-Mhm">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="796"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="uOp-gd-ef1" customClass="PresetTableViewCell" customModule="SmartLight" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uOp-gd-ef1" id="5JR-Be-hR9">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UMo-fy-KYu">
+                                                    <rect key="frame" x="20" y="12" width="20" height="20"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="20" id="Vdf-Dt-Cj4"/>
+                                                        <constraint firstAttribute="width" constant="20" id="yWU-d8-6D0"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yOJ-sg-2zn">
+                                                    <rect key="frame" x="60" y="6" width="49" height="32"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <state key="normal" title="Button">
+                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="editName:" destination="uOp-gd-ef1" eventType="touchUpInside" id="vcu-cq-LT3"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="UMo-fy-KYu" firstAttribute="centerY" secondItem="5JR-Be-hR9" secondAttribute="centerY" id="Kht-bV-yIP"/>
+                                                <constraint firstItem="yOJ-sg-2zn" firstAttribute="leading" secondItem="5JR-Be-hR9" secondAttribute="leading" constant="60" id="VCt-VN-Dxj"/>
+                                                <constraint firstItem="UMo-fy-KYu" firstAttribute="leading" secondItem="5JR-Be-hR9" secondAttribute="leading" constant="20" id="n4g-yQ-7AY"/>
+                                                <constraint firstItem="yOJ-sg-2zn" firstAttribute="centerY" secondItem="5JR-Be-hR9" secondAttribute="centerY" id="zkx-XU-gAf"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="leftLConstraint" destination="VCt-VN-Dxj" id="c4Z-G9-oO2"/>
+                                            <outlet property="nameButton" destination="yOJ-sg-2zn" id="TUL-1U-0Jc"/>
+                                            <outlet property="selectImageView" destination="UMo-fy-KYu" id="Wq5-Y3-Nx7"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="XUi-CR-zVK" id="NmZ-U5-PlV"/>
+                                    <outlet property="delegate" destination="XUi-CR-zVK" id="gmb-kL-LnZ"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6B-td-HVu">
+                                <rect key="frame" x="20" y="816" width="52" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Upload">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="upload:" destination="XUi-CR-zVK" eventType="touchUpInside" id="p5C-P1-L4k"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJ1-V1-FUr">
+                                <rect key="frame" x="347" y="816" width="47" height="32"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="deletePattern:" destination="XUi-CR-zVK" eventType="touchUpInside" id="GTj-Gw-5OH"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="WJ1-V1-FUr" firstAttribute="top" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="20" id="5PG-qo-YOJ"/>
+                            <constraint firstItem="nyC-6W-aW0" firstAttribute="trailing" secondItem="WJ1-V1-FUr" secondAttribute="trailing" constant="20" id="5aw-ge-w7u"/>
+                            <constraint firstItem="zaz-xc-Mhm" firstAttribute="trailing" secondItem="nyC-6W-aW0" secondAttribute="trailing" id="Ce9-5K-M6Q"/>
+                            <constraint firstItem="zaz-xc-Mhm" firstAttribute="leading" secondItem="nyC-6W-aW0" secondAttribute="leading" id="Xwb-IW-YQ9"/>
+                            <constraint firstItem="V6B-td-HVu" firstAttribute="top" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="20" id="ZgP-KJ-LkF"/>
+                            <constraint firstAttribute="bottom" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="100" id="lUv-cC-3Fb"/>
+                            <constraint firstItem="zaz-xc-Mhm" firstAttribute="top" secondItem="aft-FH-BaS" secondAttribute="top" id="uU9-Q5-UQy"/>
+                            <constraint firstItem="V6B-td-HVu" firstAttribute="leading" secondItem="nyC-6W-aW0" secondAttribute="leading" constant="20" id="x9K-qb-NRw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="nyC-6W-aW0"/>
+                    </view>
+                    <connections>
+                        <outlet property="deleteButton" destination="WJ1-V1-FUr" id="DOk-mR-aCq"/>
+                        <outlet property="tableView" destination="zaz-xc-Mhm" id="aoa-bs-qVt"/>
+                        <outlet property="uploadButton" destination="V6B-td-HVu" id="XVp-45-y28"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YLp-pf-B5e" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="193" y="92"/>
+        </scene>
+    </scenes>
 </document>

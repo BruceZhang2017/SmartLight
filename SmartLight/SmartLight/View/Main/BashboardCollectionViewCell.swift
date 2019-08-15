@@ -56,7 +56,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 if Dimension.screenWidth <= 320 {
                     $0.height.equalTo(220)
                 } else {
-                    $0.height.equalTo(barValueView.snp.width)
+                    $0.height.equalTo(Dimension.screenWidth / 375 * 300)
                 }
             }
         }
@@ -74,7 +74,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.setTitleColor(Color.barBG, for: .normal)
                 $0.setTitleColor(Color.main, for: .selected)
                 $0.titleEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-                $0.titleLabel?.font = UIFont.systemFont(ofSize: Dimension.screenWidth <= 320 ? 6 : 10)
+                $0.titleLabel?.font = UIFont.systemFont(ofSize: Dimension.screenWidth <= 320 ? 6 : 8)
             }
             btnView.addSubview(button)
             let space = (Dimension.screenWidth - 40 - CGFloat(width * Arrays.btnTitles.count)) / 7

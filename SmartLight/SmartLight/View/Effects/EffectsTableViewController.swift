@@ -13,8 +13,6 @@
 import UIKit
 
 class EffectsTableViewController: UITableViewController {
-
-    private var selectedTag = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,16 +72,6 @@ class EffectsTableViewController: UITableViewController {
         vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let vc = segue.destination as? EffectsSettingTableViewController else {
-            return
-        }
-        vc.tag = selectedTag
-     }
 
     // MARK: - Table view data source
     
@@ -100,8 +88,24 @@ class EffectsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        selectedTag = indexPath.row
-        self.performSegue(withIdentifier: .kSBSegueEffectsSetting, sender: self)
+        if indexPath.row == 0 {
+            let allimationVC = AcclimationTableViewController(style: .grouped)
+            allimationVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(allimationVC, animated: true)
+        } else if indexPath.row == 1 {
+            let allimationVC = LunnarTableViewController(style: .grouped)
+            allimationVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(allimationVC, animated: true)
+        } else if indexPath.row == 2 {
+            let allimationVC = LightningTableViewController(style: .grouped)
+            allimationVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(allimationVC, animated: true)
+        } else {
+            let allimationVC = CloudyTableViewController(style: .grouped)
+            allimationVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(allimationVC, animated: true)
+        }
+        
     }
 
 }

@@ -57,6 +57,11 @@
 		9A5B7EF3230457050099E3A9 /* PatternListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF2230457050099E3A9 /* PatternListModel.swift */; };
 		9A5B7EF52304586C0099E3A9 /* PresetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF42304586C0099E3A9 /* PresetTableViewCell.swift */; };
 		9A5B7EF72305ABEF0099E3A9 /* OTAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF62305ABEF0099E3A9 /* OTAViewController.swift */; };
+		9A5B7EF92307E9940099E3A9 /* Acclimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF82307E9930099E3A9 /* Acclimation.swift */; };
+		9A5B7EFD2307EFA70099E3A9 /* LightningTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EFA2307EFA60099E3A9 /* LightningTableViewController.swift */; };
+		9A5B7EFE2307EFA70099E3A9 /* LunnarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EFB2307EFA60099E3A9 /* LunnarTableViewController.swift */; };
+		9A5B7EFF2307EFA70099E3A9 /* CloudyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EFC2307EFA70099E3A9 /* CloudyTableViewController.swift */; };
+		9A5B7F012307F7800099E3A9 /* AcclimationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7F002307F7800099E3A9 /* AcclimationTableViewController.swift */; };
 		9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63722F6684E00487DC5 /* Foundation+Extension.swift */; };
 		9A79F63A22F668F100487DC5 /* UIKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63922F668F100487DC5 /* UIKit+Extension.swift */; };
 		9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63C22F669BD00487DC5 /* Colors.swift */; };
@@ -152,6 +157,11 @@
 		9A5B7EF2230457050099E3A9 /* PatternListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternListModel.swift; sourceTree = "<group>"; };
 		9A5B7EF42304586C0099E3A9 /* PresetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetTableViewCell.swift; sourceTree = "<group>"; };
 		9A5B7EF62305ABEF0099E3A9 /* OTAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAViewController.swift; sourceTree = "<group>"; };
+		9A5B7EF82307E9930099E3A9 /* Acclimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Acclimation.swift; sourceTree = "<group>"; };
+		9A5B7EFA2307EFA60099E3A9 /* LightningTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LightningTableViewController.swift; sourceTree = "<group>"; };
+		9A5B7EFB2307EFA60099E3A9 /* LunnarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LunnarTableViewController.swift; sourceTree = "<group>"; };
+		9A5B7EFC2307EFA70099E3A9 /* CloudyTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudyTableViewController.swift; sourceTree = "<group>"; };
+		9A5B7F002307F7800099E3A9 /* AcclimationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcclimationTableViewController.swift; sourceTree = "<group>"; };
 		9A79F63722F6684E00487DC5 /* Foundation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Foundation+Extension.swift"; sourceTree = "<group>"; };
 		9A79F63922F668F100487DC5 /* UIKit+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Extension.swift"; sourceTree = "<group>"; };
 		9A79F63C22F669BD00487DC5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -293,6 +303,7 @@
 			children = (
 				9A102009230066BF000F36D7 /* DeviceListModel.swift */,
 				9A10200B23006703000F36D7 /* DeviceModel.swift */,
+				9A5B7EF82307E9930099E3A9 /* Acclimation.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -443,6 +454,10 @@
 			children = (
 				9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */,
 				9AA1AC3822FC60E70000F6D2 /* EffectsSettingTableViewController.swift */,
+				9A5B7F002307F7800099E3A9 /* AcclimationTableViewController.swift */,
+				9A5B7EFB2307EFA60099E3A9 /* LunnarTableViewController.swift */,
+				9A5B7EFA2307EFA60099E3A9 /* LightningTableViewController.swift */,
+				9A5B7EFC2307EFA70099E3A9 /* CloudyTableViewController.swift */,
 				9AA1AC3C22FC64C80000F6D2 /* EffectsSettingTableViewCell.swift */,
 				9AA1AC3D22FC64C80000F6D2 /* EffectsSettingTableViewCell.xib */,
 				9AA1AC4022FC67160000F6D2 /* EffectsSettingBTableViewCell.swift */,
@@ -665,17 +680,22 @@
 				9A5B7EF72305ABEF0099E3A9 /* OTAViewController.swift in Sources */,
 				9A3E1E9622F85AF700A24DB1 /* TCPClient.swift in Sources */,
 				9A1020252303D26C000F36D7 /* LBXScanViewStyle.swift in Sources */,
+				9A5B7EFE2307EFA70099E3A9 /* LunnarTableViewController.swift in Sources */,
 				9A1020232303D26C000F36D7 /* LBXScanWrapper.swift in Sources */,
 				9A5B7EF3230457050099E3A9 /* PatternListModel.swift in Sources */,
+				9A5B7EFF2307EFA70099E3A9 /* CloudyTableViewController.swift in Sources */,
 				9A3E1E9E22F86DBE00A24DB1 /* BaseNavigationController.swift in Sources */,
+				9A5B7EF92307E9940099E3A9 /* Acclimation.swift in Sources */,
 				9A3E1E8722F8573300A24DB1 /* Strings.swift in Sources */,
 				9A1020202303D26C000F36D7 /* LBXScanViewController.swift in Sources */,
+				9A5B7F012307F7800099E3A9 /* AcclimationTableViewController.swift in Sources */,
 				9A3E1E9922F85AF700A24DB1 /* Result.swift in Sources */,
 				9A1020242303D26C000F36D7 /* LBXScanLineAnimation.swift in Sources */,
 				9A101B6022F5C9400033E96B /* SmartLight.xcdatamodeld in Sources */,
 				9A3E1E9722F85AF700A24DB1 /* yudpsocket.c in Sources */,
 				9A5B7EF12304553A0099E3A9 /* PresetViewController.swift in Sources */,
 				9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */,
+				9A5B7EFD2307EFA70099E3A9 /* LightningTableViewController.swift in Sources */,
 				9A10201523030026000F36D7 /* TouchBarValueView.swift in Sources */,
 				9A3E1EA022F86E4300A24DB1 /* BaseTabBarController.swift in Sources */,
 				9A79F63F22F66E8600487DC5 /* Dimension.swift in Sources */,

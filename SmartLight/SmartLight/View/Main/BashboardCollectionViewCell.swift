@@ -75,17 +75,45 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.setTitleColor(Color.main, for: .selected)
                 $0.titleEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
                 $0.titleLabel?.font = UIFont.systemFont(ofSize: Dimension.screenWidth <= 320 ? 6 : 8)
+                $0.addTarget(self, action: #selector(handleButtonTapEvent(_:)), for: .touchUpInside)
+                $0.tag = i
             }
             btnView.addSubview(button)
+            buttons.append(button)
             let space = (Dimension.screenWidth - 40 - CGFloat(width * Arrays.btnTitles.count)) / 7
             button.snp.makeConstraints {
                 $0.left.equalTo(space * CGFloat(i + 1) + CGFloat(width * i))
                 $0.width.height.equalTo(width)
                 $0.centerY.equalToSuperview()
             }
-            if i > 2 {
-                button.isSelected = true
-            }
         }
+    }
+    
+    @objc private func handleButtonTapEvent(_ sender: Any) {
+        guard let button = sender as? UIButton else {
+            return
+        }
+        let tag = button.tag
+        if tag < 3 {
+            if buttons[tag].isSelected {
+                if tag == 1 {
+                    if button.title(for: .normal) == "All ON" {
+                        buttons[tag].setTitle("All OFF", for: .normal) // All ON / All OFF
+                    } else {
+                        buttons[tag].setTitle("All ON", for: .normal)
+                    }
+                }
+                return
+            }
+            for i in 0..<3 {
+                if i == tag {
+                    buttons[i].isSelected = true
+                } else {
+                    buttons[i].isSelected = false
+                }
+            }
+            return
+        }
+        button.isSelected = !button.isSelected
     }
 }

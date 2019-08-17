@@ -32,31 +32,10 @@
                             <outlet property="delegate" destination="t2k-eM-vf8" id="WUu-YD-76e"/>
                         </connections>
                     </tableView>
-                    <connections>
-                        <segue destination="pYa-XO-qS6" kind="show" identifier="effectsSetting" id="hef-f7-wrL"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J06-kL-3Dx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="133" y="275"/>
-        </scene>
-        <!--Effects Setting Table View Controller-->
-        <scene sceneID="XdX-O7-bWY">
-            <objects>
-                <tableViewController storyboardIdentifier="EffectsSettingTableViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pYa-XO-qS6" customClass="EffectsSettingTableViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="XWT-Jq-LaW">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                        <connections>
-                            <outlet property="dataSource" destination="pYa-XO-qS6" id="ixW-AF-iNh"/>
-                            <outlet property="delegate" destination="pYa-XO-qS6" id="hXY-XF-tez"/>
-                        </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rL4-c7-8PY" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1007" y="275"/>
         </scene>
     </scenes>
 </document>

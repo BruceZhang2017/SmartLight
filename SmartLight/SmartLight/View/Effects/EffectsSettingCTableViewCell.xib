@@ -20,32 +20,32 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hQI-Wj-UT6">
-                        <rect key="frame" x="20" y="22" width="0.0" height="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <rect key="frame" x="10" y="22" width="0.0" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MgF-KQ-Efd">
-                        <rect key="frame" x="300" y="22" width="0.0" height="0.0"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <rect key="frame" x="310" y="22" width="0.0" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="mm6-RD-jCs">
-                        <rect key="frame" x="28" y="7" width="264" height="31"/>
+                        <rect key="frame" x="48" y="7" width="224" height="31"/>
                         <connections>
                             <action selector="valueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="3qR-Bw-Ci6"/>
                         </connections>
                     </slider>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="mm6-RD-jCs" firstAttribute="leading" secondItem="hQI-Wj-UT6" secondAttribute="trailing" constant="10" id="26r-dD-kB1"/>
-                    <constraint firstAttribute="trailing" secondItem="MgF-KQ-Efd" secondAttribute="trailing" constant="20" id="MYv-Rq-ik8"/>
+                    <constraint firstAttribute="trailing" secondItem="mm6-RD-jCs" secondAttribute="trailing" constant="50" id="L8k-IF-2sI"/>
+                    <constraint firstAttribute="trailing" secondItem="MgF-KQ-Efd" secondAttribute="trailing" constant="10" id="MYv-Rq-ik8"/>
                     <constraint firstItem="hQI-Wj-UT6" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Mi2-r3-TmV"/>
+                    <constraint firstItem="mm6-RD-jCs" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="50" id="QY5-7z-PYb"/>
                     <constraint firstItem="MgF-KQ-Efd" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="aF9-Qv-2pp"/>
-                    <constraint firstItem="hQI-Wj-UT6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="cbY-Mn-Wtd"/>
+                    <constraint firstItem="hQI-Wj-UT6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="cbY-Mn-Wtd"/>
                     <constraint firstItem="mm6-RD-jCs" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="eNf-XN-6hV"/>
-                    <constraint firstItem="MgF-KQ-Efd" firstAttribute="leading" secondItem="mm6-RD-jCs" secondAttribute="trailing" constant="10" id="xEB-9Z-Eua"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

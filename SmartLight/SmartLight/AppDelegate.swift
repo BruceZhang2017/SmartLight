@@ -102,7 +102,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate {
     private func setupBase() {
-        UINavigationBar.appearance().barTintColor = Color.main
         UITabBar.appearance().barTintColor = Color.main
         UITabBar.appearance().tintColor = Color.yellow
         UITabBarItem.appearance().setTitleTextAttributes([.foregroundColor: Color.yellow], for: .selected)

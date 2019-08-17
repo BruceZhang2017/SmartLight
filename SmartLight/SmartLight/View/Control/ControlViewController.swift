@@ -46,6 +46,11 @@ class ControlViewController: UIViewController {
         initFloatView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = Color.main
+    }
+    
     private func setLeftNavigationItem() {
         let leftItem = UIBarButtonItem(image: UIImage.top_menu, style: .plain, target: self, action: #selector(pushToMenu))
         navigationItem.leftBarButtonItem = leftItem

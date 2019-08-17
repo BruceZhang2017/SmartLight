@@ -17,11 +17,61 @@ class SettingsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setLeftNavigationItem()
+        setRightNavigationItem()
+        setTitleView()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = Color.main
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    // MARK: - Private
+    
+    private func setLeftNavigationItem() {
+        let leftItem = UIBarButtonItem(image: UIImage.top_menu, style: .plain, target: self, action: #selector(pushToMenu))
+        navigationItem.leftBarButtonItem = leftItem
+    }
+    
+    private func setRightNavigationItem() {
+        let rightItem = UIBarButtonItem(image: UIImage.top_qrcode, style: .plain, target: self, action: #selector(pushToQRCode))
+        navigationItem.rightBarButtonItem = rightItem
+    }
+    
+    private func setTitleView() {
+        navigationItem.titleView = UIImageView(image: UIImage.top_logo)
+    }
+    
+    // MARK: - Action
+    
+    @objc private func pushToMenu() {
+        let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceList) as! DeviceListViewController
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc private func pushToQRCode() {
+        var style = LBXScanViewStyle()
+        style.centerUpOffset = 44
+        style.photoframeAngleStyle = LBXScanViewPhotoframeAngleStyle.Inner
+        style.photoframeLineW = 2
+        style.photoframeAngleW = 18
+        style.photoframeAngleH = 18
+        style.isNeedShowRetangle = false
         
+        style.anmiationStyle = LBXScanViewAnimationStyle.LineMove
+        style.colorAngle = UIColor(red: 0.0/255, green: 200.0/255.0, blue: 20.0/255.0, alpha: 1.0)
+        style.animationImage = UIImage(named: "CodeScan.bundle/qrcode_Scan_weixin_Line")
+        let vc = LBXScanViewController()
+        vc.scanStyle = style
+        vc.scanResultDelegate = self
+        vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     private func currentDate() -> String {
@@ -46,7 +96,7 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
         cell.textLabel?.text = Arrays.settingTitles[indexPath.section][indexPath.row]
-        cell.accessoryType = indexPath.section == 0 ? .disclosureIndicator : .none
+        cell.accessoryType = indexPath.section == 0 || indexPath.row > 0 ? .disclosureIndicator : .none
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 cell.detailTextLabel?.text = currentDate()
@@ -62,6 +112,9 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section > 0 {
+            if indexPath.row == 1 {
+                self.performSegue(withIdentifier: "OTA", sender: self)
+            }
             return
         }
         switch indexPath.row {
@@ -82,5 +135,11 @@ class SettingsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return Arrays.settingHeadTitles[section]
+    }
+}
+
+extension SettingsTableViewController: LBXScanViewControllerDelegate {
+    func scanFinished(scanResult: LBXScanResult, error: String?) {
+        NSLog("scanResult:\(scanResult)")
     }
 }

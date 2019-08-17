@@ -56,6 +56,7 @@
 		9A5B7EF12304553A0099E3A9 /* PresetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */; };
 		9A5B7EF3230457050099E3A9 /* PatternListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF2230457050099E3A9 /* PatternListModel.swift */; };
 		9A5B7EF52304586C0099E3A9 /* PresetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF42304586C0099E3A9 /* PresetTableViewCell.swift */; };
+		9A5B7EF72305ABEF0099E3A9 /* OTAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF62305ABEF0099E3A9 /* OTAViewController.swift */; };
 		9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63722F6684E00487DC5 /* Foundation+Extension.swift */; };
 		9A79F63A22F668F100487DC5 /* UIKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63922F668F100487DC5 /* UIKit+Extension.swift */; };
 		9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63C22F669BD00487DC5 /* Colors.swift */; };
@@ -150,6 +151,7 @@
 		9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetViewController.swift; sourceTree = "<group>"; };
 		9A5B7EF2230457050099E3A9 /* PatternListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternListModel.swift; sourceTree = "<group>"; };
 		9A5B7EF42304586C0099E3A9 /* PresetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetTableViewCell.swift; sourceTree = "<group>"; };
+		9A5B7EF62305ABEF0099E3A9 /* OTAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTAViewController.swift; sourceTree = "<group>"; };
 		9A79F63722F6684E00487DC5 /* Foundation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Foundation+Extension.swift"; sourceTree = "<group>"; };
 		9A79F63922F668F100487DC5 /* UIKit+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Extension.swift"; sourceTree = "<group>"; };
 		9A79F63C22F669BD00487DC5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				9A3E1EA222F8752D00A24DB1 /* SettingsTableViewController.swift */,
+				9A5B7EF62305ABEF0099E3A9 /* OTAViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				9AA1AC3522FC492B0000F6D2 /* EffectsTableViewController.swift in Sources */,
 				9AA1AC3922FC60E70000F6D2 /* EffectsSettingTableViewController.swift in Sources */,
 				9AA1AC3E22FC64C80000F6D2 /* EffectsSettingTableViewCell.swift in Sources */,
+				9A5B7EF72305ABEF0099E3A9 /* OTAViewController.swift in Sources */,
 				9A3E1E9622F85AF700A24DB1 /* TCPClient.swift in Sources */,
 				9A1020252303D26C000F36D7 /* LBXScanViewStyle.swift in Sources */,
 				9A1020232303D26C000F36D7 /* LBXScanWrapper.swift in Sources */,

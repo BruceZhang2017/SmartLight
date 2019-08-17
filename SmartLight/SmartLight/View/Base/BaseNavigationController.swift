@@ -20,6 +20,11 @@ class BaseNavigationController: UINavigationController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationBar.barTintColor = Color.main
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -28,9 +33,9 @@ class BaseNavigationController: UINavigationController {
         return false
     }
     
-//    override var childForStatusBarStyle: UIViewController? {
-//        return topViewController
-//    }
+    override var childForStatusBarStyle: UIViewController? {
+        return topViewController
+    }
     
     /*
     // MARK: - Navigation

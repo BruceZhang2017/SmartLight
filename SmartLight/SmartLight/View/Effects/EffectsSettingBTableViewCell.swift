@@ -15,6 +15,7 @@ import UIKit
 class EffectsSettingBTableViewCell: UITableViewCell {
 
     @IBOutlet weak var mSlider: UISlider!
+    weak var delegate: EffectsSettingBTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,6 +27,10 @@ class EffectsSettingBTableViewCell: UITableViewCell {
     }
     
     @IBAction func valueChanged(_ sender: Any) {
-        
+        delegate?.valueChanged(value: Int(mSlider.value * 100), tag: tag)
     }
+}
+
+protocol EffectsSettingBTableViewCellDelegate: NSObjectProtocol {
+    func valueChanged(value: Int, tag: Int)
 }

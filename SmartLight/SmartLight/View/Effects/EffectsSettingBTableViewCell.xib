@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="xlz-Mr-YPY">
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" minimumValueImage="brightSmall" maximumValueImage="brightBig" translatesAutoresizingMaskIntoConstraints="NO" id="xlz-Mr-YPY">
                         <rect key="frame" x="18" y="7" width="284" height="31"/>
                         <connections>
                             <action selector="valueChanged:" destination="KGk-i7-Jjw" eventType="valueChanged" id="X9a-B9-vvE"/>
@@ -38,4 +38,8 @@
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="brightBig" width="28" height="28"/>
+        <image name="brightSmall" width="18" height="18"/>
+    </resources>
 </document>

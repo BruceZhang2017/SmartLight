@@ -12,4 +12,31 @@
 
 import Foundation
 
+extension String {
+    func timeStrToInt() -> Int {
+        let array = self.split(separator: ":")
+        if array.count == 2 {
+            return (Int(String(array[0])) ?? 0) * 60 + (Int(String(array[1])) ?? 0)
+        }
+        return 0
+    }
+}
 
+extension Int {
+    func timeIntToStr() -> String {
+        var h = self / 60
+        let m = self % 60
+        if Kit().getDeviceTimeSystemIs12() {
+            if h > 12 {
+                return "\(String(format: "%02i", h - 12)):\(String(format: "%02i", m)) PM"
+            } else {
+                if h == 0 {
+                    h = 12
+                }
+                return "\(String(format: "%02i", h)):\(String(format: "%02i", m)) AM"
+            }
+        } else {
+            return "\(String(format: "%02i", h)):\(String(format: "%02i", m))"
+        }
+    }
+}

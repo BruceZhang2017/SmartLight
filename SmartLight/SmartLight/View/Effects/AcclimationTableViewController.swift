@@ -37,9 +37,11 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath) as! EffectsSettingTableViewCell
+            cell.delegate = self
             if indexPath.row == 0 {
                 cell.mSwitch.isHidden = false
                 cell.desLabel.isHidden = true
+                cell.mSwitch.isOn = acclimation.enable
             } else {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
@@ -48,10 +50,13 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
                 cell.titleLabel.text = "Enable"
             } else if indexPath.row == 1 {
                 cell.titleLabel.text = "Start Date"
+                cell.desLabel.text = acclimation.startTime.timeIntToStr()
             } else if indexPath.row == 2 {
                 cell.titleLabel.text = "End Date"
+                cell.desLabel.text = acclimation.endTime.timeIntToStr()
             } else {
                 cell.titleLabel.text = "End Ramp"
+                cell.desLabel.text =  "\(acclimation.ramp) hour"
             }
             return cell
         }
@@ -87,7 +92,28 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             if indexPath.row == 1 {
-                
+                let storyboard = UIStoryboard(name: .kSBNamePublic, bundle: nil)
+                let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDTimePicker) as! TimePickerViewController
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .overCurrentContext
+                viewController.delegate = self
+                viewController.start = true
+                present(viewController, animated: false, completion: nil)
+            } else if indexPath.row == 2 {
+                let storyboard = UIStoryboard(name: .kSBNamePublic, bundle: nil)
+                let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDTimePicker) as! TimePickerViewController
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .overCurrentContext
+                viewController.delegate = self
+                viewController.start = false
+                present(viewController, animated: false, completion: nil)
+            } else if indexPath.row == 3 {
+                let storyboard = UIStoryboard(name: .kSBNamePublic, bundle: nil)
+                let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDCustomPicker) as! CustomPickerViewController
+                viewController.modalTransitionStyle = .crossDissolve
+                viewController.modalPresentationStyle = .overCurrentContext
+                viewController.delegate = self
+                present(viewController, animated: false, completion: nil)
             }
         }
     }
@@ -103,5 +129,34 @@ extension AcclimationTableViewController: EffectsSettingCTableViewCellDelegate {
         }
         acclimation.save()
         tableView.reloadData()
+    }
+}
+
+extension AcclimationTableViewController: TimePickerViewControllerDelegate {
+    func timePickerView(value: String, start: Bool) {
+        let time = value.timeStrToInt()
+        if start {
+            acclimation.startTime = time
+        } else {
+            acclimation.endTime = time
+        }
+        tableView.reloadData()
+        acclimation.save()
+    }
+}
+
+extension AcclimationTableViewController: CustomPickerViewControllerDelegate {
+    func customPickerView(value: Int) {
+        acclimation.ramp = value
+        tableView.reloadData()
+        acclimation.save()
+    }
+}
+
+extension AcclimationTableViewController: EffectsSettingTableViewCellDelegate {
+    func valueChanged(_ value: Bool) {
+        acclimation.enable = value
+        tableView.reloadData()
+        acclimation.save()
     }
 }

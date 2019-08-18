@@ -17,6 +17,7 @@ class EffectsSettingTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var desLabel: UILabel!
     @IBOutlet weak var mSwitch: UISwitch!
+    weak var delegate: EffectsSettingTableViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,5 +31,10 @@ class EffectsSettingTableViewCell: UITableViewCell {
     }
     
     @IBAction func valueChanged(_ sender: Any) {
+        delegate?.valueChanged(mSwitch.isOn)
     }
+}
+
+protocol EffectsSettingTableViewCellDelegate: NSObjectProtocol {
+    func valueChanged(_ value: Bool)
 }

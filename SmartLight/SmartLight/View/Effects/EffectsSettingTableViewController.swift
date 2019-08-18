@@ -24,4 +24,13 @@ class EffectsSettingTableViewController: UITableViewController {
         tableView.register(UINib(nibName: .kEffectsSettingCTableViewCell, bundle: nil), forCellReuseIdentifier: .kCellCIdentifier)
         tableView.tableFooterView = UIView()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = Color.navBG
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
 }

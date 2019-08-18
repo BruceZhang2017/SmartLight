@@ -31,6 +31,7 @@ class PatternListModel: NSObject, NSCoding {
     func save() {
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
         UserDefaults.standard.set(data, forKey: "patterns")
+        UserDefaults.standard.synchronize()
     }
     
     static func load() -> PatternListModel {

@@ -174,7 +174,7 @@ extension DeviceListViewController: DeviceListTableViewCellDelegate {
             }
             self?.model.groups[index].name = name
             self?.tableView.reloadData()
-            self?.model.save()
+             self?.model.save()
         }))
         present(alert, animated: true, completion: nil)
     }

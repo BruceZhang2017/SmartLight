@@ -23,6 +23,8 @@ extension String {
     static let kSBNameControl = "Control"
     static let kSBIDSettings = "SettingsTableViewController"
     static let kSBIDDatePicker = "DatePickerViewController"
+    static let kSBIDTimePicker = "TimePickerViewController"
+    static let kSBIDCustomPicker = "CustomPickerViewController"
     static let kSBIDEffects = "EffectsTableViewController"
     static let kSBSegueEffectsSetting = "effectsSetting"
     static let kSBIDDeviceList = "DeviceListViewController"

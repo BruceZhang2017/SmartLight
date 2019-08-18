@@ -68,5 +68,119 @@
             </objects>
             <point key="canvasLocation" x="156.52173913043478" y="215.625"/>
         </scene>
+        <!--Time Picker View Controller-->
+        <scene sceneID="AKD-aq-PyI">
+            <objects>
+                <viewController storyboardIdentifier="TimePickerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ovW-sK-yWj" customClass="TimePickerViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TmF-hL-EOk">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LYy-zA-Phn">
+                                <rect key="frame" x="0.0" y="596" width="414" height="300"/>
+                                <subviews>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-19-25l">
+                                        <rect key="frame" x="0.0" y="40" width="414" height="216"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="586884473.07156301">
+                                            <!--2019-08-07 15:27:53 +0000-->
+                                        </date>
+                                        <connections>
+                                            <action selector="valueChanged:" destination="ovW-sK-yWj" eventType="valueChanged" id="0Zp-xJ-yp4"/>
+                                        </connections>
+                                    </datePicker>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R43-a9-XXI">
+                                        <rect key="frame" x="357" y="5" width="37" height="30"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="done:" destination="ovW-sK-yWj" eventType="touchUpInside" id="5Qk-Bz-ley"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="Tf2-lZ-58c"/>
+                                    <constraint firstAttribute="trailing" secondItem="aGO-19-25l" secondAttribute="trailing" id="chL-Kq-Wkp"/>
+                                    <constraint firstAttribute="bottom" secondItem="aGO-19-25l" secondAttribute="bottom" constant="44" id="csn-cM-jZe"/>
+                                    <constraint firstAttribute="trailing" secondItem="R43-a9-XXI" secondAttribute="trailing" constant="20" id="kMt-hU-5sx"/>
+                                    <constraint firstItem="aGO-19-25l" firstAttribute="leading" secondItem="LYy-zA-Phn" secondAttribute="leading" id="lx2-1j-fC3"/>
+                                    <constraint firstItem="R43-a9-XXI" firstAttribute="top" secondItem="LYy-zA-Phn" secondAttribute="top" constant="5" id="oxG-kH-q3m"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="LYy-zA-Phn" firstAttribute="trailing" secondItem="gmL-jO-qNo" secondAttribute="trailing" id="1fc-1u-X47"/>
+                            <constraint firstItem="LYy-zA-Phn" firstAttribute="leading" secondItem="gmL-jO-qNo" secondAttribute="leading" id="bRU-CF-QEZ"/>
+                            <constraint firstAttribute="bottom" secondItem="LYy-zA-Phn" secondAttribute="bottom" id="n8S-GW-PfM"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gmL-jO-qNo"/>
+                    </view>
+                    <connections>
+                        <outlet property="doneButton" destination="R43-a9-XXI" id="XqN-dT-Bco"/>
+                        <outlet property="timePicker" destination="aGO-19-25l" id="wjV-7U-POE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WIi-MS-SEQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1004" y="216"/>
+        </scene>
+        <!--Custom Picker View Controller-->
+        <scene sceneID="Pbd-WB-KmL">
+            <objects>
+                <viewController storyboardIdentifier="CustomPickerViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="RKE-5n-APZ" customClass="CustomPickerViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="qja-9X-VCv">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MOj-9r-Y7F">
+                                <rect key="frame" x="0.0" y="596" width="414" height="300"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfM-ri-ysu">
+                                        <rect key="frame" x="357" y="5" width="37" height="30"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="done:" destination="RKE-5n-APZ" eventType="touchUpInside" id="kLT-fm-aaa"/>
+                                        </connections>
+                                    </button>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lol-2u-a0h">
+                                        <rect key="frame" x="0.0" y="40" width="414" height="216"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="RKE-5n-APZ" id="5gM-J2-GAK"/>
+                                            <outlet property="delegate" destination="RKE-5n-APZ" id="ZeL-En-2OF"/>
+                                        </connections>
+                                    </pickerView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Lol-2u-a0h" secondAttribute="bottom" constant="44" id="4jH-yt-6hB"/>
+                                    <constraint firstAttribute="height" constant="300" id="PMt-LY-Nv5"/>
+                                    <constraint firstItem="Lol-2u-a0h" firstAttribute="leading" secondItem="MOj-9r-Y7F" secondAttribute="leading" id="cQs-iQ-Tmj"/>
+                                    <constraint firstAttribute="trailing" secondItem="Lol-2u-a0h" secondAttribute="trailing" id="pa8-6v-dbn"/>
+                                    <constraint firstItem="kfM-ri-ysu" firstAttribute="top" secondItem="MOj-9r-Y7F" secondAttribute="top" constant="5" id="rfu-oh-L0q"/>
+                                    <constraint firstAttribute="trailing" secondItem="kfM-ri-ysu" secondAttribute="trailing" constant="20" id="xtU-Wv-LPu"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="MOj-9r-Y7F" firstAttribute="trailing" secondItem="fZn-b6-jjt" secondAttribute="trailing" id="hO6-g6-uKW"/>
+                            <constraint firstItem="MOj-9r-Y7F" firstAttribute="leading" secondItem="fZn-b6-jjt" secondAttribute="leading" id="paU-wu-ch4"/>
+                            <constraint firstAttribute="bottom" secondItem="MOj-9r-Y7F" secondAttribute="bottom" id="pr3-DX-5Rx"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="fZn-b6-jjt"/>
+                    </view>
+                    <connections>
+                        <outlet property="doneButton" destination="kfM-ri-ysu" id="Ndn-bI-V3A"/>
+                        <outlet property="pickerView" destination="Lol-2u-a0h" id="1gV-m3-lJK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ha7-97-7jT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1948" y="216"/>
+        </scene>
     </scenes>
 </document>

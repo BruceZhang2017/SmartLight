@@ -2,22 +2,22 @@
 // Copyright © 2015-2018 Anker Innovations Technology Limited All Rights Reserved.
 // The program and materials is not free. Without our permission, any use, including but not limited to reproduction, retransmission, communication, display, mirror, download, modification, is expressly prohibited. Otherwise, it will be pursued for legal liability.
 // 
-//  Acclimation.swift
+//  Lightning.swift
 //  SmartLight
 //
-//  Created by ANKER on 2019/8/17.
+//  Created by ANKER on 2019/8/18.
 //  Copyright © 2019 PDP-ACC. All rights reserved.
 //
 	
 
 import UIKit
 
-class Acclimation: NSObject, NSCoding {
-    var enable: Bool = false
-    var startTime: Int = 0
-    var endTime: Int = 0
-    var ramp: Int = 0
-    var intesity: [Int] = [0, 0, 0, 0, 0, 0, 0]
+class Lightning: NSObject, NSCoding {
+    var enable = false
+    var startTime = 0
+    var endTime = 0
+    var frequency = 0
+    var intensity = 0
     
     override init() {
         super.init()
@@ -27,8 +27,8 @@ class Acclimation: NSObject, NSCoding {
         aCoder.encode(enable, forKey: "enable")
         aCoder.encode(startTime, forKey: "startTime")
         aCoder.encode(endTime, forKey: "endTime")
-        aCoder.encode(ramp, forKey: "ramp")
-        aCoder.encode(intesity, forKey: "intesity")
+        aCoder.encode(frequency, forKey: "frequency")
+        aCoder.encode(intensity, forKey: "intensity")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -36,21 +36,23 @@ class Acclimation: NSObject, NSCoding {
         enable = aDecoder.decodeBool(forKey: "enable")
         startTime = aDecoder.decodeInteger(forKey: "startTime")
         endTime = aDecoder.decodeInteger(forKey: "endTime")
-        ramp = aDecoder.decodeInteger(forKey: "ramp")
-        intesity = aDecoder.decodeObject(forKey: "intesity") as? [Int] ?? [0, 0, 0, 0, 0, 0, 0]
+        frequency = aDecoder.decodeInteger(forKey: "frequency")
+        intensity = aDecoder.decodeInteger(forKey: "intensity")
     }
     
     func save() {
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        UserDefaults.standard.set(data, forKey: "Acclimation")
+        UserDefaults.standard.set(data, forKey: "Lightning")
         UserDefaults.standard.synchronize()
     }
     
-    static func load() -> Acclimation {
-        if let data = UserDefaults.standard.object(forKey: "Acclimation") as? Data {
-            let model = NSKeyedUnarchiver.unarchiveObject(with: data) as! Acclimation
+    static func load() -> Lightning {
+        if let data = UserDefaults.standard.object(forKey: "Lightning") as? Data {
+            let model = NSKeyedUnarchiver.unarchiveObject(with: data) as! Lightning
             return model
         }
-        return Acclimation()
+        return Lightning()
     }
 }
+
+

@@ -31,6 +31,7 @@ class DeviceListModel: NSObject, NSCoding {
     func save() {
         let data = NSKeyedArchiver.archivedData(withRootObject: self)
         UserDefaults.standard.set(data, forKey: "devices")
+        UserDefaults.standard.synchronize()
     }
     
     static func load() -> DeviceListModel? {
@@ -38,6 +39,6 @@ class DeviceListModel: NSObject, NSCoding {
             let model = NSKeyedUnarchiver.unarchiveObject(with: data) as? DeviceListModel
             return model
         }
-        return nil 
+        return nil
     }
 }

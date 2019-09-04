@@ -16,6 +16,7 @@ class DatePickerViewController: UIViewController {
 
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var doneButton: UIButton!
+    weak var delegate: DatePickerViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,5 +30,10 @@ class DatePickerViewController: UIViewController {
     
     @IBAction func done(_ sender: Any) {
         dismiss(animated: false, completion: nil)
+        delegate?.datePickerView(value: datePicker.date)
     }
+}
+
+protocol DatePickerViewControllerDelegate: NSObjectProtocol {
+    func datePickerView(value: Date)
 }

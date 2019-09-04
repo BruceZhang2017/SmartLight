@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -36,6 +36,7 @@
 		9A1020252303D26C000F36D7 /* LBXScanViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201E2303D26C000F36D7 /* LBXScanViewStyle.swift */; };
 		9A1020262303D26C000F36D7 /* LBXPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A10201F2303D26C000F36D7 /* LBXPermissions.swift */; };
 		9A1020282303D506000F36D7 /* CodeScan.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A1020272303D506000F36D7 /* CodeScan.bundle */; };
+		9A1D8E2C2316C88F000FEBEC /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1D8E2B2316C88F000FEBEC /* TopView.swift */; };
 		9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8022F830A600A24DB1 /* Images.swift */; };
 		9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8222F836C800A24DB1 /* BarValueView.swift */; };
 		9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8422F836E500A24DB1 /* BarValueView.xib */; };
@@ -72,6 +73,8 @@
 		9A79F63A22F668F100487DC5 /* UIKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63922F668F100487DC5 /* UIKit+Extension.swift */; };
 		9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63C22F669BD00487DC5 /* Colors.swift */; };
 		9A79F63F22F66E8600487DC5 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63E22F66E8600487DC5 /* Dimension.swift */; };
+		9A8900A8231F31E3009AF915 /* WIFIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900A7231F31E2009AF915 /* WIFIManager.swift */; };
+		9A8900AA23200490009AF915 /* LangaugeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900A923200490009AF915 /* LangaugeTableViewController.swift */; };
 		9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */; };
 		9AA1AC3222FA9BE00000F6D2 /* Public.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */; };
 		9AA1AC3522FC492B0000F6D2 /* EffectsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */; };
@@ -140,6 +143,7 @@
 		9A10201E2303D26C000F36D7 /* LBXScanViewStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXScanViewStyle.swift; sourceTree = "<group>"; };
 		9A10201F2303D26C000F36D7 /* LBXPermissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LBXPermissions.swift; sourceTree = "<group>"; };
 		9A1020272303D506000F36D7 /* CodeScan.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CodeScan.bundle; sourceTree = "<group>"; };
+		9A1D8E2B2316C88F000FEBEC /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 		9A3E1E8022F830A600A24DB1 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		9A3E1E8222F836C800A24DB1 /* BarValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarValueView.swift; sourceTree = "<group>"; };
 		9A3E1E8422F836E500A24DB1 /* BarValueView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BarValueView.xib; sourceTree = "<group>"; };
@@ -178,6 +182,9 @@
 		9A79F63922F668F100487DC5 /* UIKit+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Extension.swift"; sourceTree = "<group>"; };
 		9A79F63C22F669BD00487DC5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		9A79F63E22F66E8600487DC5 /* Dimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dimension.swift; sourceTree = "<group>"; };
+		9A89007A2319717C009AF915 /* SmartLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartLight.entitlements; sourceTree = "<group>"; };
+		9A8900A7231F31E2009AF915 /* WIFIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WIFIManager.swift; sourceTree = "<group>"; };
+		9A8900A923200490009AF915 /* LangaugeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LangaugeTableViewController.swift; sourceTree = "<group>"; };
 		9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Public.storyboard; sourceTree = "<group>"; };
 		9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsTableViewController.swift; sourceTree = "<group>"; };
@@ -253,6 +260,7 @@
 		9A101B5622F5C9400033E96B /* SmartLight */ = {
 			isa = PBXGroup;
 			children = (
+				9A89007A2319717C009AF915 /* SmartLight.entitlements */,
 				9AA1AC4A22FD0BAD0000F6D2 /* Model */,
 				9A79F64022F66FE100487DC5 /* View */,
 				9A79F63522F6680F00487DC5 /* Kit */,
@@ -327,6 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				9A1020102302F296000F36D7 /* ControlViewController.swift */,
+				9A1D8E2B2316C88F000FEBEC /* TopView.swift */,
 				9A10201423030026000F36D7 /* TouchBarValueView.swift */,
 				9A10201623030031000F36D7 /* TouchBarValueView.xib */,
 				9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */,
@@ -387,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				9A3E1EA222F8752D00A24DB1 /* SettingsTableViewController.swift */,
+				9A8900A923200490009AF915 /* LangaugeTableViewController.swift */,
 				9A5B7EF62305ABEF0099E3A9 /* OTAViewController.swift */,
 			);
 			path = Settings;
@@ -404,6 +414,7 @@
 		9A79F63522F6680F00487DC5 /* Kit */ = {
 			isa = PBXGroup;
 			children = (
+				9A8900A6231F3173009AF915 /* Manage */,
 				9A79F63622F6682800487DC5 /* Extension */,
 			);
 			path = Kit;
@@ -455,6 +466,14 @@
 				9A3E1E8422F836E500A24DB1 /* BarValueView.xib */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		9A8900A6231F3173009AF915 /* Manage */ = {
+			isa = PBXGroup;
+			children = (
+				9A8900A7231F31E2009AF915 /* WIFIManager.swift */,
+			);
+			path = Manage;
 			sourceTree = "<group>";
 		};
 		9AA1AC2E22FA997E0000F6D2 /* Public */ = {
@@ -523,6 +542,7 @@
 				9A101B5022F5C9400033E96B /* Sources */,
 				9A101B5122F5C9400033E96B /* Frameworks */,
 				9A101B5222F5C9400033E96B /* Resources */,
+				16E4354638CD5E4BFF6B0D13 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -582,6 +602,17 @@
 					9A101B5322F5C9400033E96B = {
 						CreatedOnToolsVersion = 10.3;
 						LastSwiftMigration = 1030;
+						SystemCapabilities = {
+							com.apple.AccessWiFi = {
+								enabled = 1;
+							};
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					9A101B6A22F5C9410033E96B = {
 						CreatedOnToolsVersion = 10.3;
@@ -652,6 +683,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		16E4354638CD5E4BFF6B0D13 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E9C3FB0B057FD35AA0F58114 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -681,6 +729,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A1D8E2C2316C88F000FEBEC /* TopView.swift in Sources */,
 				9A3E1E9822F85AF700A24DB1 /* UDPClient.swift in Sources */,
 				9A10200A230066BF000F36D7 /* DeviceListModel.swift in Sources */,
 				9A10200C23006703000F36D7 /* DeviceModel.swift in Sources */,
@@ -714,6 +763,7 @@
 				9A3E1E9922F85AF700A24DB1 /* Result.swift in Sources */,
 				9A1020242303D26C000F36D7 /* LBXScanLineAnimation.swift in Sources */,
 				9A101B6022F5C9400033E96B /* SmartLight.xcdatamodeld in Sources */,
+				9A8900A8231F31E3009AF915 /* WIFIManager.swift in Sources */,
 				9A3E1E9722F85AF700A24DB1 /* yudpsocket.c in Sources */,
 				9A5B7EF12304553A0099E3A9 /* PresetViewController.swift in Sources */,
 				9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */,
@@ -727,6 +777,7 @@
 				9A1020212303D26C000F36D7 /* LBXScanView.swift in Sources */,
 				9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */,
 				9A10200323005CD5000F36D7 /* SearchDeviceViewController.swift in Sources */,
+				9A8900AA23200490009AF915 /* LangaugeTableViewController.swift in Sources */,
 				9A3E1E9C22F85C2600A24DB1 /* Arrays.swift in Sources */,
 				9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */,
 				9A101B5822F5C9400033E96B /* AppDelegate.swift in Sources */,
@@ -917,15 +968,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BVL93LPC7F;
+				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLight;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Vendor/Socket/SmartLight-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -940,15 +992,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BVL93LPC7F;
+				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLight;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Vendor/Socket/SmartLight-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

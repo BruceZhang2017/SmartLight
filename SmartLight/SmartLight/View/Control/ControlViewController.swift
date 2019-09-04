@@ -15,18 +15,14 @@ import UIKit
 class ControlViewController: UIViewController {
 
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var topView: TopView!
     @IBOutlet weak var topManualView: UIView!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var buttonsView: UIView!
-    var drawView: UIView!
-    var dotView: UIView!
-    var floatView: UIView!
-    var drawHeight: CGFloat = 0
-    var currentItem = 0 // 当前的模式
+    
     var patterns: PatternListModel!
     var powerValueLabel: UILabel!
-    var moveTimeLabel: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,18 +33,18 @@ class ControlViewController: UIViewController {
         segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
         segmentedControl.tintColor = UIColor.white
         initBarValueViews()
-        initLabelValueViews()
         initbttonValueViews()
-        initLineView()
-        initForDrawView()
-        initDotView()
         initCircelView() // 初始化圆
-        initFloatView()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     private func setLeftNavigationItem() {
@@ -89,12 +85,13 @@ class ControlViewController: UIViewController {
     }
     
     private func initbttonValueViews() {
-        for i in 0..<9 {
+        let buttonTitles = ["中间-加号", "中间-减号", "中间-返回", "中间-左箭头", "中间-右箭头", "中间-三角形", "中间-垃圾桶", "中间-五角星", "中间-更多"]
+        for i in 0..<buttonTitles.count {
             let button = UIButton(type: .custom).then {
                 $0.addTarget(self, action: #selector(handleEvent(_:)), for: .touchUpInside)
+                $0.setImage(UIImage(named: buttonTitles[i]), for: .normal)
                 $0.tag = i
             }
-            button.backgroundColor = UIColor.black
             let space = (Dimension.screenWidth - 40 - 30 * 9) / 8
             let x = 20 + 30 * CGFloat(i) + space * CGFloat(i)
             buttonsView.addSubview(button)
@@ -103,91 +100,6 @@ class ControlViewController: UIViewController {
                 $0.width.height.equalTo(30)
                 $0.centerY.equalToSuperview()
             }
-        }
-    }
-    
-    private func initLabelValueViews() {
-        let labels = ["12AM", "4AM", "8AM", "12PM", "4PM", "8PM", "12AM"]
-        for i in 0..<labels.count {
-            let label = UILabel().then {
-                $0.textColor = UIColor.darkGray
-                $0.font = UIFont.systemFont(ofSize: 10)
-                $0.text = labels[i]
-            }
-            let w = CGFloat(30 * labels.count)
-            let space = (Dimension.screenWidth - 40 - w) / 6
-            let x = 20 + 30 * CGFloat(i) + space * CGFloat(i)
-            topView.addSubview(label)
-            label.snp.makeConstraints {
-                $0.left.equalTo(x)
-                $0.width.equalTo(30)
-                $0.height.equalTo(20)
-                $0.top.equalTo(20)
-            }
-        }
-    }
-    
-    /// 初始化线
-    private func initLineView() {
-        let lineImageView = UIImageView().then {
-            $0.backgroundColor = Color.line
-        }
-        topView.addSubview(lineImageView)
-        lineImageView.snp.makeConstraints {
-            $0.left.equalTo(20)
-            $0.right.equalTo(-20)
-            $0.height.equalTo(1)
-            $0.top.equalTo(80)
-        }
-    }
-    
-    /// 初始化折线视图
-    private func initForDrawView() {
-        let topHeight = AppDelegate.isSameToIphoneX() ? 88 : 64
-        let bottomHeight = AppDelegate.isSameToIphoneX() ? 83 : 49
-        let height = (Dimension.screenHeight - CGFloat(topHeight + bottomHeight + 1)) / 2
-        drawHeight = height - CGFloat(51 + 40 + 44)
-        drawView = UIView()
-        topView.addSubview(drawView)
-        drawView.snp.makeConstraints {
-            $0.left.equalToSuperview()
-            $0.right.equalToSuperview()
-            $0.top.equalTo(51)
-            $0.height.equalTo(drawHeight)
-        }
-        drawLine()
-    }
-    
-    /// 画线
-    private func drawLine() {
-        let colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
-        for i in 0..<colors.count {
-            let shapeLayer = CAShapeLayer()
-            let path = UIBezierPath()
-            path.move(to: CGPoint(x: 0, y: drawHeight))
-            path.addLine(to: CGPoint(x: 100, y: drawHeight - CGFloat(10 * (i + 1))))
-            path.addLine(to: CGPoint(x: 200, y: drawHeight - CGFloat(11 * (i + 1))))
-            path.addLine(to: CGPoint(x: Dimension.screenWidth - 40, y: drawHeight))
-            shapeLayer.path = path.cgPath
-            shapeLayer.fillColor = UIColor.clear.cgColor
-            shapeLayer.strokeColor = colors[i].cgColor
-            shapeLayer.frame = CGRect(x: 20, y: 0, width: Dimension.screenWidth - 40, height: drawHeight)
-            drawView.layer.addSublayer(shapeLayer)
-        }
-        
-    }
-    
-    /// 点视图
-    private func initDotView() {
-        dotView = UIView().then {
-            $0.backgroundColor = Color.bar6.withAlphaComponent(0.5)
-        }
-        topView.addSubview(dotView)
-        dotView.snp.makeConstraints {
-            $0.left.equalToSuperview().offset(20)
-            $0.right.equalToSuperview().offset(-20)
-            $0.top.equalTo(drawView.snp.bottom)
-            $0.bottom.equalTo(buttonsView.snp.top)
         }
     }
     
@@ -229,54 +141,17 @@ class ControlViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(powerValueLabel.snp.bottom)
         }
-    }
-    
-    private func initFloatView() {
-        floatView = UIView()
-        topView.addSubview(floatView)
-        floatView.snp.makeConstraints {
-            $0.top.equalTo(60)
-            $0.width.equalTo(40)
-            $0.left.equalTo(20)
-            $0.bottom.equalTo(dotView.snp.bottom)
-        }
         
-        moveTimeLabel = UILabel().then {
-            let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 40, height: 20), byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 10, height: 10))
-            let shapeLayer = CAShapeLayer()
-            shapeLayer.path = path.cgPath
-            shapeLayer.fillColor = Color.circleBG.cgColor
-            $0.layer.addSublayer(shapeLayer)
-            $0.textAlignment = .center
-            $0.textColor = UIColor.white
-            $0.font = UIFont.systemFont(ofSize: 8)
+        let lightningImageView = UIImageView().then {
+            $0.image = UIImage(named: "闪电")
         }
-        floatView.addSubview(moveTimeLabel)
-        moveTimeLabel.snp.makeConstraints {
-            $0.left.top.right.equalToSuperview()
-            $0.height.equalTo(20)
+        topManualView.addSubview(lightningImageView)
+        lightningImageView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(powerValueLabel.snp.top).offset(-2)
+            $0.width.equalTo(32)
+            $0.height.equalTo(52)
         }
-        
-        let dotButton = UIButton(type: .custom).then {
-            $0.backgroundColor = Color.bar6.withAlphaComponent(0.5)
-        }
-        floatView.addSubview(dotButton)
-        dotButton.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.top.equalTo(dotView.snp.top)
-        }
-        
-        let middleView = UIView().then {
-            $0.backgroundColor = Color.circleBG.withAlphaComponent(0.5)
-        }
-        floatView.addSubview(middleView)
-        middleView.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.top.equalTo(moveTimeLabel.snp.bottom)
-            $0.bottom.equalTo(dotButton.snp.top)
-        }
-        
     }
     
     // MARK: - Action

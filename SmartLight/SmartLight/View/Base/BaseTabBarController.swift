@@ -21,5 +21,19 @@ class BaseTabBarController: UITabBarController {
     override var prefersStatusBarHidden: Bool {
         return false
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        guard let _ = DeviceListModel.load() else {
+//            tabBar.isUserInteractionEnabled = false
+//            guard let items = tabBar.items else {
+//                return
+//            }
+//            for item in items {
+//                item.isEnabled = false
+//            }
+//            return
+//        }
+    }
 
 }

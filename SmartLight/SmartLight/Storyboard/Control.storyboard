@@ -67,9 +67,9 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6B-td-HVu">
-                                <rect key="frame" x="20" y="816" width="52" height="32"/>
+                                <rect key="frame" x="20" y="816" width="20" height="28"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <state key="normal" title="Upload">
+                                <state key="normal" image="qrcode_send">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -111,4 +111,7 @@
             <point key="canvasLocation" x="193" y="92"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="qrcode_send" width="20" height="28"/>
+    </resources>
 </document>

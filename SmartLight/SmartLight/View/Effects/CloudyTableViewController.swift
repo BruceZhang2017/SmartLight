@@ -66,6 +66,8 @@ class CloudyTableViewController: EffectsSettingTableViewController {
             cell.mSlider.value = Float(cloudy.intensity) / Float(100)
         } else {
             cell.mSlider.value = Float(cloudy.speed) / Float(100)
+            cell.mSlider.minimumValueImage = UIImage(named: "乌龟")
+            cell.mSlider.maximumValueImage = UIImage(named: "兔子")
         }
         return cell
     }

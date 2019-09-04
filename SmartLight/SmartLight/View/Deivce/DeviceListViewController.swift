@@ -31,6 +31,16 @@ class DeviceListViewController: UIViewController {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = Color.main
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+    }
+    
     private func setLeftNavigationItem() {
         let leftItem = UIBarButtonItem(image: UIImage.top_menu, style: .plain, target: self, action: #selector(pushToMenu))
         navigationItem.leftBarButtonItem = leftItem

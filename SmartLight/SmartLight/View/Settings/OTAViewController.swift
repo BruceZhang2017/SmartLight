@@ -20,15 +20,22 @@ class OTAViewController: BaseViewController {
     @IBOutlet weak var fwLabel: UILabel!
     @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var attentionLabel: UILabel!
+    @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var rightLConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        downloadButton.layer.borderColor = Color.main.cgColor
+        downloadButton.layer.borderWidth = 0.5
+        textField.backgroundColor = UIColor.white
+        textField.layer.borderColor = Color.main.cgColor
+        textField.layer.borderWidth = 0.5
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.navBG
+        self.navigationController?.navigationBar.tintColor = Color.main
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

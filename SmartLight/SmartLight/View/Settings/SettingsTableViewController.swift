@@ -14,9 +14,12 @@ import UIKit
 import SafariServices
 
 class SettingsTableViewController: UITableViewController {
+    
+    var currentDate: Date!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        syncDatetime()
         setLeftNavigationItem()
         setRightNavigationItem()
         setTitleView()
@@ -25,6 +28,7 @@ class SettingsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
+        self.navigationController?.navigationBar.tintColor = UIColor.white
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -45,6 +49,20 @@ class SettingsTableViewController: UITableViewController {
     
     private func setTitleView() {
         navigationItem.titleView = UIImageView(image: UIImage.top_logo)
+    }
+    
+    func syncDatetime() {
+        let dateTime = UserDefaults.standard.object(forKey: "datetime") as? TimeInterval ?? 0
+        if dateTime > 0 {
+            currentDate = Date(timeIntervalSince1970: dateTime)
+        } else {
+            currentDate = Date()
+        }
+    }
+    
+    func saveDatetime() {
+        UserDefaults.standard.set(currentDate, forKey: "datetime")
+        UserDefaults.standard.synchronize()
     }
     
     // MARK: - Action
@@ -74,11 +92,10 @@ class SettingsTableViewController: UITableViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func currentDate() -> String {
+    private func currentDate(date: Date) -> String {
         let dateFormate = DateFormatter()
         dateFormate.dateStyle = .medium
         dateFormate.timeStyle = .medium
-        let date = Date()
         let stringOfDate = dateFormate.string(from: date)
         return stringOfDate
     }
@@ -99,7 +116,7 @@ class SettingsTableViewController: UITableViewController {
         cell.accessoryType = indexPath.section == 0 || indexPath.row > 0 ? .disclosureIndicator : .none
         if indexPath.section == 0 {
             if indexPath.row == 0 {
-                cell.detailTextLabel?.text = currentDate()
+                cell.detailTextLabel?.text = currentDate(date: currentDate)
             } else if indexPath.row == 2 {
                 cell.detailTextLabel?.text = "English"
             } else if indexPath.row == 3 {
@@ -121,9 +138,14 @@ class SettingsTableViewController: UITableViewController {
         case 0:
             let storyboard = UIStoryboard(name: .kSBNamePublic, bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDatePicker) as! DatePickerViewController
+            viewController.delegate = self
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .overCurrentContext
-            present(viewController, animated: false, completion: nil)
+            navigationController?.tabBarController?.present(viewController, animated: false, completion: nil)
+        case 2:
+            let viewController = LangaugeTableViewController()
+            viewController.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(viewController, animated: true)
         case 3:
             let url = URL(string: "https://www.micmol.com/apphelps/")
             let safariVC = SFSafariViewController(url: url!)
@@ -141,5 +163,13 @@ class SettingsTableViewController: UITableViewController {
 extension SettingsTableViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
         NSLog("scanResult:\(scanResult)")
+    }
+}
+
+extension SettingsTableViewController: DatePickerViewControllerDelegate {
+    func datePickerView(value: Date) {
+        currentDate = value
+        tableView.reloadData()
+        saveDatetime()
     }
 }

@@ -28,6 +28,7 @@ class EffectsSettingTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.navBG
+        self.navigationController?.navigationBar.tintColor = Color.main
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

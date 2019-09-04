@@ -25,6 +25,12 @@ class PresetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         patterns = PatternListModel.load()
+        if patterns.patterns.count == 0 {
+            let model = PatternModel()
+            model.name = "SPS"
+            model.items = []
+            patterns.patterns.append(model)
+        }
         if patterns.patterns.count > 0 {
             setNavigationRight()
         }
@@ -79,7 +85,7 @@ extension PresetViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath) as! PresetTableViewCell
         cell.nameButton?.setTitle(patterns?.patterns[indexPath.row].name, for: .normal)
-        cell.selectImageView.isHidden = isEdit
+        cell.selectImageView.isHidden = !isEdit
         cell.leftLConstraint.constant = isEdit ? 60 : 20
         cell.selectImageView.image = UIImage(named: current - 1 == indexPath.row ? "circle_selected" : "circle_normal")
         cell.tag = indexPath.row

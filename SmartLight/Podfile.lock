@@ -2,6 +2,7 @@ PODS:
   - Alamofire (4.8.2)
   - EFQRCode (5.0.0):
     - swift_qrcodejs (~> 1.1.1)
+  - IQKeyboardManagerSwift (6.4.0)
   - SnapKit (4.2.0)
   - swift_qrcodejs (1.1.1)
   - Then (2.5.0)
@@ -10,6 +11,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - EFQRCode (~> 5.0.0)
+  - IQKeyboardManagerSwift
   - SnapKit
   - Then
   - Toaster
@@ -18,6 +20,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - EFQRCode
+    - IQKeyboardManagerSwift
     - SnapKit
     - swift_qrcodejs
     - Then
@@ -26,11 +29,12 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   EFQRCode: 07437cfbce3a1e497397a4f3d766c980d8972608
+  IQKeyboardManagerSwift: ed9b04ee0e3067ffba543283462d619f944b05e5
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   swift_qrcodejs: 0bacbfe321a99954c7b8e04c75562007ea4e4f7c
   Then: 0157115e883545c77967b452fe74a1d25fb796e1
   Toaster: c1a81b376edcc2470157b4d1ee1e9341d3b96455
 
-PODFILE CHECKSUM: e7bcf130abe088c3a864a538ec9b458acd58c56e
+PODFILE CHECKSUM: 36c771b05439a910cf30bf4a50acff03ebd0f2b4
 
 COCOAPODS: 1.7.2

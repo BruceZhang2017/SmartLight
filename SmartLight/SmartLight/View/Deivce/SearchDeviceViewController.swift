@@ -13,14 +13,21 @@
 import UIKit
 
 class SearchDeviceViewController: UIViewController {
+    
+    var wifiName = ""
 
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        let wifiManager = WIFIManager()
+        wifiName = wifiManager.getSSID()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = Color.navBG
+        self.navigationController?.navigationBar.tintColor = Color.main
+    }
 
     /*
     // MARK: - Navigation
@@ -41,16 +48,17 @@ extension SearchDeviceViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
-        
+        if let nameLabel = cell.viewWithTag(1) as? UILabel {
+            nameLabel.text = wifiName
+        }
         return cell
     }
-    
     
 }
 
 extension SearchDeviceViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        self.performSegue(withIdentifier: .kSBSegueWIFIList, sender: self)
+        self.performSegue(withIdentifier: .kSBSegueWIFIList, sender: self) 
     }
 }

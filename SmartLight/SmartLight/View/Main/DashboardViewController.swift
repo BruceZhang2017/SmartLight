@@ -16,6 +16,7 @@ import EFQRCode
 class DashboardViewController: BaseViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var welcomeView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,12 @@ class DashboardViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
+//        guard let _ = DeviceListModel.load() else {
+//            navigationItem.leftBarButtonItem?.isEnabled = false
+//            navigationItem.rightBarButtonItem?.isEnabled = false
+//            welcomeView.isHidden = false
+//            return
+//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -77,6 +84,12 @@ class DashboardViewController: BaseViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
+    @IBAction func addDevice(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Device", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceSearch) as! SearchDeviceViewController
+        viewController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension DashboardViewController: UICollectionViewDataSource {

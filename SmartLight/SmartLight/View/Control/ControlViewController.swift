@@ -11,27 +11,32 @@
 	
 
 import UIKit
+import Toaster
 
-class ControlViewController: UIViewController {
+class ControlViewController: BaseViewController {
 
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var topView: TopView!
     @IBOutlet weak var topManualView: UIView!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var buttonsView: UIView!
-    
+    let colors = [Color.yellow, Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
     var patterns: PatternListModel!
+    var currentPattern: PatternModel!
     var powerValueLabel: UILabel!
-    
+    var once = false
+    var currentItem = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        patterns = PatternListModel.load()
+        currentPattern = PatternModel()
+        patterns = PatternListModel.down()
         setLeftNavigationItem()
         setRightNavigationItem()
         segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
         segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
         segmentedControl.tintColor = UIColor.white
+        topView.delegate = self
         initBarValueViews()
         initbttonValueViews()
         initCircelView() // 初始化圆
@@ -41,6 +46,19 @@ class ControlViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if once {
+            return
+        }
+        once = true
+        for i in 0..<colors.count {
+            let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
+            let rect = bottomView.bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
+            view.topLConstraint.constant = rect.size.height
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -58,8 +76,6 @@ class ControlViewController: UIViewController {
     }
     
     private func initBarValueViews() {
-        let colors = [Color.yellow, Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
-        
         for i in 0..<colors.count {
             guard let barValueView = Bundle.main.loadNibNamed(.kTouchBarValueView, owner: nil, options: nil)?.first as? TouchBarValueView else {
                 return
@@ -72,6 +88,8 @@ class ControlViewController: UIViewController {
                 $0.smallImageView.backgroundColor = colors[i]
                 $0.circleImageView.layer.borderColor = UIColor.lightGray.cgColor
                 $0.circleImageView.layer.borderWidth = 0.5
+                $0.delegate = self
+                $0.tag = i + 100
             }
             let width = (Dimension.screenWidth - 40) / CGFloat(colors.count)
             let x = 20 + width * CGFloat(i)
@@ -85,14 +103,16 @@ class ControlViewController: UIViewController {
     }
     
     private func initbttonValueViews() {
-        let buttonTitles = ["中间-加号", "中间-减号", "中间-返回", "中间-左箭头", "中间-右箭头", "中间-三角形", "中间-垃圾桶", "中间-五角星", "中间-更多"]
-        for i in 0..<buttonTitles.count {
+        let buttonTitles = ["中间-加号", "中间-减号", "中间-左箭头", "中间-右箭头", "中间-三角形", "中间-五角星", "中间-更多"]
+        let count = buttonTitles.count
+        for i in 0..<count {
             let button = UIButton(type: .custom).then {
                 $0.addTarget(self, action: #selector(handleEvent(_:)), for: .touchUpInside)
                 $0.setImage(UIImage(named: buttonTitles[i]), for: .normal)
                 $0.tag = i
             }
-            let space = (Dimension.screenWidth - 40 - 30 * 9) / 8
+            
+            let space = (Dimension.screenWidth - CGFloat(40 + 30 * count)) / CGFloat(count - 1)
             let x = 20 + 30 * CGFloat(i) + space * CGFloat(i)
             buttonsView.addSubview(button)
             button.snp.makeConstraints {
@@ -192,18 +212,164 @@ class ControlViewController: UIViewController {
         }
         let tag = button.tag
         switch tag {
-        case 8:
+        case 0: // 增加点
+            let item = PatternItemModel()
+            let last = currentPattern.items.last?.time ?? 0
+            item.time =  last > 0 ? last + 10 : 0
+            item.uv = currentPattern.items.last?.uv ?? 0
+            item.db = currentPattern.items.last?.db ?? 0
+            item.b = currentPattern.items.last?.b ?? 0
+            item.g = currentPattern.items.last?.g ?? 0
+            item.dr = currentPattern.items.last?.dr ?? 0
+            item.cw = currentPattern.items.last?.cw ?? 0
+            currentPattern.items.append(item)
+            currentItem = currentPattern.items.count - 1
+            topView.floatView.isHidden = false
+            refreshTopView()
+        case 1: // 删除点
+            if currentPattern.items.count > 0 {
+                currentPattern.items.removeLast()
+                topView.floatView.isHidden = true
+                refreshTopView()
+            }
+        case 2: // 左移
+            if topView.floatView.isHidden == false {
+                let w = 10 * (Dimension.screenWidth - 40) / 1440
+                if currentItem > 0 {
+                    let pre = topView.timeToLeft(value: currentPattern.items[currentItem - 1].time)
+                    if topView.left - w >= pre + 40 {
+                        return
+                    }
+                } else {
+                    if topView.left - w <= 0 {
+                        return
+                    }
+                }
+                topView.left -= w
+                currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
+                refreshTopView()
+            }
+        case 3: // 右移
+            if topView.floatView.isHidden == false {
+                let w = 10 * (Dimension.screenWidth - 40) / 1440
+                if currentItem < currentPattern.items.count - 1 {
+                    let pre = topView.timeToLeft(value: currentPattern.items[currentItem + 1].time)
+                    if topView.left + w + 40 >= pre {
+                        return
+                    }
+                } else {
+                    if topView.left + w + 40 >= Dimension.screenWidth - 40 {
+                        return
+                    }
+                }
+                topView.left += w
+                currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
+                refreshTopView()
+            }
+        case 4:
+            print("需要和固件端联调")
+        case 5:
+            let alert = UIAlertController(title: "Save Current Settings", message: nil, preferredStyle: .alert)
+            alert.addTextField { (textField) in
+                
+            }
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert, weak self] (action) in
+                guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                    return
+                }
+                guard let self = self else { return }
+                self.currentPattern.name = name
+                self.patterns?.patterns.append(self.currentPattern)
+                self.patterns?.save()
+            }))
+            present(alert, animated: true, completion: nil)
+        case 6:
             let storyboard = UIStoryboard(name: .kSBNameControl, bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDPreset)
             navigationController?.pushViewController(viewController, animated: true)
         default:
-            print(tag)
+            Toast(text: "正在开发 \(tag)").show()
         }
+    }
+    
+    /// 刷新topView的折线
+    private func refreshTopView() {
+        topView.drawLine(currentPattern: currentPattern)
+        topView.addDotButtons(currentPattern: currentPattern, current: currentItem)
     }
 }
 
 extension ControlViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
         NSLog("scanResult:\(scanResult)")
+    }
+}
+
+extension ControlViewController: TouchBarValueViewDelegate {
+    func progress(tag: Int, top: CGFloat, value: Int) {
+        if tag == 100 {
+            for i in 1..<colors.count {
+                let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
+                view.topLConstraint.constant = top
+                view.valueLabel.text = "\(value)%"
+            }
+            if currentPattern.items.count > 0 {
+                currentPattern.items[currentItem].uv = value
+                currentPattern.items[currentItem].db = value
+                currentPattern.items[currentItem].b = value
+                currentPattern.items[currentItem].g = value
+                currentPattern.items[currentItem].dr = value
+                currentPattern.items[currentItem].cw = value
+                refreshTopView()
+            }
+        } else {
+            if currentPattern.items.count > 0 {
+                if tag == 101 {
+                    currentPattern.items[currentItem].uv = value
+                } else if tag == 102 {
+                    currentPattern.items[currentItem].db = value
+                } else if tag == 103 {
+                    currentPattern.items[currentItem].b = value
+                } else if tag == 104 {
+                    currentPattern.items[currentItem].g = value
+                } else if tag == 105 {
+                    currentPattern.items[currentItem].dr = value
+                } else if tag == 106 {
+                    currentPattern.items[currentItem].cw = value
+                }
+                refreshTopView()
+            }
+        }
+    }
+    
+    
+}
+
+extension ControlViewController: TopViewDelegate {
+    func touchValue(_ pointX: CGFloat) {
+        currentPattern.items[currentItem].time = Int((pointX) / (Dimension.screenWidth - 40) * 1440)
+        refreshTopView()
+    }
+    
+    func touchCurrent(_ current: Int) {
+        currentItem = current
+        for i in 1..<colors.count {
+            let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
+            if i == 1 {
+                view.setValue(currentPattern.items[currentItem].uv)
+            } else if i == 2 {
+                view.setValue(currentPattern.items[currentItem].db)
+            } else if i == 3 {
+                view.setValue(currentPattern.items[currentItem].b)
+            } else if i == 4 {
+                view.setValue(currentPattern.items[currentItem].g)
+            } else if i == 5 {
+                view.setValue(currentPattern.items[currentItem].dr)
+            } else if i == 6 {
+                view.setValue(currentPattern.items[currentItem].cw)
+            }
+        }
+        topView.addDotButtons(currentPattern: currentPattern, current: currentItem)
     }
 }

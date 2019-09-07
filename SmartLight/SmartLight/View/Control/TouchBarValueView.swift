@@ -21,12 +21,27 @@ class TouchBarValueView: UIView {
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var topLConstraint: NSLayoutConstraint!
+    weak var delegate: TouchBarValueViewDelegate?
+    
+    func setValue(_ value: Int) {
+        let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
+        let h1 = rect.size.height - 20
+        let v1: CGFloat = CGFloat(100 - value)
+        let top = v1 * h1 / 100 + 20
+        topLConstraint.constant = top
+        valueLabel.text = "\(value)%"
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
         if rect.contains(point) {
-            topLConstraint.constant = min(point.y, rect.size.height)
+            let top = min(point.y, rect.size.height)
+            //print("start\(top)")
+            topLConstraint.constant = top
+            let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))
+            delegate?.progress(tag: tag, top: top, value: value)
+            valueLabel.text = "\(value)%"
         }
     }
     
@@ -34,7 +49,12 @@ class TouchBarValueView: UIView {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
         if rect.contains(point) {
-            topLConstraint.constant = min(point.y, rect.size.height)
+            let top = min(point.y, rect.size.height)
+            //print("move\(top)")
+            topLConstraint.constant = top
+            let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))
+            delegate?.progress(tag: tag, top: top, value: value)
+            valueLabel.text = "\(value)%"
         }
     }
     
@@ -42,7 +62,12 @@ class TouchBarValueView: UIView {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
         if rect.contains(point) {
-            topLConstraint.constant = min(point.y, rect.size.height)
+            let top = min(point.y, rect.size.height)
+            //print("end\(top)")
+            topLConstraint.constant = top
+            let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))
+            delegate?.progress(tag: tag, top: top, value: value)
+            valueLabel.text = "\(value)%"
         }
     }
     
@@ -50,7 +75,16 @@ class TouchBarValueView: UIView {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
         if rect.contains(point) {
-            topLConstraint.constant = min(point.y, rect.size.height)
+            let top = min(point.y, rect.size.height)
+            //print("cancel\(top)")
+            topLConstraint.constant = top
+            let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))
+            delegate?.progress(tag: tag, top: top, value: value)
+            valueLabel.text = "\(value)%"
         }
     }
+}
+
+protocol TouchBarValueViewDelegate: NSObjectProtocol {
+    func progress(tag: Int, top: CGFloat, value: Int)
 }

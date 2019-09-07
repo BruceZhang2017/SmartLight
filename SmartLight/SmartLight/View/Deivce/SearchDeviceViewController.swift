@@ -29,15 +29,11 @@ class SearchDeviceViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = Color.main
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func pushToMenu() {
+        let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceList) as! DeviceListViewController
+        navigationController?.pushViewController(viewController, animated: true)
     }
-    */
 
 }
 
@@ -59,6 +55,18 @@ extension SearchDeviceViewController: UITableViewDataSource {
 extension SearchDeviceViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        self.performSegue(withIdentifier: .kSBSegueWIFIList, sender: self) 
+        let model = DeviceListModel.down()
+        if model.groups.count == 0 {
+            let device = DeviceModel() // 先添加一个设备
+            device.name = "no name"
+            model.groups.append(device)
+            model.save()
+            pushToMenu()
+            var viewControllers = navigationController!.viewControllers
+            viewControllers.remove(at: 1)
+            navigationController?.viewControllers = viewControllers
+        } else {
+            self.performSegue(withIdentifier: .kSBSegueWIFIList, sender: self)
+        }
     }
 }

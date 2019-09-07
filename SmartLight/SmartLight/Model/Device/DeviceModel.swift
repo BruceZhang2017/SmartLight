@@ -18,6 +18,7 @@ class DeviceModel: NSObject, NSCoding {
     var name: String?
     var child = 0
     var group: Bool = false
+    var pattern: PatternModel?
     
     override init() {
         super.init()
@@ -28,13 +29,15 @@ class DeviceModel: NSObject, NSCoding {
         aCoder.encode(name, forKey: "name")
         aCoder.encode(child, forKey: "child")
         aCoder.encode(group, forKey: "group")
+        aCoder.encode(pattern, forKey: "pattern")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
         superModel = aDecoder.decodeObject(forKey: "superModel") as? DeviceModel
         name = aDecoder.decodeObject(forKey: "name") as? String
-        child = aDecoder.decodeObject(forKey: "child") as? Int ?? 0
-        group = aDecoder.decodeObject(forKey: "group") as? Bool ?? false 
+        child = aDecoder.decodeInteger(forKey: "child")
+        group = aDecoder.decodeBool(forKey: "group")
+        pattern = aDecoder.decodeObject(forKey: "pattern") as? PatternModel
     }
 }

@@ -75,6 +75,7 @@
 		9A79F63F22F66E8600487DC5 /* Dimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63E22F66E8600487DC5 /* Dimension.swift */; };
 		9A8900A8231F31E3009AF915 /* WIFIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900A7231F31E2009AF915 /* WIFIManager.swift */; };
 		9A8900AA23200490009AF915 /* LangaugeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900A923200490009AF915 /* LangaugeTableViewController.swift */; };
+		9A8900AC23215556009AF915 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900AB23215555009AF915 /* DeviceManager.swift */; };
 		9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */; };
 		9AA1AC3222FA9BE00000F6D2 /* Public.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */; };
 		9AA1AC3522FC492B0000F6D2 /* EffectsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */; };
@@ -185,6 +186,7 @@
 		9A89007A2319717C009AF915 /* SmartLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SmartLight.entitlements; sourceTree = "<group>"; };
 		9A8900A7231F31E2009AF915 /* WIFIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WIFIManager.swift; sourceTree = "<group>"; };
 		9A8900A923200490009AF915 /* LangaugeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LangaugeTableViewController.swift; sourceTree = "<group>"; };
+		9A8900AB23215555009AF915 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
 		9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Public.storyboard; sourceTree = "<group>"; };
 		9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsTableViewController.swift; sourceTree = "<group>"; };
@@ -321,8 +323,8 @@
 		9A102008230066AD000F36D7 /* Device */ = {
 			isa = PBXGroup;
 			children = (
-				9A10200B23006703000F36D7 /* DeviceModel.swift */,
 				9A102009230066BF000F36D7 /* DeviceListModel.swift */,
+				9A10200B23006703000F36D7 /* DeviceModel.swift */,
 				9A5B7EF82307E9930099E3A9 /* Acclimation.swift */,
 				9A5B7F0823098FE20099E3A9 /* Lunnar.swift */,
 				9A5B7F1023099D890099E3A9 /* Lightning.swift */,
@@ -472,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				9A8900A7231F31E2009AF915 /* WIFIManager.swift */,
+				9A8900AB23215555009AF915 /* DeviceManager.swift */,
 			);
 			path = Manage;
 			sourceTree = "<group>";
@@ -786,6 +789,7 @@
 				9A3E1E9522F85AF700A24DB1 /* ytcpsocket.c in Sources */,
 				9A5B7F0723097C540099E3A9 /* CustomPickerViewController.swift in Sources */,
 				9A101FFF23004017000F36D7 /* DeviceListViewController.swift in Sources */,
+				9A8900AC23215556009AF915 /* DeviceManager.swift in Sources */,
 				9A5B7EF52304586C0099E3A9 /* PresetTableViewCell.swift in Sources */,
 				9A79F63A22F668F100487DC5 /* UIKit+Extension.swift in Sources */,
 				9A101FFC22FDBEDE000F36D7 /* BashboardCollectionViewCell.swift in Sources */,

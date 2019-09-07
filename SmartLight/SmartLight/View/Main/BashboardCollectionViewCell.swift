@@ -24,7 +24,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         initBarValueViews()
         initBtnViews()
-        btnViewHeightLConstriant.constant = Dimension.screenWidth <= 320 ? 60 : 100
+        btnViewHeightLConstriant.constant = Dimension.screenWidth <= 320 || Dimension.screenHeight <= 667 ? 60 : 100
     }
     
     required init?(coder aDecoder: NSCoder) {

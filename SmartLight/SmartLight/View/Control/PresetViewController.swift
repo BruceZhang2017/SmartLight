@@ -24,13 +24,7 @@ class PresetViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        patterns = PatternListModel.load()
-        if patterns.patterns.count == 0 {
-            let model = PatternModel()
-            model.name = "SPS"
-            model.items = []
-            patterns.patterns.append(model)
-        }
+        patterns = PatternListModel.down()
         if patterns.patterns.count > 0 {
             setNavigationRight()
         }

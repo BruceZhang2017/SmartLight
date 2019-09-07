@@ -18,8 +18,16 @@ class TopView: UIView {
     var dotView: UIView!
     var floatView: UIView!
     var drawHeight: CGFloat = 0
-    var currentItem = 0 // 当前的模式
     var moveTimeLabel: UILabel!
+    var left: CGFloat = 0 {
+        didSet {
+            floatView.snp.updateConstraints {
+                $0.left.equalTo(left)
+            }
+            moveTimeLabel.text = leftToTime(value: left)
+        }
+    }
+    weak var delegate: TopViewDelegate?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -79,18 +87,50 @@ class TopView: UIView {
             $0.top.equalTo(51)
             $0.height.equalTo(drawHeight)
         }
-        drawLine()
     }
     
     /// 画线
-    private func drawLine() {
+    func drawLine(currentPattern: PatternModel) {
+        if let layers = drawView.layer.sublayers {
+            for layer in layers {
+                layer.removeFromSuperlayer()
+            }
+        }
+        if currentPattern.items.count == 0 {
+            return
+        }
         let colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
         for i in 0..<colors.count {
             let shapeLayer = CAShapeLayer()
             let path = UIBezierPath()
             path.move(to: CGPoint(x: 0, y: drawHeight))
-            path.addLine(to: CGPoint(x: 100, y: drawHeight - CGFloat(10 * (i + 1))))
-            path.addLine(to: CGPoint(x: 200, y: drawHeight - CGFloat(11 * (i + 1))))
+            for j in 0..<currentPattern.items.count {
+                let x = CGFloat(currentPattern.items[j].time) / CGFloat(1440) * (Dimension.screenWidth - 40)
+                if x == 0 {
+                    continue
+                }
+                //print("x: \(x)")
+                var h = 0
+                switch i {
+                case 0:
+                    h = currentPattern.items[j].uv
+                case 1:
+                    h = currentPattern.items[j].db
+                case 2:
+                    h = currentPattern.items[j].b
+                case 3:
+                    h = currentPattern.items[j].g
+                case 4:
+                    h = currentPattern.items[j].dr
+                case 5:
+                    h = currentPattern.items[j].cw
+                default:
+                    continue
+                }
+                let point = CGPoint(x: x, y: drawHeight * CGFloat(100 - h) / CGFloat(100))
+                //print("point: \(point.x) \(point.y)")
+                path.addLine(to: point)
+            }
             path.addLine(to: CGPoint(x: Dimension.screenWidth - 40, y: drawHeight))
             shapeLayer.path = path.cgPath
             shapeLayer.fillColor = UIColor.clear.cgColor
@@ -115,13 +155,51 @@ class TopView: UIView {
         }
     }
     
+    func addDotButtons(currentPattern: PatternModel, current: Int) {
+        for view in dotView.subviews {
+            view.removeFromSuperview()
+        }
+        for j in 0..<currentPattern.items.count {
+            let button = UIButton(type: .custom).then {
+                $0.setImage(UIImage(named: "蓝色圆圈"), for: .normal)
+                if j == current && floatView.isHidden == false {
+                    $0.isHidden = true
+                } else {
+                    $0.isHidden = false
+                }
+                $0.tag = 1000 * (currentPattern.items[j].time) + j
+                $0.addTarget(self, action: #selector(tapDot(_:)), for: .touchUpInside)
+            }
+            dotView.addSubview(button)
+            button.snp.makeConstraints {
+                $0.width.height.equalTo(40)
+                $0.centerY.equalToSuperview()
+                let x = CGFloat(currentPattern.items[j].time) / CGFloat(1440) * (Dimension.screenWidth - 40)
+                $0.left.equalTo(x - 20)
+            }
+        }
+    }
+    
+    @objc private func tapDot(_ sender: Any) {
+        guard let button = sender as? UIButton else {
+            return
+        }
+        let tag = button.tag % 1000
+        let time = button.tag / 1000
+        left = timeToLeft(value: time)
+        floatView.isHidden = false
+        delegate?.touchCurrent(tag)
+    }
+    
     private func initFloatView() {
-        floatView = UIView()
+        floatView = UIView().then {
+            $0.isHidden = true
+        }
         addSubview(floatView)
         floatView.snp.makeConstraints {
             $0.top.equalTo(60)
             $0.width.equalTo(40)
-            $0.left.equalTo(20)
+            $0.left.equalTo(left)
             $0.bottom.equalTo(dotView.snp.bottom)
         }
         
@@ -135,7 +213,7 @@ class TopView: UIView {
             $0.textAlignment = .center
             $0.textColor = UIColor.white
             $0.font = UIFont.systemFont(ofSize: 8)
-            $0.text = "7:30 AM"
+            $0.text = "12:00 AM"
         }
         floatView.addSubview(moveTimeLabel)
         moveTimeLabel.snp.makeConstraints {
@@ -172,7 +250,7 @@ class TopView: UIView {
         floatView.addSubview(redBigImageView)
         redBigImageView.snp.makeConstraints {
             $0.width.height.equalTo(20)
-            $0.top.equalTo(dotButton.snp.top).offset(5)
+            $0.centerY.equalTo(dotButton.snp.centerY)
             $0.centerX.equalToSuperview()
         }
         
@@ -197,5 +275,68 @@ class TopView: UIView {
             $0.centerX.equalToSuperview()
         }
     }
+    
+    // MARK: - Touch
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = (touches as NSSet).anyObject() as AnyObject
+        let point = touch.location(in:self)
+        print("start: \(point.x) \(point.y)")
+        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        delegate?.touchValue(left)
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = (touches as NSSet).anyObject() as AnyObject
+        let point = touch.location(in:self)
+        print("move: \(point.x) \(point.y)")
+        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        delegate?.touchValue(left)
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = (touches as NSSet).anyObject() as AnyObject
+        let point = touch.location(in:self)
+        print("cancel: \(point.x) \(point.y)")
+        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        delegate?.touchValue(left)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = (touches as NSSet).anyObject() as AnyObject
+        let point = touch.location(in:self)
+        print("end: \(point.x) \(point.y)")
+        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        delegate?.touchValue(left)
+    }
+    
+    func leftToTime(value: CGFloat) -> String {
+        let time = Int(value * CGFloat(1440) / (Dimension.screenWidth - 40))
+        var h = time / 60
+        let m = time % 60
+        if h >= 12 {
+            return String(format: "%02d", h) + ":" + String(format: "%02d", m) + " PM"
+        } else {
+            if h == 0 {
+                h = 12
+            }
+            return String(format: "%02d", h) + ":" + String(format: "%02d", m) + " AM"
+        }
+    }
+    
+    func leftToTimeInt(value: CGFloat) -> Int {
+        let time = Int(value * CGFloat(1440) / (Dimension.screenWidth - 40))
+        return time
+    }
+    
+    /// 时间转Left
+    func timeToLeft(value: Int) -> CGFloat {
+        let x = CGFloat(value) / CGFloat(1440) * (Dimension.screenWidth - 40)
+        return min(Dimension.screenWidth - 20, max(0, x - 20))
+    }
 
+}
+
+protocol TopViewDelegate: NSObjectProtocol {
+    func touchValue(_ pointX: CGFloat)
+    func touchCurrent(_ current: Int)
 }

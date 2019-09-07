@@ -24,11 +24,7 @@ class DeviceListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setLeftNavigationItem()
-        if let model = DeviceListModel.load() {
-            self.model = model
-        } else {
-            model = DeviceListModel()
-        }
+        model = DeviceListModel.down()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -138,7 +134,7 @@ extension DeviceListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath) as! DeviceListTableViewCell
         cell.nameButton?.setTitle( model.groups[indexPath.row].name, for: .normal)
-        cell.arrowImageView.isHidden = model.groups[indexPath.row].child == 0
+        cell.arrowImageView.isHidden = !model.groups[indexPath.row].group
         cell.stateImageView.isHidden = !isEdit
         cell.leftLConstraint.constant = isEdit ? 45 : 20
         cell.nameButton.titleLabel?.font = model.groups[indexPath.row].child == 0 ? UIFont.systemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 16)

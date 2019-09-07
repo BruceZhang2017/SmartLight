@@ -17,9 +17,12 @@ class DashboardViewController: BaseViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var welcomeView: UIView!
+    @IBOutlet weak var deviceNameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false 
         setLeftNavigationItem()
         setRightNavigationItem()
         setTitleView()
@@ -29,12 +32,34 @@ class DashboardViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
-//        guard let _ = DeviceListModel.load() else {
-//            navigationItem.leftBarButtonItem?.isEnabled = false
-//            navigationItem.rightBarButtonItem?.isEnabled = false
-//            welcomeView.isHidden = false
-//            return
-//        }
+        let model = DeviceListModel.down()
+        let current = DeviceManager.sharedInstance.currentIndex
+        if model.groups.count == 0 {
+            navigationItem.leftBarButtonItem?.isEnabled = false
+            navigationItem.rightBarButtonItem?.isEnabled = false
+            welcomeView.isHidden = false
+            navigationController?.tabBarController?.tabBar.isUserInteractionEnabled = false
+            guard let items = navigationController?.tabBarController?.tabBar.items else {
+                return
+            }
+            for item in items {
+                item.isEnabled = false
+            }
+        } else {
+            deviceNameLabel.text = model.groups[current].name
+            navigationItem.leftBarButtonItem?.isEnabled = true
+            navigationItem.rightBarButtonItem?.isEnabled = true
+            welcomeView.isHidden = true
+            navigationController?.tabBarController?.tabBar.isUserInteractionEnabled = true
+            guard let items = navigationController?.tabBarController?.tabBar.items else {
+                return
+            }
+            for item in items {
+                item.isEnabled = true
+            }
+            collectionView.reloadData()
+        }
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -90,16 +115,44 @@ class DashboardViewController: BaseViewController {
         viewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(viewController, animated: true)
     }
+    
+    @IBAction func prevous(_ sender: Any) {
+        let model = DeviceListModel.down()
+        if DeviceManager.sharedInstance.currentIndex > 0 {
+            DeviceManager.sharedInstance.currentIndex -= 1
+            let current = DeviceManager.sharedInstance.currentIndex
+            collectionView.scrollToItem(
+                at: IndexPath(item: current, section: 0),
+                at: .centeredHorizontally,
+                animated: true)
+            deviceNameLabel.text = model.groups[current].name
+        }
+    }
+    
+    @IBAction func next(_ sender: Any) {
+        let model = DeviceListModel.down()
+        let count = model.groups.count
+        if DeviceManager.sharedInstance.currentIndex < count {
+            DeviceManager.sharedInstance.currentIndex += 1
+            let current = DeviceManager.sharedInstance.currentIndex
+            collectionView.scrollToItem(
+                at: IndexPath(item: current, section: 0),
+                at: .centeredHorizontally,
+                animated: true)
+            deviceNameLabel.text = model.groups[current].name
+        }
+    }
 }
 
 extension DashboardViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return DeviceListModel.down().groups.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .kCellIdentifier, for: indexPath) as! BashboardCollectionViewCell
+        let device = DeviceListModel.down().groups[indexPath.row]
         
         return cell
     }

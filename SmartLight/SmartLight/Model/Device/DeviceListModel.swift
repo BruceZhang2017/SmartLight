@@ -34,11 +34,12 @@ class DeviceListModel: NSObject, NSCoding {
         UserDefaults.standard.synchronize()
     }
     
-    static func load() -> DeviceListModel? {
+    static func down() -> DeviceListModel {
         if let data = UserDefaults.standard.object(forKey: "devices") as? Data {
-            let model = NSKeyedUnarchiver.unarchiveObject(with: data) as? DeviceListModel
-            return model
+            if let model = NSKeyedUnarchiver.unarchiveObject(with: data) as? DeviceListModel {
+                return model
+            }
         }
-        return nil
+        return DeviceListModel()
     }
 }

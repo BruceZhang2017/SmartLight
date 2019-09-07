@@ -34,7 +34,7 @@ class PatternListModel: NSObject, NSCoding {
         UserDefaults.standard.synchronize()
     }
     
-    static func load() -> PatternListModel {
+    static func down() -> PatternListModel {
         if let data = UserDefaults.standard.object(forKey: "patterns") as? Data {
             guard let model = NSKeyedUnarchiver.unarchiveObject(with: data) as? PatternListModel else {
                 return PatternListModel()

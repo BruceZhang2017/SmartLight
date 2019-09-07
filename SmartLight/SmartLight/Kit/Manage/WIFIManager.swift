@@ -19,7 +19,7 @@ class WIFIManager: NSObject {
         var wifiName : String = ""
         let wifiInterfaces = CNCopySupportedInterfaces()
         if wifiInterfaces == nil {
-            return ""
+            return "no name"
         }
         
         let interfaceArr = CFBridgingRetain(wifiInterfaces!) as! Array<String>

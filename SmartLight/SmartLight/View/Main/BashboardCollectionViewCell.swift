@@ -19,12 +19,14 @@ class BashboardCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var barView: UIView!
     @IBOutlet weak var btnView: UIView!
     @IBOutlet weak var btnViewHeightLConstriant: NSLayoutConstraint!
+    @IBOutlet weak var topLConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         initBarValueViews()
         initBtnViews()
         btnViewHeightLConstriant.constant = Dimension.screenWidth <= 320 || Dimension.screenHeight <= 667 ? 60 : 100
+        topLConstraint.constant = AppDelegate.isSameToIphoneX() ? 138 : 78
     }
     
     required init?(coder aDecoder: NSCoder) {

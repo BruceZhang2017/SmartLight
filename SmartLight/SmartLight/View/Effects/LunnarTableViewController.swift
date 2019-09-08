@@ -14,11 +14,15 @@ import UIKit
 
 class LunnarTableViewController: EffectsSettingTableViewController {
     
+    var deviceListModel: DeviceListModel!
+    var deviceModel: DeviceModel!
     var lunnar: Lunnar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        lunnar = Lunnar.load()
+        deviceListModel = DeviceListModel.down()
+        deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
+        lunnar = deviceModel.lunnar ?? Lunnar()
     }
 
     // MARK: - Table view data source
@@ -107,7 +111,7 @@ extension LunnarTableViewController: TimePickerViewControllerDelegate {
             lunnar.endTime = time
         }
         tableView.reloadData()
-        lunnar.save()
+        deviceListModel.save()
     }
 }
 
@@ -115,7 +119,7 @@ extension LunnarTableViewController: EffectsSettingBTableViewCellDelegate {
     func valueChanged(value: Int, tag: Int) {
         lunnar.intensity = value
         tableView.reloadData()
-        lunnar.save()
+        deviceListModel.save()
     }
 }
 
@@ -123,6 +127,6 @@ extension LunnarTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         lunnar.enable = value
         tableView.reloadData()
-        lunnar.save()
+        deviceListModel.save()
     }
 }

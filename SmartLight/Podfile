@@ -8,5 +8,6 @@ pod 'Toaster'
 pod 'EFQRCode', '~> 5.0.0'
 pod 'Alamofire'
 pod 'IQKeyboardManagerSwift'
+pod 'CocoaAsyncSocket'
 
 end

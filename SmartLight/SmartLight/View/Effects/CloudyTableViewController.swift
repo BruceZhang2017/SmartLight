@@ -14,11 +14,15 @@ import UIKit
 
 class CloudyTableViewController: EffectsSettingTableViewController {
     
+    var deviceListModel: DeviceListModel!
+    var deviceModel: DeviceModel!
     var cloudy: Cloudy!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        cloudy = Cloudy.load()
+        deviceListModel = DeviceListModel.down()
+        deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
+        cloudy = deviceModel.cloudy ?? Cloudy()
     }
 
     // MARK: - Table view data source
@@ -116,7 +120,7 @@ extension CloudyTableViewController: TimePickerViewControllerDelegate {
             cloudy.endTime = time
         }
         tableView.reloadData()
-        cloudy.save()
+        deviceListModel.save()
     }
 }
 
@@ -128,7 +132,7 @@ extension CloudyTableViewController: EffectsSettingBTableViewCellDelegate {
             cloudy.speed = value
         }
         tableView.reloadData()
-        cloudy.save()
+        deviceListModel.save()
     }
 }
 
@@ -136,6 +140,6 @@ extension CloudyTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         cloudy.enable = value
         tableView.reloadData()
-        cloudy.save()
+        deviceListModel.save()
     }
 }

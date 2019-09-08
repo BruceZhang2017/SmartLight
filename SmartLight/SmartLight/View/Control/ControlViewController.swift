@@ -25,7 +25,7 @@ class ControlViewController: BaseViewController {
     var currentPattern: PatternModel!
     var powerValueLabel: UILabel!
     var once = false
-    var currentItem = 0
+    var currentItem = 0 // 当前编辑的点
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,7 +142,7 @@ class ControlViewController: BaseViewController {
         
         powerValueLabel = UILabel().then {
             $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 30)
+            $0.font = UIFont.boldSystemFont(ofSize: 30)
             $0.text = "0%"
         }
         topManualView.addSubview(powerValueLabel)
@@ -153,7 +153,7 @@ class ControlViewController: BaseViewController {
         
         let powerLabel = UILabel().then {
             $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 30)
+            $0.font = UIFont.boldSystemFont(ofSize: 30)
             $0.text = "POWER"
         }
         topManualView.addSubview(powerLabel)
@@ -204,6 +204,17 @@ class ControlViewController: BaseViewController {
     @IBAction func valueChanged(_ sender: Any) {
         topView.isHidden = segmentedControl.selectedSegmentIndex != 0
         topManualView.isHidden = segmentedControl.selectedSegmentIndex == 0
+        if currentPattern.manual == nil && topManualView.isHidden == false {
+            let item = PatternItemModel()
+            item.time =  0
+            item.uv = 0
+            item.db = 0
+            item.b = 0
+            item.g = 0
+            item.dr = 0
+            item.cw = 0
+            currentPattern.manual = item
+        }
     }
     
     @objc private func handleEvent(_ sender: Any) {
@@ -213,9 +224,12 @@ class ControlViewController: BaseViewController {
         let tag = button.tag
         switch tag {
         case 0: // 增加点
+            if currentPattern.items.count >= 4 {
+                return
+            }
             let item = PatternItemModel()
             let last = currentPattern.items.last?.time ?? 0
-            item.time =  last > 0 ? last + 10 : 0
+            item.time =  last > 0 ? (last + 60) : 0
             item.uv = currentPattern.items.last?.uv ?? 0
             item.db = currentPattern.items.last?.db ?? 0
             item.b = currentPattern.items.last?.b ?? 0
@@ -225,6 +239,7 @@ class ControlViewController: BaseViewController {
             currentPattern.items.append(item)
             currentItem = currentPattern.items.count - 1
             topView.floatView.isHidden = false
+            topView.left = topView.timeToLeft(value: item.time)
             refreshTopView()
         case 1: // 删除点
             if currentPattern.items.count > 0 {
@@ -313,6 +328,15 @@ extension ControlViewController: TouchBarValueViewDelegate {
                 let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
                 view.topLConstraint.constant = top
                 view.valueLabel.text = "\(value)%"
+            }
+            if topManualView.isHidden == false {
+                currentPattern.manual?.uv = value
+                currentPattern.manual?.db = value
+                currentPattern.manual?.b = value
+                currentPattern.manual?.g = value
+                currentPattern.manual?.dr = value
+                currentPattern.manual?.cw = value
+                return
             }
             if currentPattern.items.count > 0 {
                 currentPattern.items[currentItem].uv = value

@@ -17,7 +17,7 @@ class Acclimation: NSObject, NSCoding {
     var startTime: Int = 0
     var endTime: Int = 0
     var ramp: Int = 0
-    var intesity: [Int] = [0, 0, 0, 0, 0, 0, 0]
+    var intesity: [Int] = [0, 0, 0, 0, 0, 0, 0, 0] // UV DB B G DR CW ALL
     
     override init() {
         super.init()
@@ -37,20 +37,7 @@ class Acclimation: NSObject, NSCoding {
         startTime = aDecoder.decodeInteger(forKey: "startTime")
         endTime = aDecoder.decodeInteger(forKey: "endTime")
         ramp = aDecoder.decodeInteger(forKey: "ramp")
-        intesity = aDecoder.decodeObject(forKey: "intesity") as? [Int] ?? [0, 0, 0, 0, 0, 0, 0]
+        intesity = aDecoder.decodeObject(forKey: "intesity") as? [Int] ?? [0, 0, 0, 0, 0, 0, 0, 0]
     }
-    
-    func save() {
-        let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        UserDefaults.standard.set(data, forKey: "Acclimation")
-        UserDefaults.standard.synchronize()
-    }
-    
-    static func load() -> Acclimation {
-        if let data = UserDefaults.standard.object(forKey: "Acclimation") as? Data {
-            let model = NSKeyedUnarchiver.unarchiveObject(with: data) as! Acclimation
-            return model
-        }
-        return Acclimation()
-    }
+
 }

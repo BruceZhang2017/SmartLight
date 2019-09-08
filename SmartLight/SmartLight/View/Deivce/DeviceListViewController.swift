@@ -88,8 +88,8 @@ class DeviceListViewController: UIViewController {
             if array.count == 0 {
                 return
             }
-            let sheet = UIAlertController(title: nil, message: "Attension: More to any group, will rewrite all the settings as same as this group. If more to non group from any group, the current settings will no change.", preferredStyle: .actionSheet)
-            sheet.addAction(UIAlertAction(title: "no group", style: .default, handler: nil))
+            let sheet = UIAlertController(title: nil, message: "Attention: Move to a new group will rewrite all the settings to the same as this group. If moving to a non group from any group, the  settings will not change.", preferredStyle: .actionSheet)
+            sheet.addAction(UIAlertAction(title: "Non-Group", style: .default, handler: nil))
             for item in array {
                 sheet.addAction(UIAlertAction(title: item.name ?? "", style: .default, handler: { (action) in
                     
@@ -109,7 +109,7 @@ class DeviceListViewController: UIViewController {
         if selectedIndex == 0 {
             return
         }
-        let alert = UIAlertController(title: "Delete Device", message: "Delete this device will be disconnect, if you want to control it again, you need reconnect it.Continue?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Delete Device", message: "This device will be disconnected, if you want to control it again you will need reconnect it.  Continue?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
             let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0

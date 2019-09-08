@@ -40,19 +40,6 @@ class Cloudy: NSObject, NSCoding {
         intensity = aDecoder.decodeInteger(forKey: "intensity")
     }
     
-    func save() {
-        let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        UserDefaults.standard.set(data, forKey: "Cloudy")
-        UserDefaults.standard.synchronize()
-    }
-    
-    static func load() -> Cloudy {
-        if let data = UserDefaults.standard.object(forKey: "Cloudy") as? Data {
-            let model = NSKeyedUnarchiver.unarchiveObject(with: data) as! Cloudy
-            return model
-        }
-        return Cloudy()
-    }
 }
 
 

@@ -86,7 +86,7 @@
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hoT-Cd-Rqg">
                                 <rect key="frame" x="20" y="109.5" width="374" height="57.5"/>
-                                <string key="text">Note: Put the firmware link in to the blank which will download it auto matic. Please make sure your phone is connected the network.</string>
+                                <string key="text">Note: Put the firmware link into the blank which will download it automatically. Please make sure your phone is connected the network.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -168,8 +168,8 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="79C-sl-y4D">
-                                <rect key="frame" x="20" y="431" width="374" height="76.5"/>
-                                <string key="text">Attention: Please make sure the device is connected on your phone, the firmware will installing automatic, please DO NOT power off of your device.</string>
+                                <rect key="frame" x="20" y="431" width="374" height="95.5"/>
+                                <string key="text">Attention: Please make sure the device is connected on your phone, the firmware will install automatically. Please DO NOT power off of your device while upgrading, or it will damage your device.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

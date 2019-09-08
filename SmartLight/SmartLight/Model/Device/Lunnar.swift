@@ -37,18 +37,5 @@ class Lunnar: NSObject, NSCoding {
         intensity = aDecoder.decodeInteger(forKey: "intensity") 
     }
     
-    func save() {
-        let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        UserDefaults.standard.set(data, forKey: "Lunnar")
-        UserDefaults.standard.synchronize()
-    }
-    
-    static func load() -> Lunnar {
-        if let data = UserDefaults.standard.object(forKey: "Lunnar") as? Data {
-            let model = NSKeyedUnarchiver.unarchiveObject(with: data) as! Lunnar
-            return model
-        }
-        return Lunnar()
-    }
 }
 

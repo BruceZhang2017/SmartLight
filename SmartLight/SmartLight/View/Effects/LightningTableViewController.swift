@@ -14,11 +14,15 @@ import UIKit
 
 class LightningTableViewController: EffectsSettingTableViewController {
     
+    var deviceListModel: DeviceListModel!
+    var deviceModel: DeviceModel!
     var ligtning: Lightning!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        ligtning = Lightning.load()
+        deviceListModel = DeviceListModel.down()
+        deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
+        ligtning = deviceModel.lightning ?? Lightning()
     }
 
     // MARK: - Table view data source
@@ -118,7 +122,7 @@ extension LightningTableViewController: TimePickerViewControllerDelegate {
             ligtning.endTime = time
         }
         tableView.reloadData()
-        ligtning.save()
+        deviceListModel.save()
     }
 }
 
@@ -126,7 +130,7 @@ extension LightningTableViewController: EffectsSettingBTableViewCellDelegate {
     func valueChanged(value: Int, tag: Int) {
         ligtning.intensity = value
         tableView.reloadData()
-        ligtning.save()
+        deviceListModel.save()
     }
 }
 
@@ -134,7 +138,7 @@ extension LightningTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         ligtning.enable = value
         tableView.reloadData()
-        ligtning.save()
+        deviceListModel.save()
     }
 }
 
@@ -142,6 +146,6 @@ extension LightningTableViewController: CustomPickerViewControllerDelegate {
     func customPickerView(value: Int) {
         ligtning.frequency = value
         tableView.reloadData()
-        ligtning.save()
+        deviceListModel.save()
     }
 }

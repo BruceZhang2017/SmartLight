@@ -19,6 +19,10 @@ class DeviceModel: NSObject, NSCoding {
     var child = 0
     var group: Bool = false
     var pattern: PatternModel?
+    var acclimation: Acclimation?
+    var lunnar: Lunnar?
+    var lightning: Lightning?
+    var cloudy: Cloudy?
     
     override init() {
         super.init()
@@ -30,6 +34,10 @@ class DeviceModel: NSObject, NSCoding {
         aCoder.encode(child, forKey: "child")
         aCoder.encode(group, forKey: "group")
         aCoder.encode(pattern, forKey: "pattern")
+        aCoder.encode(acclimation, forKey: "acclimation")
+        aCoder.encode(lunnar, forKey: "lunnar")
+        aCoder.encode(lightning, forKey: "lightning")
+        aCoder.encode(cloudy, forKey: "cloudy")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -39,5 +47,9 @@ class DeviceModel: NSObject, NSCoding {
         child = aDecoder.decodeInteger(forKey: "child")
         group = aDecoder.decodeBool(forKey: "group")
         pattern = aDecoder.decodeObject(forKey: "pattern") as? PatternModel
+        acclimation = aDecoder.decodeObject(forKey: "acclimation") as? Acclimation
+        lunnar = aDecoder.decodeObject(forKey: "lunnar") as? Lunnar
+        lightning = aDecoder.decodeObject(forKey: "lightning") as? Lightning
+        cloudy = aDecoder.decodeObject(forKey: "cloudy") as? Cloudy
     }
 }

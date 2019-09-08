@@ -15,9 +15,13 @@ import EFQRCode
 
 class DashboardViewController: BaseViewController {
     
+    @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var welcomeView: UIView!
     @IBOutlet weak var deviceNameLabel: UILabel!
+    @IBOutlet weak var timeLabelTopLConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomLConstraint: NSLayoutConstraint!
+    var clockTimer: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +30,9 @@ class DashboardViewController: BaseViewController {
         setLeftNavigationItem()
         setRightNavigationItem()
         setTitleView()
-        
+        timeLabelTopLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : 20
+        bottomLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : 0
+        startClock()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +65,7 @@ class DashboardViewController: BaseViewController {
             }
             collectionView.reloadData()
         }
-        
+        let _ = TCPSocketManager.sharedInstance
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -82,7 +88,24 @@ class DashboardViewController: BaseViewController {
         navigationItem.titleView = UIImageView(image: UIImage.top_logo)
     }
     
+    private func startClock() {
+        clockTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(clock), userInfo: nil, repeats: true)
+        clockTimer.fire()
+        RunLoop.current.add(clockTimer, forMode: .common)
+    }
+    
     // MARK: - Action
+    
+    @objc private func clock() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateStr = dateFormatter.string(from: Date())
+        if dateStr.count > 16 {
+            let start = dateStr.index(dateStr.startIndex, offsetBy: 11)
+            let end = dateStr.index(dateStr.startIndex, offsetBy: 16)
+            timeLabel.text = String(dateStr[start..<end])
+        }
+    }
     
     @objc private func pushToMenu() {
         let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)

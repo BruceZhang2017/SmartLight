@@ -42,12 +42,6 @@
 		9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8422F836E500A24DB1 /* BarValueView.xib */; };
 		9A3E1E8722F8573300A24DB1 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8622F8573300A24DB1 /* Strings.swift */; };
 		9A3E1E8A22F8590500A24DB1 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8922F8590500A24DB1 /* BaseViewController.swift */; };
-		9A3E1E9522F85AF700A24DB1 /* ytcpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8E22F85AF600A24DB1 /* ytcpsocket.c */; };
-		9A3E1E9622F85AF700A24DB1 /* TCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8F22F85AF600A24DB1 /* TCPClient.swift */; };
-		9A3E1E9722F85AF700A24DB1 /* yudpsocket.c in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9022F85AF700A24DB1 /* yudpsocket.c */; };
-		9A3E1E9822F85AF700A24DB1 /* UDPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9122F85AF700A24DB1 /* UDPClient.swift */; };
-		9A3E1E9922F85AF700A24DB1 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9222F85AF700A24DB1 /* Result.swift */; };
-		9A3E1E9A22F85AF700A24DB1 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9322F85AF700A24DB1 /* Socket.swift */; };
 		9A3E1E9C22F85C2600A24DB1 /* Arrays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9B22F85C2600A24DB1 /* Arrays.swift */; };
 		9A3E1E9E22F86DBE00A24DB1 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9D22F86DBE00A24DB1 /* BaseNavigationController.swift */; };
 		9A3E1EA022F86E4300A24DB1 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9F22F86E4300A24DB1 /* BaseTabBarController.swift */; };
@@ -76,6 +70,7 @@
 		9A8900A8231F31E3009AF915 /* WIFIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900A7231F31E2009AF915 /* WIFIManager.swift */; };
 		9A8900AA23200490009AF915 /* LangaugeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900A923200490009AF915 /* LangaugeTableViewController.swift */; };
 		9A8900AC23215556009AF915 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900AB23215555009AF915 /* DeviceManager.swift */; };
+		9A8900B923239973009AF915 /* TCPSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900B823239973009AF915 /* TCPSocketManager.swift */; };
 		9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */; };
 		9AA1AC3222FA9BE00000F6D2 /* Public.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */; };
 		9AA1AC3522FC492B0000F6D2 /* EffectsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */; };
@@ -151,13 +146,6 @@
 		9A3E1E8622F8573300A24DB1 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		9A3E1E8922F8590500A24DB1 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		9A3E1E8D22F85AF600A24DB1 /* SmartLight-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SmartLight-Bridging-Header.h"; sourceTree = "<group>"; };
-		9A3E1E8E22F85AF600A24DB1 /* ytcpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ytcpsocket.c; sourceTree = "<group>"; };
-		9A3E1E8F22F85AF600A24DB1 /* TCPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPClient.swift; sourceTree = "<group>"; };
-		9A3E1E9022F85AF700A24DB1 /* yudpsocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = yudpsocket.c; sourceTree = "<group>"; };
-		9A3E1E9122F85AF700A24DB1 /* UDPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UDPClient.swift; sourceTree = "<group>"; };
-		9A3E1E9222F85AF700A24DB1 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
-		9A3E1E9322F85AF700A24DB1 /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
-		9A3E1E9422F85AF700A24DB1 /* SwiftSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftSocket.h; sourceTree = "<group>"; };
 		9A3E1E9B22F85C2600A24DB1 /* Arrays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arrays.swift; sourceTree = "<group>"; };
 		9A3E1E9D22F86DBE00A24DB1 /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		9A3E1E9F22F86E4300A24DB1 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
@@ -187,6 +175,7 @@
 		9A8900A7231F31E2009AF915 /* WIFIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WIFIManager.swift; sourceTree = "<group>"; };
 		9A8900A923200490009AF915 /* LangaugeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LangaugeTableViewController.swift; sourceTree = "<group>"; };
 		9A8900AB23215555009AF915 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
+		9A8900B823239973009AF915 /* TCPSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPSocketManager.swift; sourceTree = "<group>"; };
 		9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Public.storyboard; sourceTree = "<group>"; };
 		9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsTableViewController.swift; sourceTree = "<group>"; };
@@ -374,24 +363,8 @@
 			isa = PBXGroup;
 			children = (
 				9A1020182303D18F000F36D7 /* Scan */,
-				9A3E1E8C22F85AE300A24DB1 /* Socket */,
 			);
 			path = Vendor;
-			sourceTree = "<group>";
-		};
-		9A3E1E8C22F85AE300A24DB1 /* Socket */ = {
-			isa = PBXGroup;
-			children = (
-				9A3E1E9222F85AF700A24DB1 /* Result.swift */,
-				9A3E1E9322F85AF700A24DB1 /* Socket.swift */,
-				9A3E1E9422F85AF700A24DB1 /* SwiftSocket.h */,
-				9A3E1E8F22F85AF600A24DB1 /* TCPClient.swift */,
-				9A3E1E9122F85AF700A24DB1 /* UDPClient.swift */,
-				9A3E1E8E22F85AF600A24DB1 /* ytcpsocket.c */,
-				9A3E1E9022F85AF700A24DB1 /* yudpsocket.c */,
-				9A3E1E8D22F85AF600A24DB1 /* SmartLight-Bridging-Header.h */,
-			);
-			path = Socket;
 			sourceTree = "<group>";
 		};
 		9A3E1EA122F8744E00A24DB1 /* Settings */ = {
@@ -416,6 +389,7 @@
 		9A79F63522F6680F00487DC5 /* Kit */ = {
 			isa = PBXGroup;
 			children = (
+				9A8900B123238F5C009AF915 /* ObjectC */,
 				9A8900A6231F3173009AF915 /* Manage */,
 				9A79F63622F6682800487DC5 /* Extension */,
 			);
@@ -475,8 +449,17 @@
 			children = (
 				9A8900A7231F31E2009AF915 /* WIFIManager.swift */,
 				9A8900AB23215555009AF915 /* DeviceManager.swift */,
+				9A8900B823239973009AF915 /* TCPSocketManager.swift */,
 			);
 			path = Manage;
+			sourceTree = "<group>";
+		};
+		9A8900B123238F5C009AF915 /* ObjectC */ = {
+			isa = PBXGroup;
+			children = (
+				9A3E1E8D22F85AF600A24DB1 /* SmartLight-Bridging-Header.h */,
+			);
+			path = ObjectC;
 			sourceTree = "<group>";
 		};
 		9AA1AC2E22FA997E0000F6D2 /* Public */ = {
@@ -733,7 +716,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A1D8E2C2316C88F000FEBEC /* TopView.swift in Sources */,
-				9A3E1E9822F85AF700A24DB1 /* UDPClient.swift in Sources */,
 				9A10200A230066BF000F36D7 /* DeviceListModel.swift in Sources */,
 				9A10200C23006703000F36D7 /* DeviceModel.swift in Sources */,
 				9A10200523005F58000F36D7 /* WIFIListViewController.swift in Sources */,
@@ -742,14 +724,13 @@
 				9A1020222303D26C000F36D7 /* LBXScanNetAnimation.swift in Sources */,
 				9A3E1E8A22F8590500A24DB1 /* BaseViewController.swift in Sources */,
 				9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */,
-				9A3E1E9A22F85AF700A24DB1 /* Socket.swift in Sources */,
 				9AA1AC4222FC67160000F6D2 /* EffectsSettingBTableViewCell.swift in Sources */,
 				9AA1AC3522FC492B0000F6D2 /* EffectsTableViewController.swift in Sources */,
 				9A5B7F05230965870099E3A9 /* Kit.swift in Sources */,
+				9A8900B923239973009AF915 /* TCPSocketManager.swift in Sources */,
 				9AA1AC3922FC60E70000F6D2 /* EffectsSettingTableViewController.swift in Sources */,
 				9AA1AC3E22FC64C80000F6D2 /* EffectsSettingTableViewCell.swift in Sources */,
 				9A5B7EF72305ABEF0099E3A9 /* OTAViewController.swift in Sources */,
-				9A3E1E9622F85AF700A24DB1 /* TCPClient.swift in Sources */,
 				9A1020252303D26C000F36D7 /* LBXScanViewStyle.swift in Sources */,
 				9A5B7EFE2307EFA70099E3A9 /* LunnarTableViewController.swift in Sources */,
 				9A5B7F032308FC440099E3A9 /* TimePickerViewController.swift in Sources */,
@@ -763,11 +744,9 @@
 				9A3E1E8722F8573300A24DB1 /* Strings.swift in Sources */,
 				9A1020202303D26C000F36D7 /* LBXScanViewController.swift in Sources */,
 				9A5B7F012307F7800099E3A9 /* AcclimationTableViewController.swift in Sources */,
-				9A3E1E9922F85AF700A24DB1 /* Result.swift in Sources */,
 				9A1020242303D26C000F36D7 /* LBXScanLineAnimation.swift in Sources */,
 				9A101B6022F5C9400033E96B /* SmartLight.xcdatamodeld in Sources */,
 				9A8900A8231F31E3009AF915 /* WIFIManager.swift in Sources */,
-				9A3E1E9722F85AF700A24DB1 /* yudpsocket.c in Sources */,
 				9A5B7EF12304553A0099E3A9 /* PresetViewController.swift in Sources */,
 				9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */,
 				9A5B7EFD2307EFA70099E3A9 /* LightningTableViewController.swift in Sources */,
@@ -786,7 +765,6 @@
 				9A101B5822F5C9400033E96B /* AppDelegate.swift in Sources */,
 				9AA1AC4D22FD0C130000F6D2 /* EffectsSettingModel.swift in Sources */,
 				9AA1AC4822FC68870000F6D2 /* EffectsSettingCTableViewCell.swift in Sources */,
-				9A3E1E9522F85AF700A24DB1 /* ytcpsocket.c in Sources */,
 				9A5B7F0723097C540099E3A9 /* CustomPickerViewController.swift in Sources */,
 				9A101FFF23004017000F36D7 /* DeviceListViewController.swift in Sources */,
 				9A8900AC23215556009AF915 /* DeviceManager.swift in Sources */,
@@ -983,7 +961,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Vendor/Socket/SmartLight-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1007,7 +985,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Vendor/Socket/SmartLight-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

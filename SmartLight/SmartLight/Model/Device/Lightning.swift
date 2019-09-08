@@ -40,19 +40,6 @@ class Lightning: NSObject, NSCoding {
         intensity = aDecoder.decodeInteger(forKey: "intensity")
     }
     
-    func save() {
-        let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        UserDefaults.standard.set(data, forKey: "Lightning")
-        UserDefaults.standard.synchronize()
-    }
-    
-    static func load() -> Lightning {
-        if let data = UserDefaults.standard.object(forKey: "Lightning") as? Data {
-            let model = NSKeyedUnarchiver.unarchiveObject(with: data) as! Lightning
-            return model
-        }
-        return Lightning()
-    }
 }
 
 

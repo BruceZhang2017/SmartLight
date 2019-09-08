@@ -204,7 +204,7 @@ class TopView: UIView {
         }
         
         let shapeLayer = CAShapeLayer()
-        let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 40, height: 20), byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 10, height: 10))
+        let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 40, height: 20), byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5, height: 5))
         shapeLayer.path = path.cgPath
         shapeLayer.fillColor = Color.circleBG.cgColor
         floatView.layer.insertSublayer(shapeLayer, at: 0)
@@ -232,7 +232,7 @@ class TopView: UIView {
         }
         
         let middleView = UIView().then {
-            $0.backgroundColor = Color.circleBG.withAlphaComponent(0.5)
+            $0.backgroundColor = Color.circleBG.withAlphaComponent(0.2)
         }
         floatView.addSubview(middleView)
         middleView.snp.makeConstraints {
@@ -331,7 +331,7 @@ class TopView: UIView {
     /// 时间转Left
     func timeToLeft(value: Int) -> CGFloat {
         let x = CGFloat(value) / CGFloat(1440) * (Dimension.screenWidth - 40)
-        return min(Dimension.screenWidth - 20, max(0, x - 20))
+        return min(Dimension.screenWidth - 20, max(0, x))
     }
 
 }

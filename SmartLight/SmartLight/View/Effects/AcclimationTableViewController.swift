@@ -14,11 +14,15 @@ import UIKit
 
 class AcclimationTableViewController: EffectsSettingTableViewController {
     
+    var deviceListModel: DeviceListModel!
+    var deviceModel: DeviceModel!
     var acclimation: Acclimation!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        acclimation = Acclimation.load()
+        deviceListModel = DeviceListModel.down()
+        deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
+        acclimation = deviceModel.acclimation ?? Acclimation()
     }
 
     // MARK: - Table view data source
@@ -123,11 +127,11 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
 extension AcclimationTableViewController: EffectsSettingCTableViewCellDelegate {
     func valueChanged(value: Int, tag: Int) {
         if tag >= 6 {
-            acclimation.intesity = [value, value, value, value, value, value, value]
+            acclimation.intesity = [value, value, value, value, value, value, value, value]
         } else {
             acclimation.intesity[tag] = value
         }
-        acclimation.save()
+        deviceListModel.save()
         tableView.reloadData()
     }
 }
@@ -141,7 +145,7 @@ extension AcclimationTableViewController: TimePickerViewControllerDelegate {
             acclimation.endTime = time
         }
         tableView.reloadData()
-        acclimation.save()
+        deviceListModel.save()
     }
 }
 
@@ -149,7 +153,7 @@ extension AcclimationTableViewController: CustomPickerViewControllerDelegate {
     func customPickerView(value: Int) {
         acclimation.ramp = value
         tableView.reloadData()
-        acclimation.save()
+        deviceListModel.save()
     }
 }
 
@@ -157,6 +161,6 @@ extension AcclimationTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         acclimation.enable = value
         tableView.reloadData()
-        acclimation.save()
+        deviceListModel.save()
     }
 }

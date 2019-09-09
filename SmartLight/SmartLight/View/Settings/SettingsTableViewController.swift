@@ -100,6 +100,26 @@ class SettingsTableViewController: UITableViewController {
         return stringOfDate
     }
     
+    private func showWifiAlert() {
+        let ssid = WIFIManager().getSSID()
+        var wifiList = UserDefaults.standard.object(forKey: .kWIFIPWD) as? [String : String] ?? [:]
+        let password = wifiList[ssid] ?? ""
+        let alert = UIAlertController(title: password.count > 0 ? "Update Password" : "Password", message: nil, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert] (action) in
+            guard let pwd = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), pwd.count > 0 else {
+                return
+            }
+            wifiList[ssid] = pwd
+            UserDefaults.standard.set(wifiList, forKey: .kWIFIPWD)
+            UserDefaults.standard.synchronize()
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - tableView Datasource & delegate
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -117,6 +137,8 @@ class SettingsTableViewController: UITableViewController {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 cell.detailTextLabel?.text = currentDate(date: currentDate)
+            } else if indexPath.row == 1 {
+                cell.detailTextLabel?.text = WIFIManager().getSSID()
             } else if indexPath.row == 2 {
                 cell.detailTextLabel?.text = "English"
             } else if indexPath.row == 3 {
@@ -142,6 +164,8 @@ class SettingsTableViewController: UITableViewController {
             viewController.modalTransitionStyle = .crossDissolve
             viewController.modalPresentationStyle = .overCurrentContext
             navigationController?.tabBarController?.present(viewController, animated: false, completion: nil)
+        case 1:
+            showWifiAlert()
         case 2:
             let viewController = LangaugeTableViewController()
             viewController.hidesBottomBarWhenPushed = true

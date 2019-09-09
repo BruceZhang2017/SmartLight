@@ -19,5 +19,7 @@ class BarValueView: UIView {
     @IBOutlet weak var currentValueImageView: UIImageView!
     @IBOutlet weak var settingValueImageView: UIImageView!
     @IBOutlet weak var totalValueImageview: UIImageView!
-
+    @IBOutlet weak var maxValueTopLConstraint: NSLayoutConstraint!
+    @IBOutlet weak var currentValueTopLConstraint: NSLayoutConstraint!
+    
 }

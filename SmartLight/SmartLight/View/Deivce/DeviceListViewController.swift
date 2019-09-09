@@ -24,7 +24,7 @@ class DeviceListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setLeftNavigationItem()
-        model = DeviceListModel.down()
+        model = DeviceManager.sharedInstance.deviceListModel
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -67,7 +67,7 @@ class DeviceListViewController: UIViewController {
             model.group = true
             self?.model.groups.append(model)
             self?.tableView.reloadData()
-            self?.model.save()
+            DeviceManager.sharedInstance.save()
         }))
         present(alert, animated: true, completion: nil)
     }
@@ -120,7 +120,7 @@ class DeviceListViewController: UIViewController {
             }
             self?.selectedIndex = 0
             self?.tableView.reloadData()
-            self?.model.save()
+            DeviceManager.sharedInstance.save()
         }))
         present(alert, animated: true, completion: nil)
     }
@@ -180,7 +180,7 @@ extension DeviceListViewController: DeviceListTableViewCellDelegate {
             }
             self?.model.groups[index].name = name
             self?.tableView.reloadData()
-             self?.model.save()
+             DeviceManager.sharedInstance.save()
         }))
         present(alert, animated: true, completion: nil)
     }

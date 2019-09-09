@@ -15,4 +15,26 @@ import UIKit
 class DeviceManager: NSObject {
     static let sharedInstance = DeviceManager()
     var currentIndex = 0 // 当前设备编号
+    var connectStatus: [String : Int] = [:]
+    var deviceListModel: DeviceListModel = DeviceListModel()
+    
+    override init() {
+        super.init()
+        deviceListModel = down()
+    }
+    
+    func save() {
+        let data = NSKeyedArchiver.archivedData(withRootObject: deviceListModel)
+        UserDefaults.standard.set(data, forKey: "devices")
+        UserDefaults.standard.synchronize()
+    }
+    
+    func down() -> DeviceListModel {
+        if let data = UserDefaults.standard.object(forKey: "devices") as? Data {
+            if let model = NSKeyedUnarchiver.unarchiveObject(with: data) as? DeviceListModel {
+                return model
+            }
+        }
+        return DeviceListModel()
+    }
 }

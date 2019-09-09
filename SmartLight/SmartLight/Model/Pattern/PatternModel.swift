@@ -14,6 +14,7 @@ import UIKit
 
 class PatternModel: NSObject,NSCoding {
     var name = ""
+    var isManual = false
     var items: [PatternItemModel] = []
     var manual: PatternItemModel?
     
@@ -25,6 +26,7 @@ class PatternModel: NSObject,NSCoding {
         aCoder.encode(name, forKey: "name")
         aCoder.encode(items, forKey: "items")
         aCoder.encode(manual, forKey: "manual")
+        aCoder.encode(isManual, forKey: "isManual")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -32,6 +34,7 @@ class PatternModel: NSObject,NSCoding {
         name = aDecoder.decodeObject(forKey: "name") as? String ?? ""
         items = aDecoder.decodeObject(forKey: "items") as? [PatternItemModel] ?? []
         manual = aDecoder.decodeObject(forKey: "manual") as? PatternItemModel
+        isManual = aDecoder.decodeBool(forKey: "isManual")
     }
 }
 

@@ -20,13 +20,19 @@ class BashboardCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var btnView: UIView!
     @IBOutlet weak var btnViewHeightLConstriant: NSLayoutConstraint!
     @IBOutlet weak var topLConstraint: NSLayoutConstraint!
+    var barHeight: CGFloat = 0
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        initBarValueViews()
-        initBtnViews()
         btnViewHeightLConstriant.constant = Dimension.screenWidth <= 320 || Dimension.screenHeight <= 667 ? 60 : 100
         topLConstraint.constant = AppDelegate.isSameToIphoneX() ? 138 : 78
+        if Dimension.screenWidth <= 320 {
+            barHeight = 220
+        } else {
+            barHeight = Dimension.screenWidth / 375 * 300
+        }
+        initBarValueViews()
+        initBtnViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -46,6 +52,8 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.currentValueImageView.backgroundColor = colors[i]
                 $0.settingValueImageView.backgroundColor = colors[i]
                 $0.totalValueImageview.backgroundColor = Color.barBG
+                $0.maxValueTopLConstraint.constant = barHeight
+                $0.currentValueTopLConstraint.constant = barHeight
             }
             let width = (Dimension.screenWidth - 80) / CGFloat(colors.count)
             let x = 20 + width * CGFloat(i)
@@ -55,11 +63,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.left.equalTo(x)
                 $0.width.equalTo(width)
                 $0.top.bottom.equalToSuperview()
-                if Dimension.screenWidth <= 320 {
-                    $0.height.equalTo(220)
-                } else {
-                    $0.height.equalTo(Dimension.screenWidth / 375 * 300)
-                }
+                $0.height.equalTo(barHeight)
             }
         }
     }
@@ -117,5 +121,189 @@ class BashboardCollectionViewCell: UICollectionViewCell {
             return
         }
         button.isSelected = !button.isSelected
+    }
+    
+    /// 刷新Cell UI
+    ///
+    /// - Parameter deviceModel: 对象参数值
+    func refreshUI(deviceModel: DeviceModel, currentTime: Int) {
+        for (index, barValueView) in barValueViews.enumerated() {
+            if deviceModel.pattern?.isManual == true {
+                var value: CGFloat = 0
+                if index == 0 {
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.uv ?? 0)) / 100 * barHeight
+                } else if index == 1 {
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.db ?? 0)) / 100 * barHeight
+                } else if index == 2 {
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.b ?? 0)) / 100 * barHeight
+                } else if index == 3 {
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.g ?? 0)) / 100 * barHeight
+                } else if index == 4 {
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.dr ?? 0)) / 100 * barHeight
+                } else if index == 5 {
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.cw ?? 0)) / 100 * barHeight
+                }
+                barValueView.maxValueTopLConstraint.constant = value
+                barValueView.currentValueTopLConstraint.constant = value
+            } else {
+                var maxValue: CGFloat = 0
+                var currentValue: CGFloat = 0
+                if index == 0 {
+                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.uv < $1.uv}?.uv ?? 0)
+                    currentValue = calCurrentUV(deviceModel: deviceModel, currentTime: currentTime)
+                } else if index == 1 {
+                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.db < $1.db}?.db ?? 0)
+                    currentValue = calCurrentDB(deviceModel: deviceModel, currentTime: currentTime)
+                } else if index == 2 {
+                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.b < $1.b}?.b ?? 0)
+                    currentValue = calCurrentB(deviceModel: deviceModel, currentTime: currentTime)
+                } else if index == 3 {
+                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.g < $1.uv}?.g ?? 0)
+                    currentValue = calCurrentG(deviceModel: deviceModel, currentTime: currentTime)
+                } else if index == 4 {
+                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.dr < $1.dr}?.dr ?? 0)
+                    currentValue = calCurrentDR(deviceModel: deviceModel, currentTime: currentTime)
+                } else if index == 5 {
+                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.cw < $1.cw}?.cw ?? 0)
+                    currentValue = calCurrentCW(deviceModel: deviceModel, currentTime: currentTime)
+                }
+                maxValue = CGFloat(100 - maxValue) / 100 * barHeight
+                currentValue = CGFloat(100 - currentValue) / 100 * barHeight
+                barValueView.maxValueTopLConstraint.constant = maxValue
+                barValueView.currentValueTopLConstraint.constant = currentValue
+            }
+        }
+    }
+    
+    func calCurrentUV(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
+        guard let pattern = deviceModel.pattern else {
+            return 0
+        }
+        for (index, item) in pattern.items.enumerated() {
+            if index == pattern.items.count - 1 {
+                return CGFloat(0 - item.uv) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.uv)
+            }
+            if item.time > currentTime {
+                if index > 0 {
+                    let pre = pattern.items[index - 1]
+                    return CGFloat(item.uv - pre.uv) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.uv)
+                } else {
+                    return CGFloat(item.uv) * CGFloat(currentTime) / CGFloat(item.time)
+                }
+            }
+        }
+        return 0
+    }
+    
+    func calCurrentDB(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
+        guard let pattern = deviceModel.pattern else {
+            return 0
+        }
+        for (index, item) in pattern.items.enumerated() {
+            if index == pattern.items.count - 1 {
+                return CGFloat(0 - item.db) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.db)
+            }
+            if item.time > currentTime {
+                if index > 0 {
+                    let pre = pattern.items[index - 1]
+                    return CGFloat(item.db - pre.db) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.db)
+                } else {
+                    return CGFloat(item.db) * CGFloat(currentTime) / CGFloat(item.time)
+                }
+            }
+        }
+        return 0
+    }
+    
+    func calCurrentB(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
+        guard let pattern = deviceModel.pattern else {
+            return 0
+        }
+        for (index, item) in pattern.items.enumerated() {
+            if index == pattern.items.count - 1 {
+                return CGFloat(0 - item.b) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.b)
+            }
+            if item.time > currentTime {
+                if index > 0 {
+                    let pre = pattern.items[index - 1]
+                    return CGFloat(item.b - pre.b) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.b)
+                } else {
+                    return CGFloat(item.b) * CGFloat(currentTime) / CGFloat(item.time)
+                }
+            }
+        }
+        return 0
+    }
+    
+    func calCurrentG(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
+        guard let pattern = deviceModel.pattern else {
+            return 0
+        }
+        for (index, item) in pattern.items.enumerated() {
+            if index == pattern.items.count - 1 {
+                return CGFloat(0 - item.g) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.g)
+            }
+            if item.time > currentTime {
+                if index > 0 {
+                    let pre = pattern.items[index - 1]
+                    return CGFloat(item.g - pre.g) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.g)
+                } else {
+                    return CGFloat(item.g) * CGFloat(currentTime) / CGFloat(item.time)
+                }
+            }
+        }
+        return 0
+    }
+    
+    func calCurrentDR(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
+        guard let pattern = deviceModel.pattern else {
+            return 0
+        }
+        for (index, item) in pattern.items.enumerated() {
+            if index == pattern.items.count - 1 {
+                return CGFloat(0 - item.dr) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.dr)
+            }
+            if item.time > currentTime {
+                if index > 0 {
+                    let pre = pattern.items[index - 1]
+                    return CGFloat(item.dr - pre.dr) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.dr)
+                } else {
+                    return CGFloat(item.dr) * CGFloat(currentTime) / CGFloat(item.time)
+                }
+            }
+        }
+        return 0
+    }
+    
+    func calCurrentCW(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
+        guard let pattern = deviceModel.pattern else {
+            return 0
+        }
+        for (index, item) in pattern.items.enumerated() {
+            if index == pattern.items.count - 1 {
+                return CGFloat(0 - item.cw) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.cw)
+            }
+            if item.time > currentTime {
+                if index > 0 {
+                    let pre = pattern.items[index - 1]
+                    return CGFloat(item.cw - pre.cw) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.cw)
+                } else {
+                    return CGFloat(item.cw) * CGFloat(currentTime) / CGFloat(item.time)
+                }
+            }
+        }
+        return 0
+    }
+    
+    func refreshButton(deviceModel: DeviceModel) {
+        let value = deviceModel.deviceState
+        let low = value & 0x0f
+        let high = value & 0xf0
+        buttons[0].isSelected = low == 4
+        buttons[1].isSelected = low == 2
+        buttons[2].isSelected = low == 1
+        buttons[3].isSelected = high == 4
+        buttons[4].isSelected = high == 2
+        buttons[5].isSelected = high == 1
     }
 }

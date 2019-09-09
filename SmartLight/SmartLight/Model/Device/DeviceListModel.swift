@@ -27,19 +27,4 @@ class DeviceListModel: NSObject, NSCoding {
         self.init()
         groups = aDecoder.decodeObject(forKey: "group") as? [DeviceModel] ?? []
     }
-    
-    func save() {
-        let data = NSKeyedArchiver.archivedData(withRootObject: self)
-        UserDefaults.standard.set(data, forKey: "devices")
-        UserDefaults.standard.synchronize()
-    }
-    
-    static func down() -> DeviceListModel {
-        if let data = UserDefaults.standard.object(forKey: "devices") as? Data {
-            if let model = NSKeyedUnarchiver.unarchiveObject(with: data) as? DeviceListModel {
-                return model
-            }
-        }
-        return DeviceListModel()
-    }
 }

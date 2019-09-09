@@ -13,6 +13,10 @@
 import Foundation
 
 extension String {
+    static let kWIFIPWD = "wifiPWD" // 保存wifi密码
+}
+
+extension String {
     func timeStrToInt() -> Int {
         let array = self.split(separator: ":")
         if array.count == 2 {

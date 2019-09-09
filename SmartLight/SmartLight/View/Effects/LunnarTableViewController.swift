@@ -20,7 +20,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        deviceListModel = DeviceListModel.down()
+        deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         lunnar = deviceModel.lunnar ?? Lunnar()
     }
@@ -111,7 +111,8 @@ extension LunnarTableViewController: TimePickerViewControllerDelegate {
             lunnar.endTime = time
         }
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 2, result: lunnar.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -119,7 +120,8 @@ extension LunnarTableViewController: EffectsSettingBTableViewCellDelegate {
     func valueChanged(value: Int, tag: Int) {
         lunnar.intensity = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 2, result: lunnar.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -127,6 +129,7 @@ extension LunnarTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         lunnar.enable = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 2, result: lunnar.enable ? 1 : 0, device: deviceModel)
     }
 }

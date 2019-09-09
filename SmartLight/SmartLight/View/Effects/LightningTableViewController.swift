@@ -20,7 +20,7 @@ class LightningTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        deviceListModel = DeviceListModel.down()
+        deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         ligtning = deviceModel.lightning ?? Lightning()
     }
@@ -122,7 +122,8 @@ extension LightningTableViewController: TimePickerViewControllerDelegate {
             ligtning.endTime = time
         }
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 3, result: ligtning.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -130,7 +131,8 @@ extension LightningTableViewController: EffectsSettingBTableViewCellDelegate {
     func valueChanged(value: Int, tag: Int) {
         ligtning.intensity = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 3, result: ligtning.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -138,7 +140,8 @@ extension LightningTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         ligtning.enable = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 3, result: ligtning.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -146,6 +149,7 @@ extension LightningTableViewController: CustomPickerViewControllerDelegate {
     func customPickerView(value: Int) {
         ligtning.frequency = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 3, result: ligtning.enable ? 1 : 0, device: deviceModel)
     }
 }

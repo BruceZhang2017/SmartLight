@@ -26,4 +26,5 @@ enum Color {
     static let circleBG = UIColor.hexToColor(red: 225, green: 20, blue: 127)
     static let cirBG = UIColor.hexToColor(red: 242, green: 242, blue: 246)
     static let navBG = UIColor.hexToColor(red: 248, green: 248, blue: 248)
+    static let power = UIColor.hexToColor(red: 211, green: 39, blue: 122)
 }

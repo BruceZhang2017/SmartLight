@@ -20,7 +20,7 @@ class CloudyTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        deviceListModel = DeviceListModel.down()
+        deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         cloudy = deviceModel.cloudy ?? Cloudy()
     }
@@ -120,7 +120,8 @@ extension CloudyTableViewController: TimePickerViewControllerDelegate {
             cloudy.endTime = time
         }
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 4, result: cloudy.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -132,7 +133,8 @@ extension CloudyTableViewController: EffectsSettingBTableViewCellDelegate {
             cloudy.speed = value
         }
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 4, result: cloudy.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -140,6 +142,7 @@ extension CloudyTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         cloudy.enable = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 4, result: cloudy.enable ? 1 : 0, device: deviceModel)
     }
 }

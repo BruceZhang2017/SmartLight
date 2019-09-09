@@ -22,6 +22,7 @@ class DashboardViewController: BaseViewController {
     @IBOutlet weak var timeLabelTopLConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomLConstraint: NSLayoutConstraint!
     var clockTimer: Timer!
+    var currentTime = 0 // 当前时间
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,12 +34,13 @@ class DashboardViewController: BaseViewController {
         timeLabelTopLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : 20
         bottomLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : 0
         startClock()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
-        let model = DeviceListModel.down()
+        let model = DeviceManager.sharedInstance.deviceListModel
         let current = DeviceManager.sharedInstance.currentIndex
         if model.groups.count == 0 {
             navigationItem.leftBarButtonItem?.isEnabled = false
@@ -64,8 +66,12 @@ class DashboardViewController: BaseViewController {
                 item.isEnabled = true
             }
             collectionView.reloadData()
+            let ip = model.groups[current].ip
+            if ip != nil && DeviceManager.sharedInstance.connectStatus[ip!] == 0 {
+                DeviceManager.sharedInstance.connectStatus[ip!] = 1
+                TCPSocketManager.sharedInstance.connect(ip!)
+            }
         }
-        let _ = TCPSocketManager.sharedInstance
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -103,7 +109,13 @@ class DashboardViewController: BaseViewController {
         if dateStr.count > 16 {
             let start = dateStr.index(dateStr.startIndex, offsetBy: 11)
             let end = dateStr.index(dateStr.startIndex, offsetBy: 16)
-            timeLabel.text = String(dateStr[start..<end])
+            let time = String(dateStr[start..<end])
+            timeLabel.text = time
+            let array = time.components(separatedBy: ":")
+            if array.count == 2 {
+                currentTime = (Int(array[0]) ?? 0) * 24 + (Int(array[1]) ?? 0)
+                collectionView.reloadData()
+            }
         }
     }
     
@@ -140,7 +152,7 @@ class DashboardViewController: BaseViewController {
     }
     
     @IBAction func prevous(_ sender: Any) {
-        let model = DeviceListModel.down()
+        let model = DeviceManager.sharedInstance.deviceListModel
         if DeviceManager.sharedInstance.currentIndex > 0 {
             DeviceManager.sharedInstance.currentIndex -= 1
             let current = DeviceManager.sharedInstance.currentIndex
@@ -153,9 +165,9 @@ class DashboardViewController: BaseViewController {
     }
     
     @IBAction func next(_ sender: Any) {
-        let model = DeviceListModel.down()
+        let model = DeviceManager.sharedInstance.deviceListModel
         let count = model.groups.count
-        if DeviceManager.sharedInstance.currentIndex < count {
+        if DeviceManager.sharedInstance.currentIndex < count - 1 {
             DeviceManager.sharedInstance.currentIndex += 1
             let current = DeviceManager.sharedInstance.currentIndex
             collectionView.scrollToItem(
@@ -170,13 +182,14 @@ class DashboardViewController: BaseViewController {
 extension DashboardViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return DeviceListModel.down().groups.count
+        return DeviceManager.sharedInstance.deviceListModel.groups.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .kCellIdentifier, for: indexPath) as! BashboardCollectionViewCell
-        let device = DeviceListModel.down().groups[indexPath.row]
-        
+        let device = DeviceManager.sharedInstance.deviceListModel.groups[indexPath.row]
+        cell.refreshUI(deviceModel: device, currentTime: currentTime)
+        cell.refreshButton(deviceModel: device)
         return cell
     }
 }

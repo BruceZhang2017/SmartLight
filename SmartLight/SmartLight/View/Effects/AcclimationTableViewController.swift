@@ -20,7 +20,7 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        deviceListModel = DeviceListModel.down()
+        deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         acclimation = deviceModel.acclimation ?? Acclimation()
     }
@@ -131,8 +131,9 @@ extension AcclimationTableViewController: EffectsSettingCTableViewCellDelegate {
         } else {
             acclimation.intesity[tag] = value
         }
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
         tableView.reloadData()
+        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -145,7 +146,8 @@ extension AcclimationTableViewController: TimePickerViewControllerDelegate {
             acclimation.endTime = time
         }
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -153,7 +155,8 @@ extension AcclimationTableViewController: CustomPickerViewControllerDelegate {
     func customPickerView(value: Int) {
         acclimation.ramp = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
     }
 }
 
@@ -161,6 +164,7 @@ extension AcclimationTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool) {
         acclimation.enable = value
         tableView.reloadData()
-        deviceListModel.save()
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
     }
 }

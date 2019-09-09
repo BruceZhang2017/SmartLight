@@ -11,16 +11,18 @@
 	
 
 import UIKit
+import Toaster
 
 class SearchDeviceViewController: UIViewController {
     
-    var wifiName = ""
-
+    var results: [ESPTouchResult] = []
+    var wifiList: [String : String] = [:]
+    var controller: ESPController!
     @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let wifiManager = WIFIManager()
-        wifiName = wifiManager.getSSID()
+        //results = [ESPTouchResult(isSuc: true, andBssid: "000000000000", andInetAddrData: Data(repeating: 0x00, count: 6))]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,24 +30,82 @@ class SearchDeviceViewController: UIViewController {
         self.navigationController?.navigationBar.barTintColor = Color.navBG
         self.navigationController?.navigationBar.tintColor = Color.main
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let ssid = WIFIManager().getSSID()
+        let wifiList = UserDefaults.standard.object(forKey: .kWIFIPWD) as? [String : String] ?? [:]
+        print("wifiList: \(wifiList)")
+        let password = wifiList[ssid] ?? ""
+        if password.count == 0 {
+            showWifiAlert(ssid: ssid) // 显示输入密码的弹框
+        } else {
+            initializeSmartConfig()
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        clearSmartConfig()
+    }
 
     private func pushToMenu() {
         let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceList) as! DeviceListViewController
         navigationController?.pushViewController(viewController, animated: true)
     }
+    
+    /// 初始化SmartConfig
+    private func initializeSmartConfig() {
+        if controller == nil {
+            controller = ESPController(delegate: self)
+        }
+        controller?.tapConfirmForResults()
+    }
+    
+    private func clearSmartConfig() {
+        if controller == nil {
+            return
+        }
+        controller?.tapConfirmForResults()
+    }
+    
+    private func showWifiAlert(ssid: String) {
+        let alert = UIAlertController(title: "Password", message: nil, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert, weak self] (action) in
+            guard let pwd = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), pwd.count > 0 else {
+                return
+            }
+            self?.saveWIFI(ssid: ssid, pwd: pwd)
+        }))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func saveWIFI(ssid: String, pwd: String) {
+        wifiList[ssid] = pwd
+        UserDefaults.standard.set(wifiList, forKey: .kWIFIPWD)
+        UserDefaults.standard.synchronize()
+        initializeSmartConfig()
+    }
 
 }
 
 extension SearchDeviceViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
         if let nameLabel = cell.viewWithTag(1) as? UILabel {
-            nameLabel.text = wifiName
+            nameLabel.text = "Light_\(results[indexPath.row].bssid ?? "")"
+        }
+        if let ipLabel = cell.viewWithTag(2) as? UILabel {
+            ipLabel.text = results[indexPath.row].ip() ?? ""
         }
         return cell
     }
@@ -55,18 +115,55 @@ extension SearchDeviceViewController: UITableViewDataSource {
 extension SearchDeviceViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let model = DeviceListModel.down()
+        let model = DeviceManager.sharedInstance.deviceListModel
         if model.groups.count == 0 {
             let device = DeviceModel() // 先添加一个设备
-            device.name = "no name"
+            device.name = "Light_\(results[indexPath.row].bssid ?? "")"
+            device.ip = results[indexPath.row].ip()
+            device.deviceState = 0x02
+            device.deviceType = 6
+            
             model.groups.append(device)
-            model.save()
+            DeviceManager.sharedInstance.save()
             pushToMenu()
             var viewControllers = navigationController!.viewControllers
             viewControllers.remove(at: 1)
             navigationController?.viewControllers = viewControllers
         } else {
-            self.performSegue(withIdentifier: .kSBSegueWIFIList, sender: self)
+            //self.performSegue(withIdentifier: .kSBSegueWIFIList, sender: self)
+            var isAdd = false
+            for device in model.groups {
+                if device.ip == results[indexPath.row].ip() {
+                    isAdd = true
+                    break
+                }
+            }
+            if !isAdd {
+                let device = DeviceModel() // 先添加一个设备
+                device.name = "Light_\(results[indexPath.row].bssid ?? "")"
+                device.ip = results[indexPath.row].ip()
+                device.deviceState = 0x02
+                device.deviceType = 6
+                model.groups.append(device)
+                DeviceManager.sharedInstance.save()
+            }
+            pushToMenu()
+            var viewControllers = navigationController!.viewControllers
+            viewControllers.remove(at: 1)
+            navigationController?.viewControllers = viewControllers
         }
+    }
+}
+
+extension SearchDeviceViewController: ESPControllerDelegate {
+    func scanWIFI(_ result: [ESPTouchResult]!) {
+        if result == nil {
+            results.removeAll()
+            Toast(text: "Smartconfig失败，请退出重试").show()
+            navigationController?.popViewController(animated: true)
+        } else {
+            results = result!
+        }
+        tableView.reloadData()
     }
 }

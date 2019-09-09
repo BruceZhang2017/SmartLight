@@ -24,12 +24,18 @@ class ControlViewController: BaseViewController {
     var patterns: PatternListModel!
     var currentPattern: PatternModel!
     var powerValueLabel: UILabel!
+    var deviceListModel: DeviceListModel!
+    var deviceModel: DeviceModel!
     var once = false
     var currentItem = 0 // 当前编辑的点
+    var smallShapeLayer: CAShapeLayer!
+    var powerShapeLayer: CAShapeLayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        currentPattern = PatternModel()
+        deviceListModel = DeviceManager.sharedInstance.deviceListModel
+        deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
+        currentPattern =  deviceModel.pattern ?? PatternModel()
         patterns = PatternListModel.down()
         setLeftNavigationItem()
         setRightNavigationItem()
@@ -134,7 +140,7 @@ class ControlViewController: BaseViewController {
         shapeLayer.fillColor = Color.cirBG.cgColor
         topManualView.layer.addSublayer(shapeLayer)
         
-        let smallShapeLayer = CAShapeLayer()
+        smallShapeLayer = CAShapeLayer()
         let pathB = UIBezierPath(arcCenter: CGPoint(x: Dimension.screenWidth / 2, y: height / 2), radius: 80, startAngle: 0, endAngle: CGFloat(Double.pi * 2), clockwise: false)
         smallShapeLayer.path = pathB.cgPath
         smallShapeLayer.fillColor = UIColor.white.cgColor
@@ -172,6 +178,40 @@ class ControlViewController: BaseViewController {
             $0.width.equalTo(32)
             $0.height.equalTo(52)
         }
+        showPowerValue()
+    }
+    
+    private func showPowerValue() {
+        let topHeight = AppDelegate.isSameToIphoneX() ? 88 : 64
+        let bottomHeight = AppDelegate.isSameToIphoneX() ? 83 : 49
+        let height = (Dimension.screenHeight - CGFloat(topHeight + bottomHeight + 1)) / 2
+        powerShapeLayer = CAShapeLayer()
+        let path = UIBezierPath(arcCenter: CGPoint(x: Dimension.screenWidth / 2, y: height / 2), radius: 80, startAngle: CGFloat(Double.pi / -2), endAngle: CGFloat(Double.pi * 3 / 2), clockwise: true)
+        powerShapeLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        powerShapeLayer.position = CGPoint(x: Dimension.screenWidth / 2, y: height / 2)
+        powerShapeLayer.frame = CGRect(x: 0, y: 0, width: Dimension.screenWidth, height: height)
+        powerShapeLayer.path = path.cgPath
+        powerShapeLayer.strokeColor = Color.power.cgColor
+        powerShapeLayer.fillColor = UIColor.clear.cgColor
+        powerShapeLayer.strokeStart = 0
+        powerShapeLayer.strokeEnd = 0
+        powerShapeLayer.lineWidth = 80
+        topManualView.layer.insertSublayer(powerShapeLayer, below: smallShapeLayer)
+    }
+    
+    func refreshPower() {
+        var power = CGFloat(currentPattern.manual?.uv ?? 0) * CGFloat(0.16)
+        power += CGFloat(currentPattern.manual?.db ?? 0) * 0.3
+        power += CGFloat(currentPattern.manual?.b ?? 0) * 0.3
+        power += CGFloat(currentPattern.manual?.g ?? 0) * 0.01
+        power += CGFloat(currentPattern.manual?.dr ?? 0) * 0.01
+        power += CGFloat(currentPattern.manual?.cw ?? 0) * 0.22
+        let p = Int(power)
+        if p == 0 {
+            return
+        }
+        powerShapeLayer.strokeEnd = CGFloat(p) / CGFloat(100)
+        powerValueLabel.text = "\(p)%"
     }
     
     // MARK: - Action
@@ -202,6 +242,7 @@ class ControlViewController: BaseViewController {
     }
 
     @IBAction func valueChanged(_ sender: Any) {
+        currentPattern.isManual = segmentedControl.selectedSegmentIndex != 0
         topView.isHidden = segmentedControl.selectedSegmentIndex != 0
         topManualView.isHidden = segmentedControl.selectedSegmentIndex == 0
         if currentPattern.manual == nil && topManualView.isHidden == false {
@@ -215,6 +256,7 @@ class ControlViewController: BaseViewController {
             item.cw = 0
             currentPattern.manual = item
         }
+        saveSchedule()
     }
     
     @objc private func handleEvent(_ sender: Any) {
@@ -241,11 +283,13 @@ class ControlViewController: BaseViewController {
             topView.floatView.isHidden = false
             topView.left = topView.timeToLeft(value: item.time)
             refreshTopView()
+            saveSchedule()
         case 1: // 删除点
             if currentPattern.items.count > 0 {
                 currentPattern.items.removeLast()
                 topView.floatView.isHidden = true
                 refreshTopView()
+                saveSchedule()
             }
         case 2: // 左移
             if topView.floatView.isHidden == false {
@@ -263,6 +307,7 @@ class ControlViewController: BaseViewController {
                 topView.left -= w
                 currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
                 refreshTopView()
+                saveSchedule()
             }
         case 3: // 右移
             if topView.floatView.isHidden == false {
@@ -280,6 +325,7 @@ class ControlViewController: BaseViewController {
                 topView.left += w
                 currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
                 refreshTopView()
+                saveSchedule()
             }
         case 4:
             print("需要和固件端联调")
@@ -313,6 +359,13 @@ class ControlViewController: BaseViewController {
         topView.drawLine(currentPattern: currentPattern)
         topView.addDotButtons(currentPattern: currentPattern, current: currentItem)
     }
+    
+    private func saveSchedule() {
+        deviceModel.pattern = currentPattern
+        deviceListModel.groups[DeviceManager.sharedInstance.currentIndex] = deviceModel
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightSchedual(pattern: currentPattern)
+    }
 }
 
 extension ControlViewController: LBXScanViewControllerDelegate {
@@ -336,6 +389,8 @@ extension ControlViewController: TouchBarValueViewDelegate {
                 currentPattern.manual?.g = value
                 currentPattern.manual?.dr = value
                 currentPattern.manual?.cw = value
+                refreshPower()
+                saveSchedule()
                 return
             }
             if currentPattern.items.count > 0 {
@@ -346,23 +401,43 @@ extension ControlViewController: TouchBarValueViewDelegate {
                 currentPattern.items[currentItem].dr = value
                 currentPattern.items[currentItem].cw = value
                 refreshTopView()
+                saveSchedule()
             }
         } else {
-            if currentPattern.items.count > 0 {
+            if topManualView.isHidden == false {
                 if tag == 101 {
-                    currentPattern.items[currentItem].uv = value
+                    currentPattern.manual?.uv = value
                 } else if tag == 102 {
-                    currentPattern.items[currentItem].db = value
+                    currentPattern.manual?.db = value
                 } else if tag == 103 {
-                    currentPattern.items[currentItem].b = value
+                    currentPattern.manual?.b = value
                 } else if tag == 104 {
-                    currentPattern.items[currentItem].g = value
+                    currentPattern.manual?.g = value
                 } else if tag == 105 {
-                    currentPattern.items[currentItem].dr = value
+                    currentPattern.manual?.dr = value
                 } else if tag == 106 {
-                    currentPattern.items[currentItem].cw = value
+                    currentPattern.manual?.cw = value
                 }
-                refreshTopView()
+                refreshPower()
+                saveSchedule()
+            } else {
+                if currentPattern.items.count > 0 {
+                    if tag == 101 {
+                        currentPattern.items[currentItem].uv = value
+                    } else if tag == 102 {
+                        currentPattern.items[currentItem].db = value
+                    } else if tag == 103 {
+                        currentPattern.items[currentItem].b = value
+                    } else if tag == 104 {
+                        currentPattern.items[currentItem].g = value
+                    } else if tag == 105 {
+                        currentPattern.items[currentItem].dr = value
+                    } else if tag == 106 {
+                        currentPattern.items[currentItem].cw = value
+                    }
+                    refreshTopView()
+                    saveSchedule()
+                }
             }
         }
     }
@@ -374,6 +449,7 @@ extension ControlViewController: TopViewDelegate {
     func touchValue(_ pointX: CGFloat) {
         currentPattern.items[currentItem].time = Int((pointX) / (Dimension.screenWidth - 40) * 1440)
         refreshTopView()
+        saveSchedule()
     }
     
     func touchCurrent(_ current: Int) {

@@ -82,6 +82,8 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="currentValueImageView" destination="wDQ-oP-tvD" id="yIx-gc-xIq"/>
+                <outlet property="currentValueTopLConstraint" destination="jsB-5W-DLw" id="WiP-27-e1H"/>
+                <outlet property="maxValueTopLConstraint" destination="lTx-8D-THI" id="eSC-vn-eIZ"/>
                 <outlet property="settingValueImageView" destination="ucX-ef-zNu" id="GlA-ZP-dDS"/>
                 <outlet property="titleLabel" destination="QKP-Yh-mzO" id="lkv-ya-Qln"/>
                 <outlet property="totalValueImageview" destination="lKC-73-GxU" id="e4y-sP-xNM"/>

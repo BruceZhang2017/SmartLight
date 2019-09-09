@@ -23,6 +23,9 @@ class DeviceModel: NSObject, NSCoding {
     var lunnar: Lunnar?
     var lightning: Lightning?
     var cloudy: Cloudy?
+    var ip: String?
+    var deviceType = 3 // 3和6
+    var deviceState = 0 // 使用位来存储
     
     override init() {
         super.init()
@@ -38,6 +41,9 @@ class DeviceModel: NSObject, NSCoding {
         aCoder.encode(lunnar, forKey: "lunnar")
         aCoder.encode(lightning, forKey: "lightning")
         aCoder.encode(cloudy, forKey: "cloudy")
+        aCoder.encode(ip, forKey: "ip")
+        aCoder.encode(deviceType, forKey: "deviceType")
+        aCoder.encode(deviceState, forKey: "deviceState")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -51,5 +57,8 @@ class DeviceModel: NSObject, NSCoding {
         lunnar = aDecoder.decodeObject(forKey: "lunnar") as? Lunnar
         lightning = aDecoder.decodeObject(forKey: "lightning") as? Lightning
         cloudy = aDecoder.decodeObject(forKey: "cloudy") as? Cloudy
+        ip = aDecoder.decodeObject(forKey: "ip") as? String
+        deviceType = aDecoder.decodeInteger(forKey: "deviceType")
+        deviceState = aDecoder.decodeInteger(forKey: "deviceState")
     }
 }

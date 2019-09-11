@@ -13,6 +13,10 @@
 import UIKit
 import CoreData
 import IQKeyboardManagerSwift
+import Bugly
+import XCGLogger
+
+let log = XCGLogger.default
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,6 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         setupBase()
         IQKeyboardManager.shared.enable = true
+        Bugly.start(withAppId: "92ca13740e")
+        let filepath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
+        log.setup(level: .debug, showThreadName: true, showLevel: true, showFileNames: true, showLineNumbers: true, writeToFile: "\(filepath)/MICMOL.log", fileLevel: .debug)
         return true
     }
 

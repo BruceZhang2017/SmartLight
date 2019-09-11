@@ -1,4 +1,4 @@
-module Pods_SmartLight {
+framework module Pods_SmartLight {
   umbrella header "Pods-SmartLight-umbrella.h"
 
   export *

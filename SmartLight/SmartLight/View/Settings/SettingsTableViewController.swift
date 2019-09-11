@@ -16,6 +16,7 @@ import SafariServices
 class SettingsTableViewController: UITableViewController {
     
     var currentDate: Date!
+    var versionLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,24 @@ class SettingsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
         self.navigationController?.navigationBar.tintColor = UIColor.white
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if versionLabel == nil {
+            versionLabel = UILabel().then {
+                $0.textColor = UIColor.red
+                $0.font = UIFont.systemFont(ofSize: 16)
+            }
+            view.addSubview(versionLabel)
+            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+            let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+            versionLabel.text = "V\(version) - \(build)"
+            versionLabel.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.bottom.equalTo(navigationController!.view.snp.bottom).offset(-120)
+            }
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

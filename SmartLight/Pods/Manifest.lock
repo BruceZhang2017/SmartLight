@@ -1,44 +1,60 @@
 PODS:
   - Alamofire (4.8.2)
+  - Bugly (2.5.0)
   - CocoaAsyncSocket (7.6.3)
   - EFQRCode (5.0.0):
     - swift_qrcodejs (~> 1.1.1)
   - IQKeyboardManagerSwift (6.4.0)
+  - ObjcExceptionBridging (1.0.1):
+    - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
+  - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
   - SnapKit (4.2.0)
   - swift_qrcodejs (1.1.1)
   - Then (2.5.0)
   - Toaster (2.2.0)
+  - XCGLogger (7.0.0):
+    - XCGLogger/Core (= 7.0.0)
+  - XCGLogger/Core (7.0.0):
+    - ObjcExceptionBridging
 
 DEPENDENCIES:
   - Alamofire
+  - Bugly
   - CocoaAsyncSocket
   - EFQRCode (~> 5.0.0)
   - IQKeyboardManagerSwift
   - SnapKit
   - Then
   - Toaster
+  - XCGLogger
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - Bugly
     - CocoaAsyncSocket
     - EFQRCode
     - IQKeyboardManagerSwift
+    - ObjcExceptionBridging
     - SnapKit
     - swift_qrcodejs
     - Then
     - Toaster
+    - XCGLogger
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  Bugly: 3ca9f255c01025582df26f9222893b383c7e4b4e
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
   EFQRCode: 07437cfbce3a1e497397a4f3d766c980d8972608
   IQKeyboardManagerSwift: ed9b04ee0e3067ffba543283462d619f944b05e5
+  ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   swift_qrcodejs: 0bacbfe321a99954c7b8e04c75562007ea4e4f7c
   Then: 0157115e883545c77967b452fe74a1d25fb796e1
   Toaster: c1a81b376edcc2470157b4d1ee1e9341d3b96455
+  XCGLogger: 0434f15e3909cdc450bb63faf638b8792ab782ab
 
-PODFILE CHECKSUM: 6b442b9f7ca937005541b0a12dc5f150ad74ba36
+PODFILE CHECKSUM: f7082ccb8890e471cb815153cf70ed55232e8af7
 
 COCOAPODS: 1.7.2

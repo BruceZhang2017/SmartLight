@@ -1,4 +1,4 @@
-module swift_qrcodejs {
+framework module swift_qrcodejs {
   umbrella header "swift_qrcodejs-umbrella.h"
 
   export *

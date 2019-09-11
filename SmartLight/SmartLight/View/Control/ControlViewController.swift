@@ -46,7 +46,7 @@ class ControlViewController: BaseViewController {
         initBarValueViews()
         initbttonValueViews()
         initCircelView() // 初始化圆
-        
+        refreshTopView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -287,6 +287,7 @@ class ControlViewController: BaseViewController {
         case 1: // 删除点
             if currentPattern.items.count > 0 {
                 currentPattern.items.removeLast()
+                currentItem = 0
                 topView.floatView.isHidden = true
                 refreshTopView()
                 saveSchedule()
@@ -379,8 +380,7 @@ extension ControlViewController: TouchBarValueViewDelegate {
         if tag == 100 {
             for i in 1..<colors.count {
                 let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
-                view.topLConstraint.constant = top
-                view.valueLabel.text = "\(value)%"
+                view.setValue(value)
             }
             if topManualView.isHidden == false {
                 currentPattern.manual?.uv = value
@@ -447,6 +447,9 @@ extension ControlViewController: TouchBarValueViewDelegate {
 
 extension ControlViewController: TopViewDelegate {
     func touchValue(_ pointX: CGFloat) {
+        if currentItem >= currentPattern.items.count {
+            return
+        }
         currentPattern.items[currentItem].time = Int((pointX) / (Dimension.screenWidth - 40) * 1440)
         refreshTopView()
         saveSchedule()
@@ -454,6 +457,9 @@ extension ControlViewController: TopViewDelegate {
     
     func touchCurrent(_ current: Int) {
         currentItem = current
+        if currentItem >= currentPattern.items.count {
+            return
+        }
         for i in 1..<colors.count {
             let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
             if i == 1 {

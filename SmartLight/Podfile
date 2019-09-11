@@ -1,7 +1,7 @@
 platform:ios,"9.0"
 
 target "SmartLight" do
-
+use_frameworks!
 pod 'SnapKit'
 pod 'Then'
 pod 'Toaster'
@@ -9,5 +9,7 @@ pod 'EFQRCode', '~> 5.0.0'
 pod 'Alamofire'
 pod 'IQKeyboardManagerSwift'
 pod 'CocoaAsyncSocket'
+pod 'XCGLogger'
+pod 'Bugly'
 
 end

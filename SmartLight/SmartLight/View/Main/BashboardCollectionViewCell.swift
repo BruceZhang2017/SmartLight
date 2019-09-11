@@ -52,8 +52,8 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.currentValueImageView.backgroundColor = colors[i]
                 $0.settingValueImageView.backgroundColor = colors[i]
                 $0.totalValueImageview.backgroundColor = Color.barBG
-                $0.maxValueTopLConstraint.constant = barHeight
-                $0.currentValueTopLConstraint.constant = barHeight
+                $0.maxValueTopLConstraint.constant = barHeight - 51
+                $0.currentValueTopLConstraint.constant = barHeight - 51
             }
             let width = (Dimension.screenWidth - 80) / CGFloat(colors.count)
             let x = 20 + width * CGFloat(i)
@@ -131,44 +131,50 @@ class BashboardCollectionViewCell: UICollectionViewCell {
             if deviceModel.pattern?.isManual == true {
                 var value: CGFloat = 0
                 if index == 0 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.uv ?? 0)) / 100 * barHeight
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.uv ?? 0)) / 100 * (barHeight - 71)
                 } else if index == 1 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.db ?? 0)) / 100 * barHeight
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.db ?? 0)) / 100 * (barHeight - 71)
                 } else if index == 2 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.b ?? 0)) / 100 * barHeight
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.b ?? 0)) / 100 * (barHeight - 71)
                 } else if index == 3 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.g ?? 0)) / 100 * barHeight
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.g ?? 0)) / 100 * (barHeight - 71)
                 } else if index == 4 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.dr ?? 0)) / 100 * barHeight
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.dr ?? 0)) / 100 * (barHeight - 71)
                 } else if index == 5 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.cw ?? 0)) / 100 * barHeight
+                    value = CGFloat(100 - (deviceModel.pattern?.manual?.cw ?? 0)) / 100 * (barHeight - 71)
                 }
-                barValueView.maxValueTopLConstraint.constant = value
-                barValueView.currentValueTopLConstraint.constant = value
+                barValueView.maxValueTopLConstraint.constant = value + 20
+                barValueView.currentValueTopLConstraint.constant = value + 20
             } else {
                 var maxValue: CGFloat = 0
                 var currentValue: CGFloat = 0
                 if index == 0 {
                     maxValue = CGFloat(deviceModel.pattern?.items.max{$0.uv < $1.uv}?.uv ?? 0)
                     currentValue = calCurrentUV(deviceModel: deviceModel, currentTime: currentTime)
+                    log.info("uv: \(currentValue)")
                 } else if index == 1 {
                     maxValue = CGFloat(deviceModel.pattern?.items.max{$0.db < $1.db}?.db ?? 0)
                     currentValue = calCurrentDB(deviceModel: deviceModel, currentTime: currentTime)
+                    log.info("db: \(currentValue)")
                 } else if index == 2 {
                     maxValue = CGFloat(deviceModel.pattern?.items.max{$0.b < $1.b}?.b ?? 0)
                     currentValue = calCurrentB(deviceModel: deviceModel, currentTime: currentTime)
+                    log.info("b: \(currentValue)")
                 } else if index == 3 {
-                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.g < $1.uv}?.g ?? 0)
+                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.g < $1.g}?.g ?? 0)
                     currentValue = calCurrentG(deviceModel: deviceModel, currentTime: currentTime)
+                    log.info("g: \(currentValue)")
                 } else if index == 4 {
                     maxValue = CGFloat(deviceModel.pattern?.items.max{$0.dr < $1.dr}?.dr ?? 0)
                     currentValue = calCurrentDR(deviceModel: deviceModel, currentTime: currentTime)
+                    log.info("dr: \(currentValue)")
                 } else if index == 5 {
                     maxValue = CGFloat(deviceModel.pattern?.items.max{$0.cw < $1.cw}?.cw ?? 0)
                     currentValue = calCurrentCW(deviceModel: deviceModel, currentTime: currentTime)
+                    log.info("cw: \(currentValue)")
                 }
-                maxValue = CGFloat(100 - maxValue) / 100 * barHeight
-                currentValue = CGFloat(100 - currentValue) / 100 * barHeight
+                maxValue = CGFloat(100 - maxValue) / 100 * (barHeight - 71) + CGFloat(20)
+                currentValue = CGFloat(100 - currentValue) / 100 * (barHeight - 71) + CGFloat(20)
                 barValueView.maxValueTopLConstraint.constant = maxValue
                 barValueView.currentValueTopLConstraint.constant = currentValue
             }

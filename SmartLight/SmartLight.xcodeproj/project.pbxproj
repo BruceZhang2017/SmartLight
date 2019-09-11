@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8676BFC50BFA0F2354C02D88 /* libPods-SmartLight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 834B095FA55E32C547267416 /* libPods-SmartLight.a */; };
+		1B8223FB1A9FCBD06FCF3644 /* Pods_SmartLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F64C10D86EFF1C7BC7DD516 /* Pods_SmartLight.framework */; };
 		9A101B5822F5C9400033E96B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101B5722F5C9400033E96B /* AppDelegate.swift */; };
 		9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101B5922F5C9400033E96B /* DashboardViewController.swift */; };
 		9A101B5D22F5C9400033E96B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A101B5B22F5C9400033E96B /* Main.storyboard */; };
@@ -118,8 +118,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F64C10D86EFF1C7BC7DD516 /* Pods_SmartLight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartLight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FEBEBB733C700359B9854BE /* Pods-SmartLight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartLight.debug.xcconfig"; path = "Target Support Files/Pods-SmartLight/Pods-SmartLight.debug.xcconfig"; sourceTree = "<group>"; };
-		834B095FA55E32C547267416 /* libPods-SmartLight.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SmartLight.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A101B5422F5C9400033E96B /* SmartLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A101B5722F5C9400033E96B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9A101B5922F5C9400033E96B /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
@@ -243,7 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8676BFC50BFA0F2354C02D88 /* libPods-SmartLight.a in Frameworks */,
+				1B8223FB1A9FCBD06FCF3644 /* Pods_SmartLight.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,7 +599,7 @@
 		DF3FE0527742D0EBEA230E37 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				834B095FA55E32C547267416 /* libPods-SmartLight.a */,
+				3F64C10D86EFF1C7BC7DD516 /* Pods_SmartLight.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -615,7 +615,7 @@
 				9A101B5022F5C9400033E96B /* Sources */,
 				9A101B5122F5C9400033E96B /* Frameworks */,
 				9A101B5222F5C9400033E96B /* Resources */,
-				16E4354638CD5E4BFF6B0D13 /* [CP] Copy Pods Resources */,
+				616A6145BF0382E9694F3E87 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -756,21 +756,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		16E4354638CD5E4BFF6B0D13 /* [CP] Copy Pods Resources */ = {
+		616A6145BF0382E9694F3E87 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E9C3FB0B057FD35AA0F58114 /* [CP] Check Pods Manifest.lock */ = {

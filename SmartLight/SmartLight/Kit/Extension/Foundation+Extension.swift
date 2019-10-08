@@ -24,6 +24,12 @@ extension String {
         }
         return 0
     }
+    
+    subscript(start: Int, end: Int) -> String {
+        let s = index(startIndex, offsetBy: start)
+        let e = index(startIndex, offsetBy: end)
+        return String(self[s..<e])
+    }
 }
 
 extension Int {

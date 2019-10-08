@@ -58,15 +58,40 @@ class TCPSocketManager: NSObject {
         send(value: "[TU,\(array[0]),\(array[1])]")
     }
     
-    func lightSchedual(pattern: PatternModel) {
-        var value = "[LS,"
-        if pattern.isManual {
-            value += "1,"
-            value += "{0,\(pattern.manual?.all ?? 0),1,\(pattern.manual?.uv ?? 0),2,\(pattern.manual?.db ?? 0),3,\(pattern.manual?.b ?? 0),4,\(pattern.manual?.g ?? 0),5,\(pattern.manual?.dr ?? 0),6,\(pattern.manual?.cw ?? 0)}]"
+    func lightSchedual(pattern: PatternModel, isPre: Bool) {
+        let value = createlightSchedual(pattern: pattern, isPre: isPre)
+        send(value: value)
+    }
+    
+    func createlightSchedual(pattern: PatternModel, isPre: Bool) -> String {
+        var type = 0
+        if isPre {
+            type = 2
         } else {
-            value += "0,"
+            if pattern.isManual {
+                type = 1
+            }
+        }
+        var value = "[LS,\(type),"
+        let all = pattern.manual?.intensity[6] ?? 0
+        let uv = pattern.manual?.intensity[0] ?? 0
+        let db = pattern.manual?.intensity[1] ?? 0
+        let b = pattern.manual?.intensity[2] ?? 0
+        let g = pattern.manual?.intensity[3] ?? 0
+        let dr = pattern.manual?.intensity[4] ?? 0
+        let cw = pattern.manual?.intensity[5] ?? 0
+        if pattern.isManual {
+            value += "{0,\(all),1,\(uv),2,\(db),3,\(b),4,\(g),5,\(dr),6,\(cw)}]"
+        } else {
             for (index, item) in pattern.items.enumerated() {
-                value += "{\(item.time),0,\(item.all),1,\(item.uv),2,\(item.db),3,\(item.b),4,\(item.g),5,\(item.dr),6,\(item.cw)}"
+                let all = item.intensity[6]
+                let uv = item.intensity[0]
+                let db = item.intensity[1]
+                let b = item.intensity[2]
+                let g = item.intensity[3]
+                let dr = item.intensity[4]
+                let cw = item.intensity[5]
+                value += "{\(item.time),0,\(all),1,\(uv),2,\(db),3,\(b),4,\(g),5,\(dr),6,\(cw)}"
                 if index != pattern.items.count - 1 {
                     value += ","
                 } else {
@@ -74,8 +99,7 @@ class TCPSocketManager: NSObject {
                 }
             }
         }
-        print("value: \(value)")
-        send(value: value)
+        return value
     }
     
     /// 启动心跳

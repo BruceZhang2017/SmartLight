@@ -1061,7 +1061,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev0908;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev0916;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1085,7 +1085,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev0908;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev0916;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

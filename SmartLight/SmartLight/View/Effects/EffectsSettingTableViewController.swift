@@ -14,7 +14,7 @@ import UIKit
 
 class EffectsSettingTableViewController: UITableViewController {
     
-    let colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6, Color.yellow]
+    var colors: [UIColor] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +29,7 @@ class EffectsSettingTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.navBG
         self.navigationController?.navigationBar.tintColor = Color.main
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

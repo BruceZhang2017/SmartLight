@@ -22,7 +22,7 @@ class SearchDeviceViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //results = [ESPTouchResult(isSuc: true, andBssid: "000000000000", andInetAddrData: Data(repeating: 0x00, count: 6))]
+        //results = [ESPTouchResult(isSuc: true, andBssid: "000000000000", andInetAddrData: Data(repeating: 0x00, count: 3))]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,7 +102,9 @@ extension SearchDeviceViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
         if let nameLabel = cell.viewWithTag(1) as? UILabel {
-            nameLabel.text = "Light_\(results[indexPath.row].bssid ?? "")"
+            if let bssid = results[indexPath.row].bssid, bssid.count > 4 {
+                nameLabel.text = "Light_\(bssid[bssid.count - 4, bssid.count])"
+            }
         }
         if let ipLabel = cell.viewWithTag(2) as? UILabel {
             ipLabel.text = results[indexPath.row].ip() ?? ""
@@ -117,8 +119,11 @@ extension SearchDeviceViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let model = DeviceManager.sharedInstance.deviceListModel
         if model.groups.count == 0 {
+            guard let bssid = results[indexPath.row].bssid, bssid.count > 4 else {
+                return
+            }
             let device = DeviceModel() // 先添加一个设备
-            device.name = "Light_\(results[indexPath.row].bssid ?? "")"
+            device.name = "Light_\(bssid[bssid.count - 4, bssid.count])"
             device.ip = results[indexPath.row].ip()
             device.deviceState = 0x02
             device.deviceType = 6
@@ -139,8 +144,11 @@ extension SearchDeviceViewController: UITableViewDelegate {
                 }
             }
             if !isAdd {
+                guard let bssid = results[indexPath.row].bssid, bssid.count > 4 else {
+                    return
+                }
                 let device = DeviceModel() // 先添加一个设备
-                device.name = "Light_\(results[indexPath.row].bssid ?? "")"
+                device.name = "Light_\(bssid[bssid.count - 4, bssid.count])"
                 device.ip = results[indexPath.row].ip()
                 device.deviceState = 0x02
                 device.deviceType = 6

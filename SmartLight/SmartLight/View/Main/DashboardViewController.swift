@@ -117,8 +117,9 @@ class DashboardViewController: BaseViewController {
             timeLabel.text = time
             let array = time.components(separatedBy: ":")
             if array.count == 2 {
-                currentTime = (Int(array[0]) ?? 0) * 24 + (Int(array[1]) ?? 0)
+                currentTime = (Int(array[0]) ?? 0) * 60 + (Int(array[1]) ?? 0)
                 collectionView.reloadData()
+                //print("currentTime: \(currentTime)")
             }
         }
     }
@@ -192,8 +193,12 @@ extension DashboardViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .kCellIdentifier, for: indexPath) as! BashboardCollectionViewCell
         let device = DeviceManager.sharedInstance.deviceListModel.groups[indexPath.row]
+        cell.initBarValueViews(deviceModel: device)
+        cell.initBtnViews(deviceModel: device)
         cell.refreshUI(deviceModel: device, currentTime: currentTime)
         cell.refreshButton(deviceModel: device)
+        cell.tag = indexPath.row
+        cell.delegate = self
         return cell
     }
 }
@@ -220,5 +225,68 @@ extension DashboardViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
         NSLog("scanResult:\(scanResult)")
     }
+}
+
+extension DashboardViewController: BashboardCollectionViewCellDelegate {
+    func handleMiddleButtonTap(btnTag: Int, tag: Int, result: Int) {
+        switch btnTag {
+        case 0:
+            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+            let value = device.deviceState
+            let high = (value >> 4) & 0x0f
+            device.deviceState = (high << 4) + 0x04
+            DeviceManager.sharedInstance.save()
+            if let pattern = device.pattern {
+                TCPSocketManager.sharedInstance.lightSchedual(pattern: pattern, isPre: false)
+            }
+            collectionView.reloadData()
+        case 1:
+            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+            let value = device.deviceState
+            let high = (value >> 4) & 0x0f
+            device.deviceState = (high << 4) + (result > 0 ? 0b0010 : 0b1010)
+            DeviceManager.sharedInstance.save()
+            TCPSocketManager.sharedInstance.lightControl(type: 0, result: result, device: device)
+            collectionView.reloadData()
+        case 2:
+            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+            let value = device.deviceState
+            let high = (value >> 4) & 0x0f
+            device.deviceState = (high << 4) + 0x01
+            DeviceManager.sharedInstance.save()
+            TCPSocketManager.sharedInstance.lightControl(type: 1, result: 1, device: device)
+            collectionView.reloadData()
+        case 3:
+            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+            let value = device.deviceState
+            let low = value & 0x0f
+            let high = (value >> 4) & 0x0f
+            device.deviceState = (((result > 0 ? 0x04 : 0x00) + high & 0b0011) << 4) + low
+            DeviceManager.sharedInstance.save()
+            TCPSocketManager.sharedInstance.lightControl(type: 2, result: result, device: device)
+            collectionView.reloadData()
+        case 4:
+            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+            let value = device.deviceState
+            let low = value & 0x0f
+            let high = (value >> 4) & 0x0f
+            device.deviceState = (((result > 0 ? 0x02 : 0x00) + high & 0b0101) << 4) + low
+            DeviceManager.sharedInstance.save()
+            TCPSocketManager.sharedInstance.lightControl(type: 3, result: result, device: device)
+            collectionView.reloadData()
+        case 5:
+            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+            let value = device.deviceState
+            let low = value & 0x0f
+            let high = (value >> 4) & 0x0f
+            device.deviceState = (((result > 0 ? 0x01 : 0x00) + high & 0b0110) << 4) + low
+            DeviceManager.sharedInstance.save()
+            TCPSocketManager.sharedInstance.lightControl(type: 4, result: result, device: device)
+            collectionView.reloadData()
+        default:
+            print("todo")
+        }
+    }
+    
 }
 

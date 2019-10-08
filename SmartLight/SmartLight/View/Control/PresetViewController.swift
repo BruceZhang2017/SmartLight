@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import EFQRCode
 
 class PresetViewController: UIViewController {
     
@@ -39,6 +40,8 @@ class PresetViewController: UIViewController {
         isEdit = !isEdit
         barButtonItem.title = isEdit ? "Done" : "Edit"
         tableView.reloadData()
+        uploadButton.isHidden = !isEdit
+        deleteButton.isHidden = !isEdit
     }
 
     @IBAction func upload(_ sender: Any) {
@@ -47,8 +50,8 @@ class PresetViewController: UIViewController {
         }
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Export QR code to Photos", style: .default, handler: { (action) in
-            
+        alert.addAction(UIAlertAction(title: "Export QR code to Photos", style: .default, handler: { [weak self] (action) in
+            self?.createQRCode()
         }))
         present(alert, animated: true, completion: nil)
     }
@@ -65,6 +68,22 @@ class PresetViewController: UIViewController {
             self?.patterns.save()
         }))
         present(alert, animated: true, completion: nil)
+    }
+    
+    private func createQRCode() {
+        if let tryImage = EFQRCode.generate(
+            content: TCPSocketManager.sharedInstance.createlightSchedual(pattern: patterns.patterns[current - 1], isPre: false),
+            watermark: UIImage(named: "logo")?.toCGImage()
+            ) {
+            print("Create QRCode image success: \(tryImage)")
+            UIImageWriteToSavedPhotosAlbum(UIImage(cgImage: tryImage), self, #selector(image(image:didFinishSavingWithError:contextInfo:)), nil)
+        } else {
+            print("Create QRCode image failed!")
+        }
+    }
+    
+    @objc func image(image: UIImage, didFinishSavingWithError: NSError?, contextInfo: AnyObject) {
+        print(didFinishSavingWithError)
     }
     
 }

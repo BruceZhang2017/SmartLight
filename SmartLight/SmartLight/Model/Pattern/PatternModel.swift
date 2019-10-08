@@ -40,13 +40,7 @@ class PatternModel: NSObject,NSCoding {
 
 class PatternItemModel: NSObject, NSCoding {
     var time: Int = 0
-    var uv: Int = 0
-    var db: Int = 0
-    var b: Int = 0
-    var g: Int = 0
-    var dr: Int = 0
-    var cw: Int = 0
-    var all: Int = 0
+    var intensity: [Int] = [0, 0, 0, 0, 0, 0, 0] // // UV DB B G DR CW ALL 或者 CH1 CH2 CH3 ALL
     
     override init() {
         super.init()
@@ -54,24 +48,12 @@ class PatternItemModel: NSObject, NSCoding {
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(time, forKey: "time")
-        aCoder.encode(uv, forKey: "uv")
-        aCoder.encode(db, forKey: "db")
-        aCoder.encode(b, forKey: "b")
-        aCoder.encode(g, forKey: "g")
-        aCoder.encode(dr, forKey: "dr")
-        aCoder.encode(cw, forKey: "cw")
-        aCoder.encode(all, forKey: "all")
+        aCoder.encode(intensity, forKey: "intensity")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
         time = aDecoder.decodeInteger(forKey: "time")
-        uv = aDecoder.decodeInteger(forKey: "uv")
-        db = aDecoder.decodeInteger(forKey: "db")
-        b = aDecoder.decodeInteger(forKey: "b")
-        g = aDecoder.decodeInteger(forKey: "g")
-        dr = aDecoder.decodeInteger(forKey: "dr")
-        cw = aDecoder.decodeInteger(forKey: "cw")
-        all = aDecoder.decodeInteger(forKey: "all")
+        intensity = aDecoder.decodeObject(forKey: "intensity") as? [Int] ?? [0, 0, 0, 0, 0, 0, 0]
     }
 }

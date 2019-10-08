@@ -20,7 +20,7 @@ class ControlViewController: BaseViewController {
     @IBOutlet weak var topManualView: UIView!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var buttonsView: UIView!
-    let colors = [Color.yellow, Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
+    var colors: [UIColor] = []
     var patterns: PatternListModel!
     var currentPattern: PatternModel!
     var powerValueLabel: UILabel!
@@ -43,7 +43,7 @@ class ControlViewController: BaseViewController {
         segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
         segmentedControl.tintColor = UIColor.white
         topView.delegate = self
-        initBarValueViews()
+        
         initbttonValueViews()
         initCircelView() // 初始化圆
         refreshTopView()
@@ -56,6 +56,12 @@ class ControlViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if deviceModel.deviceType == 3 {
+            colors = [Color.yellow, Color.bar6, Color.bar2, Color.bar5]
+        } else {
+            colors = [Color.yellow, Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
+        }
+        initBarValueViews()
         if once {
             return
         }
@@ -81,7 +87,10 @@ class ControlViewController: BaseViewController {
         navigationItem.rightBarButtonItem = rightItem
     }
     
-    private func initBarValueViews() {
+    func initBarValueViews() {
+        for subView in bottomView.subviews {
+            subView.removeFromSuperview()
+        }
         for i in 0..<colors.count {
             guard let barValueView = Bundle.main.loadNibNamed(.kTouchBarValueView, owner: nil, options: nil)?.first as? TouchBarValueView else {
                 return
@@ -116,6 +125,9 @@ class ControlViewController: BaseViewController {
                 $0.addTarget(self, action: #selector(handleEvent(_:)), for: .touchUpInside)
                 $0.setImage(UIImage(named: buttonTitles[i]), for: .normal)
                 $0.tag = i
+                if i == 4 {
+                    $0.setImage(UIImage(named: "中间-五角星彩色"), for: .selected)
+                }
             }
             
             let space = (Dimension.screenWidth - CGFloat(40 + 30 * count)) / CGFloat(count - 1)
@@ -200,12 +212,12 @@ class ControlViewController: BaseViewController {
     }
     
     func refreshPower() {
-        var power = CGFloat(currentPattern.manual?.uv ?? 0) * CGFloat(0.16)
-        power += CGFloat(currentPattern.manual?.db ?? 0) * 0.3
-        power += CGFloat(currentPattern.manual?.b ?? 0) * 0.3
-        power += CGFloat(currentPattern.manual?.g ?? 0) * 0.01
-        power += CGFloat(currentPattern.manual?.dr ?? 0) * 0.01
-        power += CGFloat(currentPattern.manual?.cw ?? 0) * 0.22
+        var power = CGFloat(currentPattern.manual?.intensity[0] ?? 0) * CGFloat(0.16)
+        power += CGFloat(currentPattern.manual?.intensity[1] ?? 0) * 0.3
+        power += CGFloat(currentPattern.manual?.intensity[2] ?? 0) * 0.3
+        power += CGFloat(currentPattern.manual?.intensity[3] ?? 0) * 0.01
+        power += CGFloat(currentPattern.manual?.intensity[4] ?? 0) * 0.01
+        power += CGFloat(currentPattern.manual?.intensity[5] ?? 0) * 0.22
         let p = Int(power)
         if p == 0 {
             return
@@ -248,12 +260,7 @@ class ControlViewController: BaseViewController {
         if currentPattern.manual == nil && topManualView.isHidden == false {
             let item = PatternItemModel()
             item.time =  0
-            item.uv = 0
-            item.db = 0
-            item.b = 0
-            item.g = 0
-            item.dr = 0
-            item.cw = 0
+            item.intensity = [0, 0, 0, 0, 0, 0, 0]
             currentPattern.manual = item
         }
         saveSchedule()
@@ -272,12 +279,7 @@ class ControlViewController: BaseViewController {
             let item = PatternItemModel()
             let last = currentPattern.items.last?.time ?? 0
             item.time =  last > 0 ? (last + 60) : 0
-            item.uv = currentPattern.items.last?.uv ?? 0
-            item.db = currentPattern.items.last?.db ?? 0
-            item.b = currentPattern.items.last?.b ?? 0
-            item.g = currentPattern.items.last?.g ?? 0
-            item.dr = currentPattern.items.last?.dr ?? 0
-            item.cw = currentPattern.items.last?.cw ?? 0
+            item.intensity = currentPattern.items.last?.intensity ?? [0, 0, 0, 0, 0, 0, 0]
             currentPattern.items.append(item)
             currentItem = currentPattern.items.count - 1
             topView.floatView.isHidden = false
@@ -329,7 +331,7 @@ class ControlViewController: BaseViewController {
                 saveSchedule()
             }
         case 4:
-            print("需要和固件端联调")
+            TCPSocketManager.sharedInstance.lightSchedual(pattern: currentPattern, isPre: true)
         case 5:
             let alert = UIAlertController(title: "Save Current Settings", message: nil, preferredStyle: .alert)
             alert.addTextField { (textField) in
@@ -344,6 +346,7 @@ class ControlViewController: BaseViewController {
                 self.currentPattern.name = name
                 self.patterns?.patterns.append(self.currentPattern)
                 self.patterns?.save()
+                button.isSelected = true
             }))
             present(alert, animated: true, completion: nil)
         case 6:
@@ -357,7 +360,7 @@ class ControlViewController: BaseViewController {
     
     /// 刷新topView的折线
     private func refreshTopView() {
-        topView.drawLine(currentPattern: currentPattern)
+        topView.drawLine(deviceModel: deviceModel)
         topView.addDotButtons(currentPattern: currentPattern, current: currentItem)
     }
     
@@ -365,7 +368,7 @@ class ControlViewController: BaseViewController {
         deviceModel.pattern = currentPattern
         deviceListModel.groups[DeviceManager.sharedInstance.currentIndex] = deviceModel
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightSchedual(pattern: currentPattern)
+        TCPSocketManager.sharedInstance.lightSchedual(pattern: currentPattern, isPre: false)
     }
 }
 
@@ -383,57 +386,27 @@ extension ControlViewController: TouchBarValueViewDelegate {
                 view.setValue(value)
             }
             if topManualView.isHidden == false {
-                currentPattern.manual?.uv = value
-                currentPattern.manual?.db = value
-                currentPattern.manual?.b = value
-                currentPattern.manual?.g = value
-                currentPattern.manual?.dr = value
-                currentPattern.manual?.cw = value
+                currentPattern.manual?.intensity = [value, value, value, value, value, value, value]
                 refreshPower()
                 saveSchedule()
                 return
             }
             if currentPattern.items.count > 0 {
-                currentPattern.items[currentItem].uv = value
-                currentPattern.items[currentItem].db = value
-                currentPattern.items[currentItem].b = value
-                currentPattern.items[currentItem].g = value
-                currentPattern.items[currentItem].dr = value
-                currentPattern.items[currentItem].cw = value
+                currentPattern.items[currentItem].intensity = [value, value, value, value, value, value, value]
                 refreshTopView()
                 saveSchedule()
             }
         } else {
             if topManualView.isHidden == false {
-                if tag == 101 {
-                    currentPattern.manual?.uv = value
-                } else if tag == 102 {
-                    currentPattern.manual?.db = value
-                } else if tag == 103 {
-                    currentPattern.manual?.b = value
-                } else if tag == 104 {
-                    currentPattern.manual?.g = value
-                } else if tag == 105 {
-                    currentPattern.manual?.dr = value
-                } else if tag == 106 {
-                    currentPattern.manual?.cw = value
+                if tag >= 101 && tag <= 106 {
+                    currentPattern.manual?.intensity[tag - 101] = value
                 }
                 refreshPower()
                 saveSchedule()
             } else {
                 if currentPattern.items.count > 0 {
-                    if tag == 101 {
-                        currentPattern.items[currentItem].uv = value
-                    } else if tag == 102 {
-                        currentPattern.items[currentItem].db = value
-                    } else if tag == 103 {
-                        currentPattern.items[currentItem].b = value
-                    } else if tag == 104 {
-                        currentPattern.items[currentItem].g = value
-                    } else if tag == 105 {
-                        currentPattern.items[currentItem].dr = value
-                    } else if tag == 106 {
-                        currentPattern.items[currentItem].cw = value
+                    if tag >= 101 && tag <= 106 {
+                        currentPattern.items[currentItem].intensity[tag - 101] = value
                     }
                     refreshTopView()
                     saveSchedule()
@@ -462,18 +435,8 @@ extension ControlViewController: TopViewDelegate {
         }
         for i in 1..<colors.count {
             let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
-            if i == 1 {
-                view.setValue(currentPattern.items[currentItem].uv)
-            } else if i == 2 {
-                view.setValue(currentPattern.items[currentItem].db)
-            } else if i == 3 {
-                view.setValue(currentPattern.items[currentItem].b)
-            } else if i == 4 {
-                view.setValue(currentPattern.items[currentItem].g)
-            } else if i == 5 {
-                view.setValue(currentPattern.items[currentItem].dr)
-            } else if i == 6 {
-                view.setValue(currentPattern.items[currentItem].cw)
+            if i >= 1 && i <= 6 {
+                view.setValue(currentPattern.items[currentItem].intensity[i - 1])
             }
         }
         topView.addDotButtons(currentPattern: currentPattern, current: currentItem)

@@ -90,22 +90,27 @@ class TopView: UIView {
     }
     
     /// 画线
-    func drawLine(currentPattern: PatternModel) {
+    func drawLine(deviceModel: DeviceModel) {
         if let layers = drawView.layer.sublayers {
             for layer in layers {
                 layer.removeFromSuperlayer()
             }
         }
-        if currentPattern.items.count == 0 {
+        if deviceModel.pattern?.items.count == 0 {
             return
         }
-        let colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
+        var colors: [UIColor] = []
+        if deviceModel.deviceType == 3 {
+            colors = [Color.bar6, Color.bar2, Color.bar5]
+        } else {
+            colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
+        }
         for i in 0..<colors.count {
             let shapeLayer = CAShapeLayer()
             let path = UIBezierPath()
             path.move(to: CGPoint(x: 0, y: drawHeight))
-            for j in 0..<currentPattern.items.count {
-                let x = CGFloat(currentPattern.items[j].time) / CGFloat(1440) * (Dimension.screenWidth - 40)
+            for j in 0..<(deviceModel.pattern?.items.count ?? 0) {
+                let x = CGFloat(deviceModel.pattern?.items[j].time ?? 0) / CGFloat(1440) * (Dimension.screenWidth - 40)
                 if x == 0 {
                     continue
                 }
@@ -113,21 +118,21 @@ class TopView: UIView {
                 var h = 0
                 switch i {
                 case 0:
-                    h = currentPattern.items[j].uv
+                    h = deviceModel.pattern?.items[j].intensity[0] ?? 0
                 case 1:
-                    h = currentPattern.items[j].db
+                    h = deviceModel.pattern?.items[j].intensity[1] ?? 0
                 case 2:
-                    h = currentPattern.items[j].b
+                    h = deviceModel.pattern?.items[j].intensity[2] ?? 0
                 case 3:
-                    h = currentPattern.items[j].g
+                    h = deviceModel.pattern?.items[j].intensity[3] ?? 0
                 case 4:
-                    h = currentPattern.items[j].dr
+                    h = deviceModel.pattern?.items[j].intensity[4] ?? 0
                 case 5:
-                    h = currentPattern.items[j].cw
+                    h = deviceModel.pattern?.items[j].intensity[5] ?? 0
                 default:
                     continue
                 }
-                let point = CGPoint(x: x, y: drawHeight * CGFloat(100 - h) / CGFloat(100))
+                let point = CGPoint(x: x, y: (drawHeight - 29) * CGFloat(100 - h) / CGFloat(100) + 29)
                 //print("point: \(point.x) \(point.y)")
                 path.addLine(to: point)
             }
@@ -280,7 +285,7 @@ class TopView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
-        print("start: \(point.x) \(point.y)")
+        //print("start: \(point.x) \(point.y)")
         left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         delegate?.touchValue(left)
     }
@@ -288,7 +293,7 @@ class TopView: UIView {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
-        print("move: \(point.x) \(point.y)")
+        //print("move: \(point.x) \(point.y)")
         left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         delegate?.touchValue(left)
     }
@@ -296,7 +301,7 @@ class TopView: UIView {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
-        print("cancel: \(point.x) \(point.y)")
+        //print("cancel: \(point.x) \(point.y)")
         left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         delegate?.touchValue(left)
     }
@@ -304,7 +309,7 @@ class TopView: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
-        print("end: \(point.x) \(point.y)")
+        //print("end: \(point.x) \(point.y)")
         left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         delegate?.touchValue(left)
     }

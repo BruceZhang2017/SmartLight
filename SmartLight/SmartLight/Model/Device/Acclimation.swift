@@ -17,7 +17,7 @@ class Acclimation: NSObject, NSCoding {
     var startTime: Int = 0
     var endTime: Int = 0
     var ramp: Int = 0
-    var intesity: [Int] = [0, 0, 0, 0, 0, 0, 0, 0] // UV DB B G DR CW ALL
+    var intesity: [Int] = [0, 0, 0, 0, 0, 0, 0, 0] // UV DB B G DR CW ALL 或者 CH1 CH2 CH3 ALL
     
     override init() {
         super.init()

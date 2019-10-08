@@ -21,6 +21,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var btnViewHeightLConstriant: NSLayoutConstraint!
     @IBOutlet weak var topLConstraint: NSLayoutConstraint!
     var barHeight: CGFloat = 0
+    weak var delegate: BashboardCollectionViewCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -31,23 +32,30 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         } else {
             barHeight = Dimension.screenWidth / 375 * 300
         }
-        initBarValueViews()
-        initBtnViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    private func initBarValueViews() {
-        let colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
+    func initBarValueViews(deviceModel: DeviceModel) {
+        barValueViews.removeAll()
+        for subView in barView.subviews {
+            subView.removeFromSuperview()
+        }
+        var colors: [UIColor] = []
+        if deviceModel.deviceType == 3 {
+            colors = [Color.bar6, Color.bar2, Color.bar5]
+        } else {
+            colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
+        }
         
         for i in 0..<colors.count {
             guard let barValueView = Bundle.main.loadNibNamed(.kBarValueView, owner: nil, options: nil)?.first as? BarValueView else {
                 return
             }
             barValueView.do {
-                $0.titleLabel.text = Arrays.barTitles[i]
+                $0.titleLabel.text = colors.count == 3 ? Arrays.barTitleBs[i] : Arrays.barTitles[i]
                 $0.valueLabel.text = "0%"
                 $0.currentValueImageView.backgroundColor = colors[i]
                 $0.settingValueImageView.backgroundColor = colors[i]
@@ -68,15 +76,32 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private func initBtnViews() {
-        let imageNormals = [UIImage.schedule_nomal, UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.lunnar_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
-        let imagePresseds = [UIImage.schedule_pressed, UIImage.alloff_pressed, UIImage.aclm_pressed, UIImage.lunnar_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
+    func initBtnViews(deviceModel: DeviceModel) {
+        buttons.removeAll()
+        for subView in btnView.subviews {
+            subView.removeFromSuperview()
+        }
+        var imageNormals: [UIImage?] = []
+        var imagePresseds: [UIImage?] = []
+        if deviceModel.deviceType == 3 {
+            imageNormals = [UIImage.schedule_nomal, UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
+            imagePresseds = [UIImage.schedule_pressed, UIImage.alloff_pressed, UIImage.aclm_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
+        } else {
+            imageNormals = [UIImage.schedule_nomal, UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.lunnar_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
+            imagePresseds = [UIImage.schedule_pressed, UIImage.alloff_pressed, UIImage.aclm_pressed, UIImage.lunnar_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
+        }
         let width = Dimension.screenWidth <= 320 ? 40 : 50
-        for i in 0..<Arrays.btnTitles.count {
+        let count = deviceModel.deviceType == 3 ? Arrays.btnTitleBs.count : Arrays.btnTitles.count
+        for i in 0..<count {
             let button = UIButton(type: .custom).then {
                 $0.setBackgroundImage(imageNormals[i], for: .normal)
                 $0.setBackgroundImage(imagePresseds[i], for: .selected)
-                $0.setTitle(Arrays.btnTitles[i], for: .normal)
+                let value = deviceModel.deviceState
+                let low = value & 0b00001000
+                $0.setTitle(deviceModel.deviceType == 3 ? Arrays.btnTitleBs[i] : Arrays.btnTitles[i], for: .normal)
+                if i == 1 && low == 8 {
+                    $0.setTitle("ALL OFF", for: .normal)
+                }
                 $0.setTitleColor(Color.barBG, for: .normal)
                 $0.setTitleColor(Color.main, for: .selected)
                 $0.titleEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
@@ -86,7 +111,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
             }
             btnView.addSubview(button)
             buttons.append(button)
-            let space = (Dimension.screenWidth - 40 - CGFloat(width * Arrays.btnTitles.count)) / 7
+            let space = (Dimension.screenWidth - 40 - CGFloat(width * count)) / CGFloat(count + 1)
             button.snp.makeConstraints {
                 $0.left.equalTo(space * CGFloat(i + 1) + CGFloat(width * i))
                 $0.width.height.equalTo(width)
@@ -105,22 +130,25 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 if tag == 1 {
                     if button.title(for: .normal) == "All ON" {
                         buttons[tag].setTitle("All OFF", for: .normal) // All ON / All OFF
+                        delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 0)
                     } else {
                         buttons[tag].setTitle("All ON", for: .normal)
+                        delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
+                        
                     }
                 }
                 return
-            }
-            for i in 0..<3 {
-                if i == tag {
-                    buttons[i].isSelected = true
-                } else {
-                    buttons[i].isSelected = false
+            } else {
+                if tag == 1 {
+                    if button.title(for: .normal) == "All ON" {
+                        delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
+                    } else {
+                        delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 0)
+                    }
                 }
             }
-            return
         }
-        button.isSelected = !button.isSelected
+        delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: button.isSelected ? 0 : 1)
     }
     
     /// 刷新Cell UI
@@ -130,49 +158,14 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         for (index, barValueView) in barValueViews.enumerated() {
             if deviceModel.pattern?.isManual == true {
                 var value: CGFloat = 0
-                if index == 0 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.uv ?? 0)) / 100 * (barHeight - 71)
-                } else if index == 1 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.db ?? 0)) / 100 * (barHeight - 71)
-                } else if index == 2 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.b ?? 0)) / 100 * (barHeight - 71)
-                } else if index == 3 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.g ?? 0)) / 100 * (barHeight - 71)
-                } else if index == 4 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.dr ?? 0)) / 100 * (barHeight - 71)
-                } else if index == 5 {
-                    value = CGFloat(100 - (deviceModel.pattern?.manual?.cw ?? 0)) / 100 * (barHeight - 71)
-                }
+                value = CGFloat(100 - (deviceModel.pattern?.manual?.intensity[index] ?? 0)) / 100 * (barHeight - 71)
                 barValueView.maxValueTopLConstraint.constant = value + 20
                 barValueView.currentValueTopLConstraint.constant = value + 20
             } else {
                 var maxValue: CGFloat = 0
                 var currentValue: CGFloat = 0
-                if index == 0 {
-                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.uv < $1.uv}?.uv ?? 0)
-                    currentValue = calCurrentUV(deviceModel: deviceModel, currentTime: currentTime)
-                    log.info("uv: \(currentValue)")
-                } else if index == 1 {
-                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.db < $1.db}?.db ?? 0)
-                    currentValue = calCurrentDB(deviceModel: deviceModel, currentTime: currentTime)
-                    log.info("db: \(currentValue)")
-                } else if index == 2 {
-                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.b < $1.b}?.b ?? 0)
-                    currentValue = calCurrentB(deviceModel: deviceModel, currentTime: currentTime)
-                    log.info("b: \(currentValue)")
-                } else if index == 3 {
-                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.g < $1.g}?.g ?? 0)
-                    currentValue = calCurrentG(deviceModel: deviceModel, currentTime: currentTime)
-                    log.info("g: \(currentValue)")
-                } else if index == 4 {
-                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.dr < $1.dr}?.dr ?? 0)
-                    currentValue = calCurrentDR(deviceModel: deviceModel, currentTime: currentTime)
-                    log.info("dr: \(currentValue)")
-                } else if index == 5 {
-                    maxValue = CGFloat(deviceModel.pattern?.items.max{$0.cw < $1.cw}?.cw ?? 0)
-                    currentValue = calCurrentCW(deviceModel: deviceModel, currentTime: currentTime)
-                    log.info("cw: \(currentValue)")
-                }
+                maxValue = CGFloat(deviceModel.pattern?.items.max{$0.intensity[index] < $1.intensity[index]}?.intensity[index] ?? 0)
+                currentValue = calCurrent(deviceModel: deviceModel, currentTime: currentTime, index: index)
                 maxValue = CGFloat(100 - maxValue) / 100 * (barHeight - 71) + CGFloat(20)
                 currentValue = CGFloat(100 - currentValue) / 100 * (barHeight - 71) + CGFloat(20)
                 barValueView.maxValueTopLConstraint.constant = maxValue
@@ -181,120 +174,20 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func calCurrentUV(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
+    func calCurrent(deviceModel: DeviceModel, currentTime: Int, index: Int) -> CGFloat {
         guard let pattern = deviceModel.pattern else {
             return 0
         }
         for (index, item) in pattern.items.enumerated() {
-            if index == pattern.items.count - 1 {
-                return CGFloat(0 - item.uv) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.uv)
+            if index == pattern.items.count - 1 && item.time <= currentTime {
+                return CGFloat(item.intensity[index]) * CGFloat(1440 - currentTime) / CGFloat(1440 - item.time)
             }
             if item.time > currentTime {
                 if index > 0 {
                     let pre = pattern.items[index - 1]
-                    return CGFloat(item.uv - pre.uv) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.uv)
+                    return CGFloat(item.intensity[index] - pre.intensity[index]) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.intensity[index])
                 } else {
-                    return CGFloat(item.uv) * CGFloat(currentTime) / CGFloat(item.time)
-                }
-            }
-        }
-        return 0
-    }
-    
-    func calCurrentDB(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
-        guard let pattern = deviceModel.pattern else {
-            return 0
-        }
-        for (index, item) in pattern.items.enumerated() {
-            if index == pattern.items.count - 1 {
-                return CGFloat(0 - item.db) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.db)
-            }
-            if item.time > currentTime {
-                if index > 0 {
-                    let pre = pattern.items[index - 1]
-                    return CGFloat(item.db - pre.db) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.db)
-                } else {
-                    return CGFloat(item.db) * CGFloat(currentTime) / CGFloat(item.time)
-                }
-            }
-        }
-        return 0
-    }
-    
-    func calCurrentB(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
-        guard let pattern = deviceModel.pattern else {
-            return 0
-        }
-        for (index, item) in pattern.items.enumerated() {
-            if index == pattern.items.count - 1 {
-                return CGFloat(0 - item.b) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.b)
-            }
-            if item.time > currentTime {
-                if index > 0 {
-                    let pre = pattern.items[index - 1]
-                    return CGFloat(item.b - pre.b) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.b)
-                } else {
-                    return CGFloat(item.b) * CGFloat(currentTime) / CGFloat(item.time)
-                }
-            }
-        }
-        return 0
-    }
-    
-    func calCurrentG(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
-        guard let pattern = deviceModel.pattern else {
-            return 0
-        }
-        for (index, item) in pattern.items.enumerated() {
-            if index == pattern.items.count - 1 {
-                return CGFloat(0 - item.g) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.g)
-            }
-            if item.time > currentTime {
-                if index > 0 {
-                    let pre = pattern.items[index - 1]
-                    return CGFloat(item.g - pre.g) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.g)
-                } else {
-                    return CGFloat(item.g) * CGFloat(currentTime) / CGFloat(item.time)
-                }
-            }
-        }
-        return 0
-    }
-    
-    func calCurrentDR(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
-        guard let pattern = deviceModel.pattern else {
-            return 0
-        }
-        for (index, item) in pattern.items.enumerated() {
-            if index == pattern.items.count - 1 {
-                return CGFloat(0 - item.dr) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.dr)
-            }
-            if item.time > currentTime {
-                if index > 0 {
-                    let pre = pattern.items[index - 1]
-                    return CGFloat(item.dr - pre.dr) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.dr)
-                } else {
-                    return CGFloat(item.dr) * CGFloat(currentTime) / CGFloat(item.time)
-                }
-            }
-        }
-        return 0
-    }
-    
-    func calCurrentCW(deviceModel: DeviceModel, currentTime: Int) -> CGFloat {
-        guard let pattern = deviceModel.pattern else {
-            return 0
-        }
-        for (index, item) in pattern.items.enumerated() {
-            if index == pattern.items.count - 1 {
-                return CGFloat(0 - item.cw) * CGFloat(currentTime - item.time) / CGFloat(1440 - item.time) + CGFloat(item.cw)
-            }
-            if item.time > currentTime {
-                if index > 0 {
-                    let pre = pattern.items[index - 1]
-                    return CGFloat(item.cw - pre.cw) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.cw)
-                } else {
-                    return CGFloat(item.cw) * CGFloat(currentTime) / CGFloat(item.time)
+                    return CGFloat(item.intensity[index]) * CGFloat(currentTime) / CGFloat(item.time)
                 }
             }
         }
@@ -304,12 +197,20 @@ class BashboardCollectionViewCell: UICollectionViewCell {
     func refreshButton(deviceModel: DeviceModel) {
         let value = deviceModel.deviceState
         let low = value & 0x0f
-        let high = value & 0xf0
-        buttons[0].isSelected = low == 4
-        buttons[1].isSelected = low == 2
-        buttons[2].isSelected = low == 1
-        buttons[3].isSelected = high == 4
-        buttons[4].isSelected = high == 2
-        buttons[5].isSelected = high == 1
+        let high = (value >> 4) & 0x0f
+        if deviceModel.deviceType == 3 {
+            
+        } else {
+            buttons[0].isSelected = low == 4
+            buttons[1].isSelected = (low == 2 || low == 10)
+            buttons[2].isSelected = low == 1
+            buttons[3].isSelected = (high & 0b0100) > 0
+            buttons[4].isSelected = (high & 0b0010) > 0
+            buttons[5].isSelected = (high & 0b0001) > 0
+        }
     }
+}
+
+protocol BashboardCollectionViewCellDelegate: NSObjectProtocol {
+    func handleMiddleButtonTap(btnTag: Int, tag: Int, result: Int)
 }

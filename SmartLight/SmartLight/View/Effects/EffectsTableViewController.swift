@@ -14,6 +14,8 @@ import UIKit
 
 class EffectsTableViewController: UITableViewController {
     
+    var titles: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setLeftNavigationItem()
@@ -25,6 +27,14 @@ class EffectsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
         self.navigationController?.navigationBar.tintColor = UIColor.white
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let index = DeviceManager.sharedInstance.currentIndex
+        let deviceModel = DeviceManager.sharedInstance.deviceListModel.groups[index]
+        titles = deviceModel.deviceType == 3 ? Arrays.effectBs : Arrays.effects
+        tableView.reloadData()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -77,12 +87,12 @@ class EffectsTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Arrays.effects.count
+        return titles.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
-        cell.textLabel?.text = Arrays.effects[indexPath.row]
+        cell.textLabel?.text = titles[indexPath.row]
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -93,11 +103,11 @@ class EffectsTableViewController: UITableViewController {
             let allimationVC = AcclimationTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
-        } else if indexPath.row == 1 {
+        } else if indexPath.row == 1 && titles.count > 3 {
             let allimationVC = LunnarTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
-        } else if indexPath.row == 2 {
+        } else if (indexPath.row == 2 && titles.count > 3) || (indexPath.row == 1 && titles.count == 3)  {
             let allimationVC = LightningTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)

@@ -17,6 +17,8 @@ import Bugly
 import XCGLogger
 
 let log = XCGLogger.default
+var temperature = 0
+var firmwareVersion = ""
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

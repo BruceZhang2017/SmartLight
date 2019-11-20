@@ -15,10 +15,8 @@ import UIKit
 class Arrays: NSObject {
     static let barTitleBs = ["CH1", "CH2", "CH3"]
     static let barTitles = ["UV", "DB", "B", "G", "DR", "CW"]
-    static let btnTitleBs = ["Schedule", "All ON", "ACLM", "Lightning", "Cloudy"]
     static let btnTitles = ["Schedule", "All ON", "ACLM", "Lunnar", "Lightning", "Cloudy"]
     static let settingTitles = [["Date&Time", "Networks", "Language", "Help"], ["Firmware Version", "Upgrade Firmware"]]
     static let settingHeadTitles = ["", "Device Information"]
-    static let effects = ["Acclimation", "Lunnar", "Lightning", "Cloudy"]
-    static let effectBs = ["Acclimation", "Lightning", "Cloudy"]
+    static let effects = ["Acclimation", "Lunnar", "Lightning", "Cloudy", "Fan"]
 }

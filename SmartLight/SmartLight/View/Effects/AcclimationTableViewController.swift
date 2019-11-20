@@ -17,12 +17,16 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
     var deviceListModel: DeviceListModel!
     var deviceModel: DeviceModel!
     var acclimation: Acclimation!
+    var preTimer: Timer?
+    var currentIndex = 0
+    var totalIndex = 0
 
     override func viewDidLoad() {
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         acclimation = deviceModel.acclimation ?? Acclimation()
         super.viewDidLoad()
+        tableView.register(TableViewHeadView.classForCoder(), forHeaderFooterViewReuseIdentifier: "HEAD")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -33,6 +37,49 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
             colors = [Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6, Color.yellow]
         }
         tableView.reloadData()
+    }
+    
+    /// 处理Acclimation相关内容
+    private func handleAcclimation() {
+        TCPSocketManager.sharedInstance.lightSchedual(model: 4, device: deviceModel)
+    }
+    
+    // 10秒内预览 1s 一次
+    private func PreviousFunction(count: Int) {
+        preTimer?.invalidate()
+        preTimer = nil
+        totalIndex = count
+        preTimer = Timer.scheduledTimer(timeInterval: Double(10) / Double(count), target: self, selector: #selector(handlePre), userInfo: nil, repeats: true)
+        preTimer?.fire()
+        showHUD()
+    }
+    
+    @objc private func handlePre() {
+        if currentIndex > totalIndex {
+            preTimer?.invalidate()
+            preTimer = nil
+            hideHUD()
+            handleAcclimation() // 发送真实的SCHEDULE
+            return
+        }
+        let duration = (acclimation.endTime - acclimation.startTime) / totalIndex
+        var value = [0, 0, 0, 0, 0, 0]
+        let time = acclimation.startTime + currentIndex * duration
+        if time < acclimation.startTime + acclimation.ramp * 60 {
+            for j in 0..<value.count {
+                value[j] = acclimation.intesity[j] * (time - acclimation.startTime) / (acclimation.ramp * 60)
+            }
+        } else if time > acclimation.endTime - acclimation.ramp * 60 {
+            for j in 0..<value.count {
+                value[j] = acclimation.intesity[j] * (acclimation.endTime - time) / (acclimation.ramp * 60)
+            }
+        } else {
+            for j in 0..<value.count {
+                value[j] = acclimation.intesity[j]
+            }
+        }
+        TCPSocketManager.sharedInstance.lightPreview(value: value)
+        currentIndex += 1
     }
 
     // MARK: - Table view data source
@@ -72,9 +119,10 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
                 cell.titleLabel.text = "End Date"
                 cell.desLabel.text = acclimation.endTime.timeIntToStr()
             } else {
-                cell.titleLabel.text = "End Ramp"
+                cell.titleLabel.text = "Ramp"
                 cell.desLabel.text =  "\(acclimation.ramp) hour"
             }
+            cell.selectionStyle = .none
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellCIdentifier, for: indexPath) as! EffectsSettingCTableViewCell
@@ -87,8 +135,13 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
         cell.mSlider.thumbTintColor = colors[indexPath.row]
         cell.mSlider.minimumTrackTintColor = colors[indexPath.row]
         cell.rightLabel.text = "\(acclimation.intesity[indexPath.row])%"
-        let value = acclimation.intesity[indexPath.row]
-        cell.mSlider.value = Float(value) / Float(100)
+        if (deviceModel.deviceType == 3 && indexPath.row == 3) || (deviceModel.deviceType == 6 && indexPath.row == 6) {
+            let value = acclimation.intesity[6]
+            cell.mSlider.value = Float(value) / Float(100)
+        } else {
+            let value = acclimation.intesity[indexPath.row]
+            cell.mSlider.value = Float(value) / Float(100)
+        }
         cell.tag = indexPath.row
         cell.delegate = self
         cell.selectionStyle = .none
@@ -96,14 +149,19 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
         
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HEAD") as! TableViewHeadView
+        headView.contentLabel.text = ""
         if section == 0 {
-            return "Quickly Setup"
+            headView.titleLabel.text = "Quickly Setup".uppercased()
         } else if section == 1 {
-            return "Ramp Intensity"
-        } else {
-            return "Speed"
+            headView.titleLabel.text = "Ramp Intensity".uppercased()
         }
+        return headView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 38
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -141,13 +199,18 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
 extension AcclimationTableViewController: EffectsSettingCTableViewCellDelegate {
     func valueChanged(value: Int, tag: Int) {
         if (tag >= 6 && deviceModel.deviceType > 3) || (tag >= 3 && deviceModel.deviceType == 3) {
-            acclimation.intesity = [value, value, value, value, value, value, value, value]
+            if tag >= 6 && deviceModel.deviceType > 3 {
+                acclimation.intesity = [value, value, value, value, value, value, value]
+            } else {
+                acclimation.intesity = [value, value, value, 0, 0, 0, value]
+            }
         } else {
             acclimation.intesity[tag] = value
         }
+        deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()
         tableView.reloadData()
-        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
+        handleAcclimation()
     }
 }
 
@@ -160,8 +223,9 @@ extension AcclimationTableViewController: TimePickerViewControllerDelegate {
             acclimation.endTime = time
         }
         tableView.reloadData()
+        deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
+        handleAcclimation()
     }
 }
 
@@ -169,16 +233,27 @@ extension AcclimationTableViewController: CustomPickerViewControllerDelegate {
     func customPickerView(value: Int) {
         acclimation.ramp = value
         tableView.reloadData()
+        deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
+        handleAcclimation()
     }
 }
 
 extension AcclimationTableViewController: EffectsSettingTableViewCellDelegate {
-    func valueChanged(_ value: Bool) {
+    // 开关
+    func valueChanged(_ value: Bool, tag: Int) {
+        if acclimation.startTime <= 0 || acclimation.endTime <= 0 || acclimation.ramp == 0 {
+            tableView.reloadData()
+            return
+        }
         acclimation.enable = value
         tableView.reloadData()
+        deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 1, result: acclimation.enable ? 1 : 0, device: deviceModel)
+        if value {
+            PreviousFunction(count: 50) // 先预览200ms一次
+        } else {
+            handleAcclimation()
+        }
     }
 }

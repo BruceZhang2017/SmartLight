@@ -228,6 +228,7 @@ class TopView: UIView {
         
         let dotButton = UIButton(type: .custom).then {
             $0.backgroundColor = .clear
+            $0.tag = 2
         }
         floatView.addSubview(dotButton)
         dotButton.snp.makeConstraints {
@@ -251,6 +252,7 @@ class TopView: UIView {
             $0.layer.borderColor = Color.circleBG.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 10
+            $0.tag = 4
         }
         floatView.addSubview(redBigImageView)
         redBigImageView.snp.makeConstraints {
@@ -262,6 +264,7 @@ class TopView: UIView {
         let redSmallImageView = UIImageView().then {
             $0.backgroundColor = Color.circleBG
             $0.layer.cornerRadius = 5
+            $0.tag = 5
         }
         floatView.addSubview(redSmallImageView)
         redSmallImageView.snp.makeConstraints {
@@ -271,6 +274,7 @@ class TopView: UIView {
         
         let redLineImageView = UIImageView().then {
             $0.backgroundColor = Color.circleBG
+            $0.tag = 3
         }
         floatView.addSubview(redLineImageView)
         redLineImageView.snp.makeConstraints {
@@ -281,12 +285,31 @@ class TopView: UIView {
         }
     }
     
+    public func setFloatViewDot(isShown: Bool) {
+        let button = floatView.viewWithTag(2) as! UIButton
+        let imageView = floatView.viewWithTag(3) as! UIImageView
+        let imageViewB = floatView.viewWithTag(4) as! UIImageView
+        let imageViewC = floatView.viewWithTag(5) as! UIImageView
+        button.isHidden = !isShown
+        imageView.isHidden = !isShown
+        imageViewB.isHidden = !isShown
+        imageViewC.isHidden = !isShown
+    }
+    
     // MARK: - Touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("start: \(point.x) \(point.y)")
-        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let time = leftToTimeInt(value: tem)
+        if (delegate?.readBeforeValue() ?? 0) >= time {
+            return
+        }
+        if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        left = tem
         delegate?.touchValue(left)
     }
     
@@ -294,7 +317,15 @@ class TopView: UIView {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("move: \(point.x) \(point.y)")
-        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let time = leftToTimeInt(value: tem)
+        if (delegate?.readBeforeValue() ?? 0) >= time {
+            return
+        }
+        if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        left = tem
         delegate?.touchValue(left)
     }
     
@@ -302,7 +333,15 @@ class TopView: UIView {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("cancel: \(point.x) \(point.y)")
-        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let time = leftToTimeInt(value: tem)
+        if (delegate?.readBeforeValue() ?? 0) >= time {
+            return
+        }
+        if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        left = tem
         delegate?.touchValue(left)
     }
     
@@ -310,11 +349,19 @@ class TopView: UIView {
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("end: \(point.x) \(point.y)")
-        left = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
+        let time = leftToTimeInt(value: tem)
+        if (delegate?.readBeforeValue() ?? 0) >= time {
+            return
+        }
+        if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        left = tem
         delegate?.touchValue(left)
     }
     
-    func leftToTime(value: CGFloat) -> String {
+    public func leftToTime(value: CGFloat) -> String {
         let time = Int(value * CGFloat(1440) / (Dimension.screenWidth - 40))
         var h = time / 60
         let m = time % 60
@@ -344,4 +391,6 @@ class TopView: UIView {
 protocol TopViewDelegate: NSObjectProtocol {
     func touchValue(_ pointX: CGFloat)
     func touchCurrent(_ current: Int)
+    func readBeforeValue() -> Int
+    func readAfterValue() -> Int
 }

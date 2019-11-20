@@ -83,23 +83,20 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         }
         var imageNormals: [UIImage?] = []
         var imagePresseds: [UIImage?] = []
-        if deviceModel.deviceType == 3 {
-            imageNormals = [UIImage.schedule_nomal, UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
-            imagePresseds = [UIImage.schedule_pressed, UIImage.alloff_pressed, UIImage.aclm_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
-        } else {
-            imageNormals = [UIImage.schedule_nomal, UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.lunnar_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
-            imagePresseds = [UIImage.schedule_pressed, UIImage.alloff_pressed, UIImage.aclm_pressed, UIImage.lunnar_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
-        }
+    
+        imageNormals = [UIImage.schedule_nomal, UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.lunnar_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
+        imagePresseds = [UIImage.schedule_pressed, UIImage.alloff_pressed, UIImage.aclm_pressed, UIImage.lunnar_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
+        
         let width = Dimension.screenWidth <= 320 ? 40 : 50
-        let count = deviceModel.deviceType == 3 ? Arrays.btnTitleBs.count : Arrays.btnTitles.count
+        let count = Arrays.btnTitles.count
         for i in 0..<count {
             let button = UIButton(type: .custom).then {
                 $0.setBackgroundImage(imageNormals[i], for: .normal)
                 $0.setBackgroundImage(imagePresseds[i], for: .selected)
                 let value = deviceModel.deviceState
-                let low = value & 0b00001000
-                $0.setTitle(deviceModel.deviceType == 3 ? Arrays.btnTitleBs[i] : Arrays.btnTitles[i], for: .normal)
-                if i == 1 && low == 8 {
+                let high = (value >> 7) & 0x01
+                $0.setTitle(Arrays.btnTitles[i], for: .normal)
+                if i == 1 && high == 1 {
                     $0.setTitle("ALL OFF", for: .normal)
                 }
                 $0.setTitleColor(Color.barBG, for: .normal)
@@ -145,6 +142,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                     } else {
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 0)
                     }
+                    return
                 }
             }
         }
@@ -156,58 +154,29 @@ class BashboardCollectionViewCell: UICollectionViewCell {
     /// - Parameter deviceModel: 对象参数值
     func refreshUI(deviceModel: DeviceModel, currentTime: Int) {
         for (index, barValueView) in barValueViews.enumerated() {
-            if deviceModel.pattern?.isManual == true {
-                var value: CGFloat = 0
-                value = CGFloat(100 - (deviceModel.pattern?.manual?.intensity[index] ?? 0)) / 100 * (barHeight - 71)
-                barValueView.maxValueTopLConstraint.constant = value + 20
-                barValueView.currentValueTopLConstraint.constant = value + 20
-            } else {
-                var maxValue: CGFloat = 0
-                var currentValue: CGFloat = 0
-                maxValue = CGFloat(deviceModel.pattern?.items.max{$0.intensity[index] < $1.intensity[index]}?.intensity[index] ?? 0)
-                currentValue = calCurrent(deviceModel: deviceModel, currentTime: currentTime, index: index)
-                maxValue = CGFloat(100 - maxValue) / 100 * (barHeight - 71) + CGFloat(20)
-                currentValue = CGFloat(100 - currentValue) / 100 * (barHeight - 71) + CGFloat(20)
-                barValueView.maxValueTopLConstraint.constant = maxValue
-                barValueView.currentValueTopLConstraint.constant = currentValue
-            }
+            let manager = CurrentLightValueManager.sharedInstance
+            let currentValue = manager.calCurrent(deviceModel: deviceModel, currentTime: currentTime, index: index)
+            let maxValue = manager.calMax(deviceModel: deviceModel, index: index)
+            let max = CGFloat(100 - maxValue) / 100 * (barHeight - 71) + CGFloat(20)
+            barValueView.valueLabel.text = "\(Int(currentValue))%"
+            let current = CGFloat(100 - currentValue) / 100 * (barHeight - 71) + CGFloat(20)
+            barValueView.maxValueTopLConstraint.constant = max
+            barValueView.currentValueTopLConstraint.constant = current
         }
-    }
-    
-    func calCurrent(deviceModel: DeviceModel, currentTime: Int, index: Int) -> CGFloat {
-        guard let pattern = deviceModel.pattern else {
-            return 0
-        }
-        for (index, item) in pattern.items.enumerated() {
-            if index == pattern.items.count - 1 && item.time <= currentTime {
-                return CGFloat(item.intensity[index]) * CGFloat(1440 - currentTime) / CGFloat(1440 - item.time)
-            }
-            if item.time > currentTime {
-                if index > 0 {
-                    let pre = pattern.items[index - 1]
-                    return CGFloat(item.intensity[index] - pre.intensity[index]) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.intensity[index])
-                } else {
-                    return CGFloat(item.intensity[index]) * CGFloat(currentTime) / CGFloat(item.time)
-                }
-            }
-        }
-        return 0
     }
     
     func refreshButton(deviceModel: DeviceModel) {
         let value = deviceModel.deviceState
         let low = value & 0x0f
         let high = (value >> 4) & 0x0f
-        if deviceModel.deviceType == 3 {
-            
-        } else {
-            buttons[0].isSelected = low == 4
-            buttons[1].isSelected = (low == 2 || low == 10)
-            buttons[2].isSelected = low == 1
-            buttons[3].isSelected = (high & 0b0100) > 0
-            buttons[4].isSelected = (high & 0b0010) > 0
-            buttons[5].isSelected = (high & 0b0001) > 0
-        }
+   
+        buttons[0].isSelected = low == 4
+        buttons[1].isSelected = (low == 2 || ((high >> 3) & 0x01 == 1))
+        buttons[2].isSelected = low == 1
+        buttons[3].isSelected = (high & 0b0100) > 0
+        buttons[4].isSelected = (high & 0b0010) > 0
+        buttons[5].isSelected = (high & 0b0001) > 0
+        
     }
 }
 

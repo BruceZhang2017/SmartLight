@@ -41,3 +41,22 @@ extension UIColor {
     }
     
 }
+
+extension UIViewController {
+    
+    public func showHUD() {
+        if let _ = view.viewWithTag(8888) as? MBProgressHUD {
+           return
+        }
+        let hud = MBProgressHUD.showAdded(to: view, animated: true)
+        hud.mode = MBProgressHUDMode.annularDeterminate
+        hud.label.text = "预览中..."
+        hud.tag = 8888
+    }
+    
+    public func hideHUD() {
+        if let hud = view.viewWithTag(8888) as? MBProgressHUD {
+            hud.hide(animated: true)
+        }
+    }
+}

@@ -17,12 +17,53 @@ class LunnarTableViewController: EffectsSettingTableViewController {
     var deviceListModel: DeviceListModel!
     var deviceModel: DeviceModel!
     var lunnar: Lunnar!
+    var preTimer: Timer?
+    var currentIndex = 0
+    var totalIndex = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         lunnar = deviceModel.lunnar ?? Lunnar()
+        tableView.register(TableViewHeadView.classForCoder(), forHeaderFooterViewReuseIdentifier: "HEAD")
+    }
+    
+    private func handleLunnar() {
+        TCPSocketManager.sharedInstance.lightEffect(type: 0, result: lunnar.enable ? 2 : 1, device: deviceModel)
+    }
+    
+    // 10秒内预览 1s 一次
+    private func PreviousFunction(count: Int) {
+        preTimer?.invalidate()
+        preTimer = nil
+        totalIndex = count
+        preTimer = Timer.scheduledTimer(timeInterval: Double(10) / Double(count), target: self, selector: #selector(handlePre), userInfo: nil, repeats: true)
+        preTimer?.fire()
+        showHUD()
+    }
+    
+    @objc private func handlePre() {
+        if currentIndex > totalIndex {
+            preTimer?.invalidate()
+            preTimer = nil
+            hideHUD()
+            handleLunnar() // 发送真实的SCHEDULE
+            return
+        }
+        let duration = (lunnar.endTime - lunnar.startTime) / totalIndex
+        var value = [0, 0, 0, 0, 0, 0]
+        let time = lunnar.startTime + currentIndex * duration
+        for j in 0..<value.count {
+            if j == 1 {
+                value[j] = lunnar.intensity
+            } else {
+                let manager = CurrentLightValueManager()
+                value[j] = Int(manager.calCurrent(deviceModel: deviceModel, currentTime: time, index: j))
+            }
+        }
+        TCPSocketManager.sharedInstance.lightPreview(value: value)
+        currentIndex += 1
     }
 
     // MARK: - Table view data source
@@ -59,6 +100,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
                 cell.titleLabel.text = "End Date"
                 cell.desLabel.text = lunnar.endTime.timeIntToStr()
             }
+            cell.selectionStyle = .none
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellBIdentifier, for: indexPath) as! EffectsSettingBTableViewCell
@@ -67,15 +109,20 @@ class LunnarTableViewController: EffectsSettingTableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HEAD") as! TableViewHeadView
         if section == 0 {
-            
-        } else if section == 1 {
-            return "Intensity"
+            headView.titleLabel.text = "Quickly Setup"
+            headView.contentLabel.text = ""
         } else {
-            return "Speed"
+            headView.titleLabel.text = "Intensity".uppercased()
+            headView.contentLabel.text = "\(lunnar.intensity)%"
         }
-        return ""
+        return headView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 38
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -111,8 +158,9 @@ extension LunnarTableViewController: TimePickerViewControllerDelegate {
             lunnar.endTime = time
         }
         tableView.reloadData()
+        deviceModel.lunnar = lunnar
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 2, result: lunnar.enable ? 1 : 0, device: deviceModel)
+        handleLunnar()
     }
 }
 
@@ -120,16 +168,30 @@ extension LunnarTableViewController: EffectsSettingBTableViewCellDelegate {
     func valueChanged(value: Int, tag: Int) {
         lunnar.intensity = value
         tableView.reloadData()
+        deviceModel.lunnar = lunnar
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 2, result: lunnar.enable ? 1 : 0, device: deviceModel)
+        handleLunnar()
     }
 }
 
 extension LunnarTableViewController: EffectsSettingTableViewCellDelegate {
-    func valueChanged(_ value: Bool) {
+    func valueChanged(_ value: Bool, tag: Int) {
+        if lunnar.startTime <= 0 || lunnar.endTime <= 0 {
+            tableView.reloadData()
+            return
+        }
         lunnar.enable = value
         tableView.reloadData()
+        deviceModel.lunnar = lunnar
+        let state = deviceModel.deviceState
+        let low = state & 0x0f
+        let high = (state >> 4) & 0x0f
+        deviceModel.deviceState = (((value ? 0x04 : 0x00) + high & 0b0011) << 4) + low
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 2, result: lunnar.enable ? 1 : 0, device: deviceModel)
+        if value {
+            PreviousFunction(count: 50) // 先预览200ms一次
+        } else {
+            handleLunnar()
+        }
     }
 }

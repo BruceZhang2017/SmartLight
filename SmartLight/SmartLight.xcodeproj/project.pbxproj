@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1B8223FB1A9FCBD06FCF3644 /* Pods_SmartLight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F64C10D86EFF1C7BC7DD516 /* Pods_SmartLight.framework */; };
+		9A083AD02379625B0018D54D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9A083AD22379625B0018D54D /* Localizable.strings */; };
+		9A083AD52379803D0018D54D /* CurrentLightValueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A083AD42379803D0018D54D /* CurrentLightValueManager.swift */; };
+		9A083ADF237C34920018D54D /* TableViewHeadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A083ADE237C34920018D54D /* TableViewHeadView.swift */; };
+		9A083AE1237C5C6D0018D54D /* FanTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A083AE0237C5C6D0018D54D /* FanTableViewController.swift */; };
+		9A083AE3237C5C8A0018D54D /* Fan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A083AE2237C5C8A0018D54D /* Fan.swift */; };
+		9A083AE5237C5DE70018D54D /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A083AE4237C5DE70018D54D /* TableViewHeaderView.swift */; };
 		9A101B5822F5C9400033E96B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101B5722F5C9400033E96B /* AppDelegate.swift */; };
 		9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A101B5922F5C9400033E96B /* DashboardViewController.swift */; };
 		9A101B5D22F5C9400033E96B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A101B5B22F5C9400033E96B /* Main.storyboard */; };
@@ -120,6 +126,13 @@
 /* Begin PBXFileReference section */
 		3F64C10D86EFF1C7BC7DD516 /* Pods_SmartLight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartLight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FEBEBB733C700359B9854BE /* Pods-SmartLight.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartLight.debug.xcconfig"; path = "Target Support Files/Pods-SmartLight/Pods-SmartLight.debug.xcconfig"; sourceTree = "<group>"; };
+		9A083AD12379625B0018D54D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		9A083AD3237962680018D54D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		9A083AD42379803D0018D54D /* CurrentLightValueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLightValueManager.swift; sourceTree = "<group>"; };
+		9A083ADE237C34920018D54D /* TableViewHeadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeadView.swift; sourceTree = "<group>"; };
+		9A083AE0237C5C6D0018D54D /* FanTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FanTableViewController.swift; sourceTree = "<group>"; };
+		9A083AE2237C5C8A0018D54D /* Fan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fan.swift; sourceTree = "<group>"; };
+		9A083AE4237C5DE70018D54D /* TableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaderView.swift; sourceTree = "<group>"; };
 		9A101B5422F5C9400033E96B /* SmartLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A101B5722F5C9400033E96B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9A101B5922F5C9400033E96B /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
@@ -309,6 +322,7 @@
 				9A101B6122F5C9410033E96B /* Assets.xcassets */,
 				9A101B6322F5C9410033E96B /* LaunchScreen.storyboard */,
 				9A101B6622F5C9410033E96B /* Info.plist */,
+				9A083AD22379625B0018D54D /* Localizable.strings */,
 				9A101B5E22F5C9400033E96B /* SmartLight.xcdatamodeld */,
 			);
 			path = SmartLight;
@@ -363,6 +377,7 @@
 				9A10200B23006703000F36D7 /* DeviceModel.swift */,
 				9A5B7EF82307E9930099E3A9 /* Acclimation.swift */,
 				9A5B7F0823098FE20099E3A9 /* Lunnar.swift */,
+				9A083AE2237C5C8A0018D54D /* Fan.swift */,
 				9A5B7F1023099D890099E3A9 /* Lightning.swift */,
 				9A5B7F122309A1520099E3A9 /* Cloudy.swift */,
 			);
@@ -537,6 +552,7 @@
 				9A8900A7231F31E2009AF915 /* WIFIManager.swift */,
 				9A8900AB23215555009AF915 /* DeviceManager.swift */,
 				9A8900B823239973009AF915 /* TCPSocketManager.swift */,
+				9A083AD42379803D0018D54D /* CurrentLightValueManager.swift */,
 			);
 			path = Manage;
 			sourceTree = "<group>";
@@ -566,8 +582,11 @@
 				9AA1AC3822FC60E70000F6D2 /* EffectsSettingTableViewController.swift */,
 				9A5B7F002307F7800099E3A9 /* AcclimationTableViewController.swift */,
 				9A5B7EFB2307EFA60099E3A9 /* LunnarTableViewController.swift */,
+				9A083ADE237C34920018D54D /* TableViewHeadView.swift */,
 				9A5B7EFA2307EFA60099E3A9 /* LightningTableViewController.swift */,
 				9A5B7EFC2307EFA70099E3A9 /* CloudyTableViewController.swift */,
+				9A083AE0237C5C6D0018D54D /* FanTableViewController.swift */,
+				9A083AE4237C5DE70018D54D /* TableViewHeaderView.swift */,
 				9AA1AC3C22FC64C80000F6D2 /* EffectsSettingTableViewCell.swift */,
 				9AA1AC3D22FC64C80000F6D2 /* EffectsSettingTableViewCell.xib */,
 				9AA1AC4022FC67160000F6D2 /* EffectsSettingBTableViewCell.swift */,
@@ -704,6 +723,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 9A101B4B22F5C9400033E96B;
 			productRefGroup = 9A101B5522F5C9400033E96B /* Products */;
@@ -732,6 +752,7 @@
 				9A1020132302F38D000F36D7 /* Control.storyboard in Resources */,
 				9A101B5D22F5C9400033E96B /* Main.storyboard in Resources */,
 				9AA1AC3722FC49420000F6D2 /* Effects.storyboard in Resources */,
+				9A083AD02379625B0018D54D /* Localizable.strings in Resources */,
 				9A3E1EA522F87CC900A24DB1 /* Settings.storyboard in Resources */,
 				9A10201723030031000F36D7 /* TouchBarValueView.xib in Resources */,
 				9A10200123004035000F36D7 /* Device.storyboard in Resources */,
@@ -806,12 +827,14 @@
 				9A10200A230066BF000F36D7 /* DeviceListModel.swift in Sources */,
 				9A10200C23006703000F36D7 /* DeviceModel.swift in Sources */,
 				9A211CF82325317600C36FC2 /* ESP_WifiUtil.m in Sources */,
+				9A083AE5237C5DE70018D54D /* TableViewHeaderView.swift in Sources */,
 				9A10200523005F58000F36D7 /* WIFIListViewController.swift in Sources */,
 				9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */,
 				9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */,
 				9A1020222303D26C000F36D7 /* LBXScanNetAnimation.swift in Sources */,
 				9A211CF92325317600C36FC2 /* ESPDataCode.m in Sources */,
 				9A3E1E8A22F8590500A24DB1 /* BaseViewController.swift in Sources */,
+				9A083AD52379803D0018D54D /* CurrentLightValueManager.swift in Sources */,
 				9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */,
 				9A211CF12325317600C36FC2 /* ESPDatumCode.m in Sources */,
 				9AA1AC4222FC67160000F6D2 /* EffectsSettingBTableViewCell.swift in Sources */,
@@ -844,9 +867,11 @@
 				9A211CF32325317600C36FC2 /* ESPGuideCode.m in Sources */,
 				9A5B7EFD2307EFA70099E3A9 /* LightningTableViewController.swift in Sources */,
 				9A10201523030026000F36D7 /* TouchBarValueView.swift in Sources */,
+				9A083AE3237C5C8A0018D54D /* Fan.swift in Sources */,
 				9A211CEF2325317600C36FC2 /* ESP_CRC8.m in Sources */,
 				9A3E1EA022F86E4300A24DB1 /* BaseTabBarController.swift in Sources */,
 				9A5B7F132309A1520099E3A9 /* Cloudy.swift in Sources */,
+				9A083AE1237C5C6D0018D54D /* FanTableViewController.swift in Sources */,
 				9A79F63F22F66E8600487DC5 /* Dimension.swift in Sources */,
 				9A1020112302F296000F36D7 /* ControlViewController.swift in Sources */,
 				9A1020262303D26C000F36D7 /* LBXPermissions.swift in Sources */,
@@ -859,6 +884,7 @@
 				9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */,
 				9A101B5822F5C9400033E96B /* AppDelegate.swift in Sources */,
 				9AA1AC4D22FD0C130000F6D2 /* EffectsSettingModel.swift in Sources */,
+				9A083ADF237C34920018D54D /* TableViewHeadView.swift in Sources */,
 				9AA1AC4822FC68870000F6D2 /* EffectsSettingCTableViewCell.swift in Sources */,
 				9A5B7F0723097C540099E3A9 /* CustomPickerViewController.swift in Sources */,
 				9A211CF52325317600C36FC2 /* ESPTouchGenerator.m in Sources */,
@@ -911,6 +937,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		9A083AD22379625B0018D54D /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9A083AD12379625B0018D54D /* en */,
+				9A083AD3237962680018D54D /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		9A101B5B22F5C9400033E96B /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -934,6 +969,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -995,6 +1031,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1054,6 +1091,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1061,7 +1099,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev0916;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1078,6 +1117,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1085,7 +1125,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev0916;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

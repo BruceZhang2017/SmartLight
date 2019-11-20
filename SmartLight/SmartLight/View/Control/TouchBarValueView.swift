@@ -35,8 +35,8 @@ class TouchBarValueView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
-        if rect.contains(point) {
-            let top = min(point.y, rect.size.height)
+        if bounds.contains(point) {
+            let top = max(20, min(point.y, rect.size.height))
             //print("start\(top)")
             topLConstraint.constant = top
             let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))
@@ -48,8 +48,8 @@ class TouchBarValueView: UIView {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
-        if rect.contains(point) {
-            let top = min(point.y, rect.size.height)
+        if bounds.contains(point) {
+            let top = max(20, min(point.y, rect.size.height))
             //print("move\(top)")
             topLConstraint.constant = top
             let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))
@@ -61,8 +61,8 @@ class TouchBarValueView: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
-        if rect.contains(point) {
-            let top = min(point.y, rect.size.height)
+        if bounds.contains(point) {
+            let top = max(20, min(point.y, rect.size.height))
             //print("end\(top)")
             topLConstraint.constant = top
             let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))
@@ -74,8 +74,8 @@ class TouchBarValueView: UIView {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let point = touches.first?.location(in: self) else { return }
         let rect = bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
-        if rect.contains(point) {
-            let top = min(point.y, rect.size.height)
+        if bounds.contains(point) {
+            let top = max(20, min(point.y, rect.size.height))
             //print("cancel\(top)")
             topLConstraint.constant = top
             let value = 100 - Int((top - 20) * 100 / (rect.size.height - 20))

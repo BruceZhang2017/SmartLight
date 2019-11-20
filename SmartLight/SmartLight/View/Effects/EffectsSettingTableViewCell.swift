@@ -31,10 +31,10 @@ class EffectsSettingTableViewCell: UITableViewCell {
     }
     
     @IBAction func valueChanged(_ sender: Any) {
-        delegate?.valueChanged(mSwitch.isOn)
+        delegate?.valueChanged(mSwitch.isOn, tag: tag)
     }
 }
 
 protocol EffectsSettingTableViewCellDelegate: NSObjectProtocol {
-    func valueChanged(_ value: Bool)
+    func valueChanged(_ value: Bool, tag: Int)
 }

@@ -23,6 +23,7 @@ class DeviceModel: NSObject, NSCoding {
     var lunnar: Lunnar?
     var lightning: Lightning?
     var cloudy: Cloudy?
+    var fan: Fan?
     var ip: String?
     var deviceType = 3 // 3和6
     var deviceState = 0 // 使用位来存储
@@ -41,6 +42,7 @@ class DeviceModel: NSObject, NSCoding {
         aCoder.encode(lunnar, forKey: "lunnar")
         aCoder.encode(lightning, forKey: "lightning")
         aCoder.encode(cloudy, forKey: "cloudy")
+        aCoder.encode(fan, forKey: "fan")
         aCoder.encode(ip, forKey: "ip")
         aCoder.encode(deviceType, forKey: "deviceType")
         aCoder.encode(deviceState, forKey: "deviceState")
@@ -57,6 +59,7 @@ class DeviceModel: NSObject, NSCoding {
         lunnar = aDecoder.decodeObject(forKey: "lunnar") as? Lunnar
         lightning = aDecoder.decodeObject(forKey: "lightning") as? Lightning
         cloudy = aDecoder.decodeObject(forKey: "cloudy") as? Cloudy
+        fan = aDecoder.decodeObject(forKey: "fan") as? Fan
         ip = aDecoder.decodeObject(forKey: "ip") as? String
         deviceType = aDecoder.decodeInteger(forKey: "deviceType")
         deviceState = aDecoder.decodeInteger(forKey: "deviceState")

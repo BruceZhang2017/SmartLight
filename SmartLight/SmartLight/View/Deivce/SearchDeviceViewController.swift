@@ -125,8 +125,8 @@ extension SearchDeviceViewController: UITableViewDelegate {
             let device = DeviceModel() // 先添加一个设备
             device.name = "Light_\(bssid[bssid.count - 4, bssid.count])"
             device.ip = results[indexPath.row].ip()
-            device.deviceState = 0x02
-            device.deviceType = 6
+            device.deviceState = 0x00
+            device.deviceType = 3
             
             model.groups.append(device)
             DeviceManager.sharedInstance.save()
@@ -150,8 +150,8 @@ extension SearchDeviceViewController: UITableViewDelegate {
                 let device = DeviceModel() // 先添加一个设备
                 device.name = "Light_\(bssid[bssid.count - 4, bssid.count])"
                 device.ip = results[indexPath.row].ip()
-                device.deviceState = 0x02
-                device.deviceType = 6
+                device.deviceState = 0x00
+                device.deviceType = 3
                 model.groups.append(device)
                 DeviceManager.sharedInstance.save()
             }

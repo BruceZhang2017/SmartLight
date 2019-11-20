@@ -17,12 +17,58 @@ class CloudyTableViewController: EffectsSettingTableViewController {
     var deviceListModel: DeviceListModel!
     var deviceModel: DeviceModel!
     var cloudy: Cloudy!
+    var preTimer: Timer?
+    var currentIndex = 0
+    var totalIndex = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         cloudy = deviceModel.cloudy ?? Cloudy()
+        tableView.register(TableViewHeadView.classForCoder(), forHeaderFooterViewReuseIdentifier: "HEAD")
+    }
+    
+    private func handleLightEffect() {
+        TCPSocketManager.sharedInstance.lightEffect(type: 2, result: cloudy.enable ? 2 : 1, device: deviceModel)
+    }
+    
+    // 10秒内预览 1s 一次
+    private func PreviousFunction(count: Int) {
+        preTimer?.invalidate()
+        preTimer = nil
+        totalIndex = count
+        preTimer = Timer.scheduledTimer(timeInterval: Double(10) / Double(count), target: self, selector: #selector(handlePre), userInfo: nil, repeats: true)
+        preTimer?.fire()
+        showHUD()
+    }
+    
+    @objc private func handlePre() {
+        if currentIndex > totalIndex {
+            preTimer?.invalidate()
+            preTimer = nil
+            hideHUD()
+            handleLightEffect() // 发送真实的SCHEDULE
+            return
+        }
+        let s2e = cloudy.endTime - cloudy.startTime
+        let duration = s2e / totalIndex
+        var value = [0, 0, 0, 0, 0, 0]
+        let time = cloudy.startTime + currentIndex * duration
+        for j in 0..<value.count {
+            if j == 1 {
+                if time < (cloudy.endTime + cloudy.startTime) / 2 {
+                    value[j] = cloudy.intensity * (time - cloudy.startTime) / (s2e / 2)
+                } else {
+                    value[j] = cloudy.intensity * (cloudy.endTime - time) / (s2e / 2)
+                }
+            } else {
+                let manager = CurrentLightValueManager()
+                value[j] = Int(manager.calCurrent(deviceModel: deviceModel, currentTime: time, index: j))
+            }
+        }
+        TCPSocketManager.sharedInstance.lightPreview(value: value, tag: 1)
+        currentIndex += 1
     }
 
     // MARK: - Table view data source
@@ -44,6 +90,7 @@ class CloudyTableViewController: EffectsSettingTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath) as! EffectsSettingTableViewCell
+            cell.delegate = self 
             if indexPath.row == 0 {
                 cell.mSwitch.isHidden = false
                 cell.desLabel.isHidden = true
@@ -76,15 +123,23 @@ class CloudyTableViewController: EffectsSettingTableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HEAD") as! TableViewHeadView
         if section == 0 {
-            
+            headView.titleLabel.text = "Quickly Setup"
+            headView.contentLabel.text = ""
         } else if section == 1 {
-            return "Intensity"
-        } else {
-            return "Speed"
+            headView.titleLabel.text = "Intensity".uppercased()
+            headView.contentLabel.text = "\(cloudy.intensity)%"
+        }else {
+            headView.titleLabel.text = "Speed".uppercased()
+            headView.contentLabel.text = "\(cloudy.speed)%"
         }
-        return ""
+        return headView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 38
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -120,8 +175,9 @@ extension CloudyTableViewController: TimePickerViewControllerDelegate {
             cloudy.endTime = time
         }
         tableView.reloadData()
+        deviceModel.cloudy = cloudy
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 4, result: cloudy.enable ? 1 : 0, device: deviceModel)
+        handleLightEffect()
     }
 }
 
@@ -133,16 +189,31 @@ extension CloudyTableViewController: EffectsSettingBTableViewCellDelegate {
             cloudy.speed = value
         }
         tableView.reloadData()
+        deviceModel.cloudy = cloudy
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 4, result: cloudy.enable ? 1 : 0, device: deviceModel)
+        handleLightEffect()
     }
 }
 
 extension CloudyTableViewController: EffectsSettingTableViewCellDelegate {
-    func valueChanged(_ value: Bool) {
+    func valueChanged(_ value: Bool, tag: Int) {
+        if cloudy.startTime <= 0 ||
+            cloudy.endTime <= 0 {
+            tableView.reloadData()
+            return
+        }
         cloudy.enable = value
         tableView.reloadData()
+        deviceModel.cloudy = cloudy
+        let state = deviceModel.deviceState
+        let low = state & 0x0f
+        let high = (state >> 4) & 0x0f
+        deviceModel.deviceState = (((value ? 0x01 : 0x00) + high & 0b0110) << 4) + low
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightControl(type: 4, result: cloudy.enable ? 1 : 0, device: deviceModel)
+        if value {
+            PreviousFunction(count: 50) // 先预览200ms一次
+        } else {
+            handleLightEffect()
+        }
     }
 }

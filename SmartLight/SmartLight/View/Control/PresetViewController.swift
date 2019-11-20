@@ -72,7 +72,7 @@ class PresetViewController: UIViewController {
     
     private func createQRCode() {
         if let tryImage = EFQRCode.generate(
-            content: TCPSocketManager.sharedInstance.createlightSchedual(pattern: patterns.patterns[current - 1], isPre: false),
+            content: TCPSocketManager.sharedInstance.createQRCode(pattern: patterns.patterns[current - 1]),
             watermark: UIImage(named: "logo")?.toCGImage()
             ) {
             print("Create QRCode image success: \(tryImage)")

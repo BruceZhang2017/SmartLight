@@ -30,6 +30,10 @@ class ControlViewController: BaseViewController {
     var currentItem = 0 // 当前编辑的点
     var smallShapeLayer: CAShapeLayer!
     var powerShapeLayer: CAShapeLayer!
+    var scan: LBXScanViewController!
+    var preTimer: Timer? // 预览定时器
+    var currentIndex = 0 // 当前预览节点
+    var totalIndex = 0 //  总预览数量
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -246,11 +250,11 @@ class ControlViewController: BaseViewController {
         style.anmiationStyle = LBXScanViewAnimationStyle.LineMove
         style.colorAngle = UIColor(red: 0.0/255, green: 200.0/255.0, blue: 20.0/255.0, alpha: 1.0)
         style.animationImage = UIImage(named: "CodeScan.bundle/qrcode_Scan_weixin_Line")
-        let vc = LBXScanViewController()
-        vc.scanStyle = style
-        vc.scanResultDelegate = self
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        scan = LBXScanViewController()
+        scan.scanStyle = style
+        scan.scanResultDelegate = self
+        scan.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(scan, animated: true)
     }
 
     @IBAction func valueChanged(_ sender: Any) {
@@ -273,12 +277,12 @@ class ControlViewController: BaseViewController {
         let tag = button.tag
         switch tag {
         case 0: // 增加点
-            if currentPattern.items.count >= 4 {
+            if currentPattern.items.count >= 12 {
                 return
             }
             let item = PatternItemModel()
             let last = currentPattern.items.last?.time ?? 0
-            item.time =  last > 0 ? (last + 60) : 0
+            item.time =  last > 0 ? (last + 60) : 0 // 在最后一个点往后移动1小时
             item.intensity = currentPattern.items.last?.intensity ?? [0, 0, 0, 0, 0, 0, 0]
             currentPattern.items.append(item)
             currentItem = currentPattern.items.count - 1
@@ -330,8 +334,20 @@ class ControlViewController: BaseViewController {
                 refreshTopView()
                 saveSchedule()
             }
-        case 4:
-            TCPSocketManager.sharedInstance.lightSchedual(pattern: currentPattern, isPre: true)
+        case 4:// 预览
+            print("设置预览")
+            if preTimer != nil {
+                let button = buttonsView.viewWithTag(4) as! UIButton
+                button.setImage(UIImage(named: "中间-三角形"), for: .normal)
+                preTimer?.invalidate()
+                preTimer = nil
+                topView.floatView.isHidden = true
+                topView.setFloatViewDot(isShown: true)
+                currentIndex = 0
+                return
+            }
+            button.setImage(UIImage(named: "中间-返回"), for: .normal)
+            PreviousFunction(count: 150) // 每200ms一次
         case 5:
             let alert = UIAlertController(title: "Save Current Settings", message: nil, preferredStyle: .alert)
             alert.addTextField { (textField) in
@@ -368,13 +384,67 @@ class ControlViewController: BaseViewController {
         deviceModel.pattern = currentPattern
         deviceListModel.groups[DeviceManager.sharedInstance.currentIndex] = deviceModel
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightSchedual(pattern: currentPattern, isPre: false)
+        TCPSocketManager.sharedInstance.lightSchedual(model: deviceModel.pattern?.isManual == true ? 2 : 1, device: deviceModel)
     }
+    
+    // 30秒内预览 200ms 一次
+    private func PreviousFunction(count: Int) {
+        preTimer?.invalidate()
+        preTimer = nil
+        totalIndex = count
+        preTimer = Timer.scheduledTimer(timeInterval: Double(30) / Double(count), target: self, selector: #selector(handlePre), userInfo: nil, repeats: true)
+        preTimer?.fire()
+        topView.floatView.isHidden = false
+        topView.setFloatViewDot(isShown: false)
+    }
+    
+    @objc private func handlePre() {
+        if currentIndex > totalIndex {
+            preTimer?.invalidate()
+            preTimer = nil
+            topView.floatView.isHidden = true
+            topView.setFloatViewDot(isShown: true)
+            let button = buttonsView.viewWithTag(4) as! UIButton
+            button.setImage(UIImage(named: "中间-三角形"), for: .normal)
+            currentIndex = 0
+            return
+        }
+        let duration = 24 * 60 / totalIndex
+        topView.left = topView.timeToLeft(value: currentIndex * duration)
+        var value = [0, 0, 0, 0, 0, 0]
+        for j in 0..<value.count {
+            let manager = CurrentLightValueManager()
+            let v = manager.calCurrentB(deviceModel: deviceModel, currentTime: currentIndex * duration, index: j)
+            value[j] = Int(v)
+        }
+        TCPSocketManager.sharedInstance.lightPreview(value: value)
+        currentIndex += 1
+    }
+    
+    
 }
 
 extension ControlViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
-        NSLog("scanResult:\(scanResult)")
+        if scanResult.strScanned?.hasPrefix("{") == true && scanResult.strScanned?.hasSuffix("}") == true {
+            let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                
+            }))
+            present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                self?.scan?.startScan()
+            }))
+            present(alert, animated: true, completion: nil)
+        }
     }
 }
 
@@ -386,13 +456,21 @@ extension ControlViewController: TouchBarValueViewDelegate {
                 view.setValue(value)
             }
             if topManualView.isHidden == false {
-                currentPattern.manual?.intensity = [value, value, value, value, value, value, value]
+                if deviceModel.deviceType == 3 {
+                    currentPattern.manual?.intensity = [value, value, value, 0, 0, 0, value]
+                } else {
+                    currentPattern.manual?.intensity = [value, value, value, value, value, value, value]
+                }
                 refreshPower()
                 saveSchedule()
                 return
             }
             if currentPattern.items.count > 0 {
-                currentPattern.items[currentItem].intensity = [value, value, value, value, value, value, value]
+                if deviceModel.deviceType == 3 {
+                    currentPattern.items[currentItem].intensity = [value, value, value, 0, 0, 0, value]
+                } else {
+                    currentPattern.items[currentItem].intensity = [value, value, value, value, value, value, value]
+                }
                 refreshTopView()
                 saveSchedule()
             }
@@ -423,6 +501,17 @@ extension ControlViewController: TopViewDelegate {
         if currentItem >= currentPattern.items.count {
             return
         }
+        let time = Int((pointX) / (Dimension.screenWidth - 40) * 1440)
+        if currentItem - 1 >= 0 {
+            if currentPattern.items[currentItem - 1].time >= time {
+                return
+            }
+        }
+        if currentItem + 1 < currentPattern.items.count {
+            if currentPattern.items[currentItem + 1].time <= time {
+                return
+            }
+        }
         currentPattern.items[currentItem].time = Int((pointX) / (Dimension.screenWidth - 40) * 1440)
         refreshTopView()
         saveSchedule()
@@ -440,5 +529,19 @@ extension ControlViewController: TopViewDelegate {
             }
         }
         topView.addDotButtons(currentPattern: currentPattern, current: currentItem)
+    }
+    
+    func readBeforeValue() -> Int {
+        if currentItem - 1 >= 0 {
+            return currentPattern.items[currentItem - 1].time
+        }
+        return 0
+    }
+    
+    func readAfterValue() -> Int {
+        if currentItem + 1 < currentPattern.items.count {
+            return currentPattern.items[currentItem + 1].time
+        }
+        return 0
     }
 }

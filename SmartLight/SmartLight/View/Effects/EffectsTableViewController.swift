@@ -15,6 +15,7 @@ import UIKit
 class EffectsTableViewController: UITableViewController {
     
     var titles: [String] = []
+    var scan: LBXScanViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,9 +32,7 @@ class EffectsTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let index = DeviceManager.sharedInstance.currentIndex
-        let deviceModel = DeviceManager.sharedInstance.deviceListModel.groups[index]
-        titles = deviceModel.deviceType == 3 ? Arrays.effectBs : Arrays.effects
+        titles = Arrays.effects
         tableView.reloadData()
     }
     
@@ -77,11 +76,11 @@ class EffectsTableViewController: UITableViewController {
         style.anmiationStyle = LBXScanViewAnimationStyle.LineMove
         style.colorAngle = UIColor(red: 0.0/255, green: 200.0/255.0, blue: 20.0/255.0, alpha: 1.0)
         style.animationImage = UIImage(named: "CodeScan.bundle/qrcode_Scan_weixin_Line")
-        let vc = LBXScanViewController()
-        vc.scanStyle = style
-        vc.scanResultDelegate = self
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        scan = LBXScanViewController()
+        scan.scanStyle = style
+        scan.scanResultDelegate = self
+        scan.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(scan, animated: true)
     }
 
     // MARK: - Table view data source
@@ -103,12 +102,16 @@ class EffectsTableViewController: UITableViewController {
             let allimationVC = AcclimationTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
-        } else if indexPath.row == 1 && titles.count > 3 {
+        } else if indexPath.row == 1 {
             let allimationVC = LunnarTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
-        } else if (indexPath.row == 2 && titles.count > 3) || (indexPath.row == 1 && titles.count == 3)  {
+        } else if indexPath.row == 2 {
             let allimationVC = LightningTableViewController(style: .grouped)
+            allimationVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(allimationVC, animated: true)
+        } else  if indexPath.row == 4 {
+            let allimationVC = FanTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
         } else {
@@ -123,6 +126,24 @@ class EffectsTableViewController: UITableViewController {
 
 extension EffectsTableViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
-        NSLog("scanResult:\(scanResult)")
+        if scanResult.strScanned?.hasPrefix("{") == true && scanResult.strScanned?.hasSuffix("}") == true {
+            let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                
+            }))
+            present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                self?.scan?.startScan()
+            }))
+            present(alert, animated: true, completion: nil)
+        }
     }
 }

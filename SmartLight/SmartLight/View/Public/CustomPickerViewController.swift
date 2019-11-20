@@ -17,7 +17,7 @@ class CustomPickerViewController: UIViewController {
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var pickerView: UIPickerView!
     weak var delegate: CustomPickerViewControllerDelegate?
-    var componentCount = 2
+    var componentCount = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ class CustomPickerViewController: UIViewController {
     
     @IBAction func done(_ sender: Any) {
         let value = pickerView.selectedRow(inComponent: 0)
-        delegate?.customPickerView(value: value)
+        delegate?.customPickerView(value: value + 1)
         dismiss(animated: true, completion: nil)
     }
     
@@ -44,19 +44,13 @@ extension CustomPickerViewController: UIPickerViewDataSource {
     
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if componentCount > 1 {
-            return 1
-        }
-        return 13
+        return 12
     }
     
 }
 
 extension CustomPickerViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if componentCount > 1 {
-            return "hour"
-        }
-        return "\(row)"
+        return "\(row + 1)"
     }
 }

@@ -16,6 +16,7 @@ class Lightning: NSObject, NSCoding {
     var enable = false
     var startTime = 0
     var endTime = 0
+    var interval = 0
     var frequency = 0
     var intensity = 0
     
@@ -27,6 +28,7 @@ class Lightning: NSObject, NSCoding {
         aCoder.encode(enable, forKey: "enable")
         aCoder.encode(startTime, forKey: "startTime")
         aCoder.encode(endTime, forKey: "endTime")
+        aCoder.encode(interval, forKey: "interval")
         aCoder.encode(frequency, forKey: "frequency")
         aCoder.encode(intensity, forKey: "intensity")
     }
@@ -36,6 +38,7 @@ class Lightning: NSObject, NSCoding {
         enable = aDecoder.decodeBool(forKey: "enable")
         startTime = aDecoder.decodeInteger(forKey: "startTime")
         endTime = aDecoder.decodeInteger(forKey: "endTime")
+        interval = aDecoder.decodeInteger(forKey: "interval")
         frequency = aDecoder.decodeInteger(forKey: "frequency")
         intensity = aDecoder.decodeInteger(forKey: "intensity")
     }

@@ -17,6 +17,7 @@ class PatternModel: NSObject,NSCoding {
     var isManual = false
     var items: [PatternItemModel] = []
     var manual: PatternItemModel?
+    var deviceType = 3 // 3和6
     
     override init() {
         super.init()
@@ -27,6 +28,7 @@ class PatternModel: NSObject,NSCoding {
         aCoder.encode(items, forKey: "items")
         aCoder.encode(manual, forKey: "manual")
         aCoder.encode(isManual, forKey: "isManual")
+        aCoder.encode(deviceType, forKey: "deviceType")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -35,6 +37,7 @@ class PatternModel: NSObject,NSCoding {
         items = aDecoder.decodeObject(forKey: "items") as? [PatternItemModel] ?? []
         manual = aDecoder.decodeObject(forKey: "manual") as? PatternItemModel
         isManual = aDecoder.decodeBool(forKey: "isManual")
+        deviceType = aDecoder.decodeInteger(forKey: "deviceType")
     }
 }
 

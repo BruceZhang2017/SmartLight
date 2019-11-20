@@ -16,7 +16,8 @@ import SafariServices
 class SettingsTableViewController: UITableViewController {
     
     var currentDate: Date!
-    var versionLabel: UILabel!
+    //var versionLabel: UILabel!
+    var scan: LBXScanViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,20 +35,20 @@ class SettingsTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if versionLabel == nil {
-            versionLabel = UILabel().then {
-                $0.textColor = UIColor.red
-                $0.font = UIFont.systemFont(ofSize: 16)
-            }
-            view.addSubview(versionLabel)
-            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-            let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
-            versionLabel.text = "V\(version) - \(build)"
-            versionLabel.snp.makeConstraints {
-                $0.centerX.equalToSuperview()
-                $0.bottom.equalTo(navigationController!.view.snp.bottom).offset(-120)
-            }
-        }
+//        if versionLabel == nil {
+//            versionLabel = UILabel().then {
+//                $0.textColor = UIColor.red
+//                $0.font = UIFont.systemFont(ofSize: 16)
+//            }
+//            view.addSubview(versionLabel)
+//            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+//            let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+//            versionLabel.text = "V\(version) - \(build)"
+//            versionLabel.snp.makeConstraints {
+//                $0.centerX.equalToSuperview()
+//                $0.bottom.equalTo(navigationController!.view.snp.bottom).offset(-120)
+//            }
+//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -104,11 +105,11 @@ class SettingsTableViewController: UITableViewController {
         style.anmiationStyle = LBXScanViewAnimationStyle.LineMove
         style.colorAngle = UIColor(red: 0.0/255, green: 200.0/255.0, blue: 20.0/255.0, alpha: 1.0)
         style.animationImage = UIImage(named: "CodeScan.bundle/qrcode_Scan_weixin_Line")
-        let vc = LBXScanViewController()
-        vc.scanStyle = style
-        vc.scanResultDelegate = self
-        vc.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        scan = LBXScanViewController()
+        scan.scanStyle = style
+        scan.scanResultDelegate = self
+        scan.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(scan, animated: true)
     }
     
     private func currentDate(date: Date) -> String {
@@ -163,6 +164,10 @@ class SettingsTableViewController: UITableViewController {
             } else if indexPath.row == 3 {
                 
             }
+        } else if indexPath.section == 1 {
+            if indexPath.row == 0 {
+                cell.detailTextLabel?.text = firmwareVersion
+            }
         }
         return cell
     }
@@ -205,7 +210,25 @@ class SettingsTableViewController: UITableViewController {
 
 extension SettingsTableViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
-        NSLog("scanResult:\(scanResult)")
+        if scanResult.strScanned?.hasPrefix("{") == true && scanResult.strScanned?.hasSuffix("}") == true {
+            let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                
+            }))
+            present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                self?.scan?.startScan()
+            }))
+            present(alert, animated: true, completion: nil)
+        }
     }
 }
 

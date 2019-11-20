@@ -23,6 +23,9 @@ class DashboardViewController: BaseViewController {
     @IBOutlet weak var bottomLConstraint: NSLayoutConstraint!
     var clockTimer: Timer!
     var currentTime = 0 // 当前时间
+    var indexs: [Int] = []
+    var currentIndex = 0
+    var scan: LBXScanViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,9 +74,14 @@ class DashboardViewController: BaseViewController {
             }
             collectionView.reloadData()
             let ip = model.groups[current].ip
-            if ip != nil && DeviceManager.sharedInstance.connectStatus[ip!] == 0 {
-                DeviceManager.sharedInstance.connectStatus[ip!] = 1
-                TCPSocketManager.sharedInstance.connect(ip!)
+            print("当前设备的ip是：\(ip ?? "")")
+            
+            if ip != nil {
+                let current = DeviceManager.sharedInstance.connectStatus[ip!] ?? 0
+                if current == 0 {
+                    DeviceManager.sharedInstance.connectStatus[ip!] = 1
+                    TCPSocketManager.sharedInstance.connect(ip!)
+                }
             }
         }
     }
@@ -119,7 +127,6 @@ class DashboardViewController: BaseViewController {
             if array.count == 2 {
                 currentTime = (Int(array[0]) ?? 0) * 60 + (Int(array[1]) ?? 0)
                 collectionView.reloadData()
-                //print("currentTime: \(currentTime)")
             }
         }
     }
@@ -142,11 +149,11 @@ class DashboardViewController: BaseViewController {
         style.anmiationStyle = LBXScanViewAnimationStyle.LineMove
         style.colorAngle = UIColor(red: 0.0/255, green: 200.0/255.0, blue: 20.0/255.0, alpha: 1.0)
         style.animationImage = UIImage(named: "CodeScan.bundle/qrcode_Scan_weixin_Line")
-        let vc = LBXScanViewController()
-        vc.scanStyle = style
-        vc.scanResultDelegate = self
-        vc.hidesBottomBarWhenPushed = true 
-        self.navigationController?.pushViewController(vc, animated: true)
+        scan = LBXScanViewController()
+        scan.scanStyle = style
+        scan.scanResultDelegate = self
+        scan.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(scan, animated: true)
     }
 
     @IBAction func addDevice(_ sender: Any) {
@@ -158,25 +165,26 @@ class DashboardViewController: BaseViewController {
     
     @IBAction func prevous(_ sender: Any) {
         let model = DeviceManager.sharedInstance.deviceListModel
-        if DeviceManager.sharedInstance.currentIndex > 0 {
-            DeviceManager.sharedInstance.currentIndex -= 1
-            let current = DeviceManager.sharedInstance.currentIndex
+        if currentIndex > 0 {
+            currentIndex -= 1
+            DeviceManager.sharedInstance.currentIndex = indexs[currentIndex]
             collectionView.scrollToItem(
-                at: IndexPath(item: current, section: 0),
+                at: IndexPath(item: currentIndex, section: 0),
                 at: .centeredHorizontally,
                 animated: true)
-            deviceNameLabel.text = model.groups[current].name
+            deviceNameLabel.text = model.groups[DeviceManager.sharedInstance.currentIndex].name
         }
     }
     
     @IBAction func next(_ sender: Any) {
         let model = DeviceManager.sharedInstance.deviceListModel
-        let count = model.groups.count
-        if DeviceManager.sharedInstance.currentIndex < count - 1 {
-            DeviceManager.sharedInstance.currentIndex += 1
+        let count = indexs.count
+        if currentIndex < count - 1 {
+            currentIndex += 1
+            DeviceManager.sharedInstance.currentIndex = indexs[currentIndex]
             let current = DeviceManager.sharedInstance.currentIndex
             collectionView.scrollToItem(
-                at: IndexPath(item: current, section: 0),
+                at: IndexPath(item: currentIndex, section: 0),
                 at: .centeredHorizontally,
                 animated: true)
             deviceNameLabel.text = model.groups[current].name
@@ -187,12 +195,27 @@ class DashboardViewController: BaseViewController {
 extension DashboardViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return DeviceManager.sharedInstance.deviceListModel.groups.count
+        indexs.removeAll()
+        var tem = 0
+        for device in DeviceManager.sharedInstance.deviceListModel.groups {
+            if device.group == false {
+                indexs.append(tem)
+            } else {
+                if device.child > 0 {
+                    indexs.append(tem)
+                    tem += device.child
+                } else {
+                    continue
+                }
+            }
+            tem += 1
+        }
+        return indexs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .kCellIdentifier, for: indexPath) as! BashboardCollectionViewCell
-        let device = DeviceManager.sharedInstance.deviceListModel.groups[indexPath.row]
+        let device = DeviceManager.sharedInstance.deviceListModel.groups[indexs[indexPath.row]]
         cell.initBarValueViews(deviceModel: device)
         cell.initBtnViews(deviceModel: device)
         cell.refreshUI(deviceModel: device, currentTime: currentTime)
@@ -224,64 +247,87 @@ extension DashboardViewController: UICollectionViewDelegateFlowLayout {
 extension DashboardViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
         NSLog("scanResult:\(scanResult)")
+        if scanResult.strScanned?.hasPrefix("{") == true && scanResult.strScanned?.hasSuffix("}") == true {
+            let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                
+            }))
+            present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                self?.navigationController?.popViewController(animated: true)
+            }))
+            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                self?.scan?.startScan()
+            }))
+            present(alert, animated: true, completion: nil)
+        }
     }
 }
 
 extension DashboardViewController: BashboardCollectionViewCellDelegate {
     func handleMiddleButtonTap(btnTag: Int, tag: Int, result: Int) {
-        switch btnTag {
-        case 0:
-            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
-            let value = device.deviceState
+        let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+        let value = device.deviceState
+        let cTag = btnTag
+        switch cTag {
+        case 0: // SCHEDUAL
             let high = (value >> 4) & 0x0f
-            device.deviceState = (high << 4) + 0x04
+            device.deviceState = (high << 4) + (device.pattern?.isManual == true ? 0x08 : 0x04)
             DeviceManager.sharedInstance.save()
-            if let pattern = device.pattern {
-                TCPSocketManager.sharedInstance.lightSchedual(pattern: pattern, isPre: false)
+            if let _ = device.pattern {
+            TCPSocketManager.sharedInstance.lightSchedual(model: device.pattern?.isManual == true ? 2 : 1, device: device)
             }
             collectionView.reloadData()
-        case 1:
-            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
-            let value = device.deviceState
+        case 1: // ALL ON / ALL OFF
             let high = (value >> 4) & 0x0f
-            device.deviceState = (high << 4) + (result > 0 ? 0b0010 : 0b1010)
+            let low = value & 0x0f
+            device.deviceState = result > 0 ? ((high << 4) + 0b0010) : (low + ((high + 8) << 4))
             DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightControl(type: 0, result: result, device: device)
+            TCPSocketManager.sharedInstance.lightSchedual(model: 3, device: device, allOn: result > 0)
             collectionView.reloadData()
-        case 2:
-            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
-            let value = device.deviceState
+        case 2: // ACCL
             let high = (value >> 4) & 0x0f
             device.deviceState = (high << 4) + 0x01
             DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightControl(type: 1, result: 1, device: device)
+            TCPSocketManager.sharedInstance.lightSchedual(model: 4, device: device)
             collectionView.reloadData()
-        case 3:
-            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
-            let value = device.deviceState
+        case 3: // Lunnar
             let low = value & 0x0f
             let high = (value >> 4) & 0x0f
             device.deviceState = (((result > 0 ? 0x04 : 0x00) + high & 0b0011) << 4) + low
+            if device.lunnar == nil {
+                device.lunnar = Lunnar()
+            }
+            device.lunnar?.enable = result > 0
             DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightControl(type: 2, result: result, device: device)
+            TCPSocketManager.sharedInstance.lightEffect(type: 0, result: result + 1, device: device)
             collectionView.reloadData()
-        case 4:
-            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
-            let value = device.deviceState
+        case 4: // Lighting
             let low = value & 0x0f
             let high = (value >> 4) & 0x0f
             device.deviceState = (((result > 0 ? 0x02 : 0x00) + high & 0b0101) << 4) + low
+            if device.lightning == nil {
+                device.lightning = Lightning()
+            }
+            device.lightning?.enable = result > 0
             DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightControl(type: 3, result: result, device: device)
+            TCPSocketManager.sharedInstance.lightEffect(type: 1, result: result + 1, device: device)
             collectionView.reloadData()
-        case 5:
-            let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
-            let value = device.deviceState
+        case 5: // Cloudy
             let low = value & 0x0f
             let high = (value >> 4) & 0x0f
             device.deviceState = (((result > 0 ? 0x01 : 0x00) + high & 0b0110) << 4) + low
+            if device.cloudy == nil {
+                device.cloudy = Cloudy()
+            }
+            device.cloudy?.enable = result > 0
             DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightControl(type: 4, result: result, device: device)
+            TCPSocketManager.sharedInstance.lightEffect(type: 2, result: result + 1, device: device)
             collectionView.reloadData()
         default:
             print("todo")

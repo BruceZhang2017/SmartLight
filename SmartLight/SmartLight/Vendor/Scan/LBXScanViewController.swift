@@ -135,7 +135,7 @@ open class LBXScanViewController: UIViewController, UIImagePickerControllerDeleg
     {
         if let delegate = scanResultDelegate  {
             
-            self.navigationController? .popViewController(animated: true)
+            //self.navigationController? .popViewController(animated: true)
             let result:LBXScanResult = arrayResult[0]
             
             delegate.scanFinished(scanResult: result, error: nil)

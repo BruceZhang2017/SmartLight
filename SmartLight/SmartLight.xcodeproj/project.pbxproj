@@ -58,6 +58,8 @@
 		9A211CFB2325317600C36FC2 /* ESPUDPSocketServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A211CEA2325317600C36FC2 /* ESPUDPSocketServer.m */; };
 		9A211CFC2325317600C36FC2 /* ESPAES.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A211CEC2325317600C36FC2 /* ESPAES.m */; };
 		9A211CFF2325320C00C36FC2 /* ESPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A211CFD2325320B00C36FC2 /* ESPController.m */; };
+		9A311C08238FB4640099EC02 /* ESPTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A311C06238FB4640099EC02 /* ESPTools.m */; };
+		9A311C0A238FEE6E0099EC02 /* MCLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A311C09238FEE6E0099EC02 /* MCLocation.swift */; };
 		9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8022F830A600A24DB1 /* Images.swift */; };
 		9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8222F836C800A24DB1 /* BarValueView.swift */; };
 		9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1E8422F836E500A24DB1 /* BarValueView.xib */; };
@@ -104,6 +106,8 @@
 		9AA1AC4822FC68870000F6D2 /* EffectsSettingCTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC4622FC68870000F6D2 /* EffectsSettingCTableViewCell.swift */; };
 		9AA1AC4922FC68870000F6D2 /* EffectsSettingCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AA1AC4722FC68870000F6D2 /* EffectsSettingCTableViewCell.xib */; };
 		9AA1AC4D22FD0C130000F6D2 /* EffectsSettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC4C22FD0C130000F6D2 /* EffectsSettingModel.swift */; };
+		9AE39880238527CC00A2A632 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3987F238527CC00A2A632 /* BottomView.swift */; };
+		9AE398822385667800A2A632 /* QRCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE398812385667800A2A632 /* QRCodeHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -200,6 +204,9 @@
 		9A211CEC2325317600C36FC2 /* ESPAES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPAES.m; sourceTree = "<group>"; };
 		9A211CFD2325320B00C36FC2 /* ESPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPController.m; sourceTree = "<group>"; };
 		9A211CFE2325320C00C36FC2 /* ESPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPController.h; sourceTree = "<group>"; };
+		9A311C06238FB4640099EC02 /* ESPTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPTools.m; sourceTree = "<group>"; };
+		9A311C07238FB4640099EC02 /* ESPTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPTools.h; sourceTree = "<group>"; };
+		9A311C09238FEE6E0099EC02 /* MCLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCLocation.swift; sourceTree = "<group>"; };
 		9A3E1E8022F830A600A24DB1 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		9A3E1E8222F836C800A24DB1 /* BarValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarValueView.swift; sourceTree = "<group>"; };
 		9A3E1E8422F836E500A24DB1 /* BarValueView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BarValueView.xib; sourceTree = "<group>"; };
@@ -248,6 +255,8 @@
 		9AA1AC4622FC68870000F6D2 /* EffectsSettingCTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsSettingCTableViewCell.swift; sourceTree = "<group>"; };
 		9AA1AC4722FC68870000F6D2 /* EffectsSettingCTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EffectsSettingCTableViewCell.xib; sourceTree = "<group>"; };
 		9AA1AC4C22FD0C130000F6D2 /* EffectsSettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsSettingModel.swift; sourceTree = "<group>"; };
+		9AE3987F238527CC00A2A632 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
+		9AE398812385667800A2A632 /* QRCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeHelper.swift; sourceTree = "<group>"; };
 		CD261D01D98AF10D7C326555 /* Pods-SmartLight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartLight.release.xcconfig"; path = "Target Support Files/Pods-SmartLight/Pods-SmartLight.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -414,6 +423,8 @@
 		9A211C8C23252E6800C36FC2 /* SmartConfig */ = {
 			isa = PBXGroup;
 			children = (
+				9A311C07238FB4640099EC02 /* ESPTools.h */,
+				9A311C06238FB4640099EC02 /* ESPTools.m */,
 				9A211CFE2325320C00C36FC2 /* ESPController.h */,
 				9A211CFD2325320B00C36FC2 /* ESPController.m */,
 				9A211CD32325317400C36FC2 /* ESP_ByteUtil.h */,
@@ -551,8 +562,10 @@
 			children = (
 				9A8900A7231F31E2009AF915 /* WIFIManager.swift */,
 				9A8900AB23215555009AF915 /* DeviceManager.swift */,
+				9AE398812385667800A2A632 /* QRCodeHelper.swift */,
 				9A8900B823239973009AF915 /* TCPSocketManager.swift */,
 				9A083AD42379803D0018D54D /* CurrentLightValueManager.swift */,
+				9A311C09238FEE6E0099EC02 /* MCLocation.swift */,
 			);
 			path = Manage;
 			sourceTree = "<group>";
@@ -581,6 +594,7 @@
 				9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */,
 				9AA1AC3822FC60E70000F6D2 /* EffectsSettingTableViewController.swift */,
 				9A5B7F002307F7800099E3A9 /* AcclimationTableViewController.swift */,
+				9AE3987F238527CC00A2A632 /* BottomView.swift */,
 				9A5B7EFB2307EFA60099E3A9 /* LunnarTableViewController.swift */,
 				9A083ADE237C34920018D54D /* TableViewHeadView.swift */,
 				9A5B7EFA2307EFA60099E3A9 /* LightningTableViewController.swift */,
@@ -843,6 +857,8 @@
 				9A8900B923239973009AF915 /* TCPSocketManager.swift in Sources */,
 				9AA1AC3922FC60E70000F6D2 /* EffectsSettingTableViewController.swift in Sources */,
 				9AA1AC3E22FC64C80000F6D2 /* EffectsSettingTableViewCell.swift in Sources */,
+				9A311C0A238FEE6E0099EC02 /* MCLocation.swift in Sources */,
+				9A311C08238FB4640099EC02 /* ESPTools.m in Sources */,
 				9A5B7EF72305ABEF0099E3A9 /* OTAViewController.swift in Sources */,
 				9A1020252303D26C000F36D7 /* LBXScanViewStyle.swift in Sources */,
 				9A5B7EFE2307EFA70099E3A9 /* LunnarTableViewController.swift in Sources */,
@@ -856,6 +872,7 @@
 				9A5B7F1123099D890099E3A9 /* Lightning.swift in Sources */,
 				9A3E1E8722F8573300A24DB1 /* Strings.swift in Sources */,
 				9A1020202303D26C000F36D7 /* LBXScanViewController.swift in Sources */,
+				9AE398822385667800A2A632 /* QRCodeHelper.swift in Sources */,
 				9A5B7F012307F7800099E3A9 /* AcclimationTableViewController.swift in Sources */,
 				9A211CFC2325317600C36FC2 /* ESPAES.m in Sources */,
 				9A1020242303D26C000F36D7 /* LBXScanLineAnimation.swift in Sources */,
@@ -882,6 +899,7 @@
 				9A211CFB2325317600C36FC2 /* ESPUDPSocketServer.m in Sources */,
 				9A3E1E9C22F85C2600A24DB1 /* Arrays.swift in Sources */,
 				9A3E1E8322F836C800A24DB1 /* BarValueView.swift in Sources */,
+				9AE39880238527CC00A2A632 /* BottomView.swift in Sources */,
 				9A101B5822F5C9400033E96B /* AppDelegate.swift in Sources */,
 				9AA1AC4D22FD0C130000F6D2 /* EffectsSettingModel.swift in Sources */,
 				9A083ADF237C34920018D54D /* TableViewHeadView.swift in Sources */,
@@ -1091,7 +1109,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1100,7 +1118,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev1114;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1117,7 +1135,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1126,7 +1144,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev1114;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

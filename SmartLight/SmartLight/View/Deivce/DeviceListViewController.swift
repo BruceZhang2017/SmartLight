@@ -47,6 +47,9 @@ class DeviceListViewController: UIViewController {
     }
 
     @IBAction func addDevice(_ sender: Any) {
+        if !MCLocation.shared.didUpdateLocation(self) {
+            return
+        }
         let viewController = storyboard?.instantiateViewController(withIdentifier: .kSBIDDeviceSearch) as! SearchDeviceViewController
         navigationController?.pushViewController(viewController, animated: true)
     }

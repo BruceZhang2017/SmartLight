@@ -83,7 +83,7 @@ class PresetViewController: UIViewController {
     }
     
     @objc func image(image: UIImage, didFinishSavingWithError: NSError?, contextInfo: AnyObject) {
-        print(didFinishSavingWithError)
+        //print(didFinishSavingWithError ?? <#default value#>)
     }
     
 }
@@ -116,11 +116,16 @@ extension PresetViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.reloadData()
         } else {
             let alert = UIAlertController(title: "Overwrite Current Settings", message: "Selecting apreset will overwrite your current settings.Continues?", preferredStyle: .alert)
-            alert.addTextField { (textField) in
-                
-            }
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                let models = DeviceManager.sharedInstance.deviceListModel.groups
+                let current = DeviceManager.sharedInstance.currentIndex
+                if current < models.count {
+                    models[current].pattern = self?.patterns?.patterns[indexPath.row]
+                }
+                DeviceManager.sharedInstance.deviceListModel.groups = models
+                DeviceManager.sharedInstance.save()
+                NotificationCenter.default.post(name: Notification.Name("ControlViewController"), object: nil)
                 self?.navigationController?.popViewController(animated: true)
             }))
             present(alert, animated: true, completion: nil)

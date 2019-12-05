@@ -11,8 +11,16 @@
 #import "ESP_NetUtil.h"
 #import "ESPTouchDelegate.h"
 #import "ESPAES.h"
-
+#import "ESPTools.h"
+#import <UIKit/UIKit.h>
 #import <SystemConfiguration/CaptiveNetwork.h>
+#import <CoreLocation/CoreLocation.h>
+
+#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
+#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 @interface EspTouchDelegateImpl : NSObject<ESPTouchDelegate>
 
@@ -112,8 +120,12 @@
                         }
                         NSLog(@"Esptouch %@", mutableStr);
                         [self.delegate scanWIFI: esptouchResultArray];
+                        
+//                        [[[UIAlertView alloc] initWithTitle:@"Execute Result" message:mutableStr delegate:nil cancelButtonTitle:@"I know" otherButtonTitles:nil]show];
+                        
                     } else {
                         NSLog(@"Esptouch fail");
+//                        [[[UIAlertView alloc]initWithTitle:@"Execute Result" message:@"Esptouch did not find the device" delegate:nil cancelButtonTitle:@"I know" otherButtonTitles:nil]show];
                         [self.delegate scanWIFI:nil];
                     }
                 }
@@ -162,23 +174,30 @@
     return [bssidInfo objectForKey:@"BSSID"];
 }
 
-// refer to http://stackoverflow.com/questions/5198716/iphone-get-ssid-without-private-library
+
 - (NSDictionary *)fetchNetInfo {
-    NSArray *interfaceNames = CFBridgingRelease(CNCopySupportedInterfaces());
-    //    NSLog(@"%s: Supported interfaces: %@", __func__, interfaceNames);
-    
-    NSDictionary *SSIDInfo;
-    for (NSString *interfaceName in interfaceNames) {
-        SSIDInfo = CFBridgingRelease(
-                                     CNCopyCurrentNetworkInfo((__bridge CFStringRef)interfaceName));
-        //        NSLog(@"%s: %@ => %@", __func__, interfaceName, SSIDInfo);
+    if (SYSTEM_VERSION_LESS_THAN(@"13.0")) {
+        NSArray *interfaceNames = CFBridgingRelease(CNCopySupportedInterfaces());
+        //    NSLog(@"%s: Supported interfaces: %@", __func__, interfaceNames);
         
-        BOOL isNotEmpty = (SSIDInfo.count > 0);
-        if (isNotEmpty) {
-            break;
+        NSDictionary *SSIDInfo;
+        for (NSString *interfaceName in interfaceNames) {
+            SSIDInfo = CFBridgingRelease(
+                                         CNCopyCurrentNetworkInfo((__bridge CFStringRef)interfaceName));
+            //        NSLog(@"%s: %@ => %@", __func__, interfaceName, SSIDInfo);
+            
+            BOOL isNotEmpty = (SSIDInfo.count > 0);
+            if (isNotEmpty) {
+                break;
+            }
         }
+        return SSIDInfo;
+    } else {
+        NSMutableDictionary *wifiDic = [NSMutableDictionary dictionaryWithCapacity:0];
+        wifiDic[@"SSID"] = ESPTools.getCurrentWiFiSsid;
+        wifiDic[@"BSSID"] = ESPTools.getCurrentBSSID;
+        return wifiDic;
     }
-    return SSIDInfo;
 }
 
 @end

@@ -20,6 +20,7 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
     var preTimer: Timer?
     var currentIndex = 0
     var totalIndex = 0
+    var bottomView: BottomView!
 
     override func viewDidLoad() {
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
@@ -27,6 +28,9 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
         acclimation = deviceModel.acclimation ?? Acclimation()
         super.viewDidLoad()
         tableView.register(TableViewHeadView.classForCoder(), forHeaderFooterViewReuseIdentifier: "HEAD")
+        bottomView = BottomView(frame: CGRect(x: 0, y: 0, width: Dimension.screenWidth, height: 300))
+        tableView.tableFooterView = bottomView
+        bottomView.drawLine(deviceModel: deviceModel)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -211,6 +215,7 @@ extension AcclimationTableViewController: EffectsSettingCTableViewCellDelegate {
         DeviceManager.sharedInstance.save()
         tableView.reloadData()
         handleAcclimation()
+        bottomView.drawLine(deviceModel: deviceModel)
     }
 }
 
@@ -226,6 +231,7 @@ extension AcclimationTableViewController: TimePickerViewControllerDelegate {
         deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()
         handleAcclimation()
+        bottomView.drawLine(deviceModel: deviceModel)
     }
 }
 
@@ -236,6 +242,7 @@ extension AcclimationTableViewController: CustomPickerViewControllerDelegate {
         deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()
         handleAcclimation()
+        bottomView.drawLine(deviceModel: deviceModel)
     }
 }
 

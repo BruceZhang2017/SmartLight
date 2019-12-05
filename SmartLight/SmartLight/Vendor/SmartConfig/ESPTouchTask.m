@@ -15,6 +15,7 @@
 #import "ESPUDPSocketServer.h"
 #import "ESP_NetUtil.h"
 #import "ESPTouchTaskParameter.h"
+#import <UIKit/UIKit.h>
 
 #define ONE_DATA_LEN    3
 
@@ -153,6 +154,11 @@
         [_self._parameter setWaitUdpTotalMillisecond:timeoutMillisecond];
     }
     return _self;
+}
+
+- (id) initWithApSsid: (NSString *)apSsid andApBssid: (NSString *) apBssid andApPwd: (NSString *)apPwd andIsSsidHiden: (BOOL) isSsidHidden andTimeoutMillisecond: (int) timeoutMillisecond
+{
+    return [self initWithApSsid:apSsid andApBssid:apBssid andApPwd:apPwd andTimeoutMillisecond:timeoutMillisecond];
 }
 
 - (void) __putEsptouchResultIsSuc: (BOOL) isSuc AndBssid: (NSString *)bssid AndInetAddr:(NSData *)inetAddr
@@ -313,7 +319,6 @@
                     }
                     if (receiveData != nil)
                     {
-                        NSLog(@"返回的数据：%@", [[NSString alloc] initWithData:receiveData encoding:NSUTF8StringEncoding]);
                         NSString *bssid =
                         [ESP_ByteUtil parseBssid:(Byte *)[receiveData bytes]
                                           Offset:[self._parameter getEsptouchResultOneLen]

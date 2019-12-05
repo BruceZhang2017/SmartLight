@@ -51,11 +51,18 @@ class ControlViewController: BaseViewController {
         initbttonValueViews()
         initCircelView() // 初始化圆
         refreshTopView()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification), name: Notification.Name("ControlViewController"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -75,6 +82,20 @@ class ControlViewController: BaseViewController {
             let rect = bottomView.bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
             view.topLConstraint.constant = rect.size.height
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+    }
+    
+    @objc private func handleNotification() {
+        deviceListModel = DeviceManager.sharedInstance.deviceListModel
+        deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
+        currentPattern =  deviceModel.pattern ?? PatternModel()
+        patterns = PatternListModel.down()
+        refreshTopView()
+        saveSchedule()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -426,25 +447,37 @@ class ControlViewController: BaseViewController {
 
 extension ControlViewController: LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
-        if scanResult.strScanned?.hasPrefix("{") == true && scanResult.strScanned?.hasSuffix("}") == true {
-            let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
-                self?.navigationController?.popViewController(animated: true)
-            }))
-            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
-                
-            }))
-            present(alert, animated: true, completion: nil)
-        } else {
-            let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
-                self?.navigationController?.popViewController(animated: true)
-            }))
-            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
-                self?.scan?.startScan()
-            }))
-            present(alert, animated: true, completion: nil)
+        if let result = scanResult.strScanned {
+            let array = QRCodeHelper().checkQR(content: result)
+            if array.count > 0 {
+                let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                    self?.navigationController?.popViewController(animated: true)
+                }))
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                    let models = DeviceManager.sharedInstance.deviceListModel.groups
+                    let current = DeviceManager.sharedInstance.currentIndex
+                    if current < models.count {
+                        models[current].pattern?.items = array
+                    }
+                    DeviceManager.sharedInstance.deviceListModel.groups = models
+                    DeviceManager.sharedInstance.save()
+                    NotificationCenter.default.post(name: Notification.Name("ControlViewController"), object: nil)
+                    self?.navigationController?.popViewController(animated: true)
+                }))
+                present(alert, animated: true, completion: nil)
+                return
+            }
         }
+        
+        let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+            self?.navigationController?.popViewController(animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+            self?.scan?.startScan()
+        }))
+        present(alert, animated: true, completion: nil)
     }
 }
 

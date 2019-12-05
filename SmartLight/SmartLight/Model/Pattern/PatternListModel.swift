@@ -41,156 +41,161 @@ class PatternListModel: NSObject, NSCoding {
             }
             return model
         }
-        var model = PatternListModel()
+        let model = PatternListModel()
         model.patterns = preLoadData()
         return model
     }
     
     static func preLoadData() -> [PatternModel] {
         var array : [PatternModel] = []
-        var model = PatternModel()
+        let model = PatternModel()
         model.name = "SPS"
         var items: [PatternItemModel] = []
-        var item = PatternItemModel()
+        let item = PatternItemModel()
         item.time = 480
         item.intensity = [0, 0, 0, 0, 0, 0, 0]
         items.append(item)
-        var itemB = PatternItemModel()
+        let itemB = PatternItemModel()
         itemB.time = 540
         itemB.intensity = [1, 1, 1, 0, 0, 0, 0]
         items.append(itemB)
-        var itemC = PatternItemModel()
+        let itemC = PatternItemModel()
         itemC.time = 720
         itemC.intensity = [100, 75, 50, 0, 0, 0, 0]
         items.append(itemC)
-        var itemD = PatternItemModel()
+        let itemD = PatternItemModel()
         itemD.time = 1020
         itemD.intensity = [75, 100, 50, 0, 0, 0, 0]
         items.append(itemD)
-        var itemE = PatternItemModel()
+        let itemE = PatternItemModel()
         itemE.time = 1200
         itemE.intensity = [1, 1, 1, 0, 0, 0, 0]
         items.append(itemE)
-        var itemF = PatternItemModel()
+        let itemF = PatternItemModel()
         itemF.time = 1260
         itemF.intensity = [0, 0, 0, 0, 0, 0, 0]
         items.append(itemF)
+        model.items = items
         array.append(model)
         
-        var model2 = PatternModel()
+        let model2 = PatternModel()
         model2.name = "LPS"
         var items2: [PatternItemModel] = []
-        var item2 = PatternItemModel()
+        let item2 = PatternItemModel()
         item2.time = 480
         item2.intensity = [0, 0, 0, 0, 0, 0, 0]
         items2.append(item2)
-        var item2B = PatternItemModel()
+        let item2B = PatternItemModel()
         item2B.time = 540
         item2B.intensity = [1, 1, 1, 0, 0, 0, 0]
         items2.append(item2B)
-        var item2C = PatternItemModel()
+        let item2C = PatternItemModel()
         item2C.time = 720
         item2C.intensity = [100, 50, 30, 0, 0, 0, 0]
         items2.append(item2C)
-        var item2D = PatternItemModel()
+        let item2D = PatternItemModel()
         item2D.time = 1020
         item2D.intensity = [50, 100, 30, 0, 0, 0, 0]
         items2.append(item2D)
-        var item2E = PatternItemModel()
+        let item2E = PatternItemModel()
         item2E.time = 1200
         item2E.intensity = [1, 1, 1, 0, 0, 0, 0]
         items2.append(item2E)
-        var item2F = PatternItemModel()
+        let item2F = PatternItemModel()
         item2F.time = 1260
         item2F.intensity = [0, 0, 0, 0, 0, 0, 0]
         items2.append(item2F)
+        model2.items = items2
         array.append(model2)
         
-        var model3 = PatternModel()
+        let model3 = PatternModel()
         model3.name = "FOT"
         var items3: [PatternItemModel] = []
-        var item3 = PatternItemModel()
+        let item3 = PatternItemModel()
         item3.time = 480
         item3.intensity = [0, 0, 0, 0, 0, 0, 0]
         items3.append(item3)
-        var item3B = PatternItemModel()
+        let item3B = PatternItemModel()
         item3B.time = 540
         item3B.intensity = [1, 1, 1, 0, 0, 0, 0]
         items3.append(item3B)
-        var item3C = PatternItemModel()
+        let item3C = PatternItemModel()
         item3C.time = 720
         item3C.intensity = [50, 50, 30, 0, 0, 0, 0]
         items3.append(item3C)
-        var item3D = PatternItemModel()
+        let item3D = PatternItemModel()
         item3D.time = 1020
         item3D.intensity = [50, 50, 30, 0, 0, 0, 0]
         items3.append(item3D)
-        var item3E = PatternItemModel()
+        let item3E = PatternItemModel()
         item3E.time = 1200
         item3E.intensity = [1, 1, 1, 0, 0, 0, 0]
         items3.append(item3E)
-        var item3F = PatternItemModel()
+        let item3F = PatternItemModel()
         item3F.time = 1260
         item3F.intensity = [0, 0, 0, 0, 0, 0, 0]
         items3.append(item3F)
+        model3.items = items3
         array.append(model3)
         
-        var model4 = PatternModel()
+        let model4 = PatternModel()
         model4.name = "Reef Tank"
         var items4: [PatternItemModel] = []
-        var item4 = PatternItemModel()
+        let item4 = PatternItemModel()
         item4.time = 480
         item4.intensity = [0, 0, 0, 0, 0, 0, 0]
         items4.append(item4)
-        var item4B = PatternItemModel()
+        let item4B = PatternItemModel()
         item4B.time = 540
         item4B.intensity = [1, 1, 1, 0, 0, 0, 0]
         items4.append(item4B)
-        var item4C = PatternItemModel()
+        let item4C = PatternItemModel()
         item4C.time = 720
         item4C.intensity = [75, 75, 50, 0, 0, 0, 0]
         items4.append(item4C)
-        var item4D = PatternItemModel()
+        let item4D = PatternItemModel()
         item4D.time = 1020
         item4D.intensity = [75, 75, 50, 0, 0, 0, 0]
         items4.append(item4D)
-        var item4E = PatternItemModel()
+        let item4E = PatternItemModel()
         item4E.time = 1200
         item4E.intensity = [1, 1, 1, 0, 0, 0, 0]
         items4.append(item4E)
-        var item4F = PatternItemModel()
+        let item4F = PatternItemModel()
         item4F.time = 1260
         item4F.intensity = [0, 0, 0, 0, 0, 0, 0]
         items4.append(item4F)
+        model4.items = items4
         array.append(model4)
         
-        var model5 = PatternModel()
+        let model5 = PatternModel()
         model5.name = "Planted"
         var items5: [PatternItemModel] = []
-        var item5 = PatternItemModel()
+        let item5 = PatternItemModel()
         item5.time = 480
         item5.intensity = [0, 0, 0, 0, 0, 0, 0]
         items5.append(item5)
-        var item5B = PatternItemModel()
+        let item5B = PatternItemModel()
         item5B.time = 540
         item5B.intensity = [1, 1, 1, 0, 0, 0, 0]
         items5.append(item5B)
-        var item5C = PatternItemModel()
+        let item5C = PatternItemModel()
         item5C.time = 720
         item5C.intensity = [50, 75, 30, 0, 0, 0, 0]
         items5.append(item5C)
-        var item5D = PatternItemModel()
+        let item5D = PatternItemModel()
         item5D.time = 1020
         item5D.intensity = [75, 50, 30, 0, 0, 0, 0]
         items5.append(item5D)
-        var item5E = PatternItemModel()
+        let item5E = PatternItemModel()
         item5E.time = 1200
         item5E.intensity = [1, 1, 1, 0, 0, 0, 0]
         items5.append(item5E)
-        var item5F = PatternItemModel()
+        let item5F = PatternItemModel()
         item5F.time = 1260
         item5F.intensity = [0, 0, 0, 0, 0, 0, 0]
         items5.append(item5F)
+        model5.items = items5
         array.append(model5)
         return array
     }

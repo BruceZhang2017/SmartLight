@@ -1,16 +1,16 @@
 //
-//  ESP_WifiUtil.m
-//  EspTouchDemo
+//  EspNetUtils.m
+//  Esp32Mesh
 //
-//  Created by 白 桦 on 6/15/16.
-//  Copyright © 2016 白 桦. All rights reserved.
+//  Created by AE on 2018/4/19.
+//  Copyright © 2018年 AE. All rights reserved.
 //
 
-#import "ESP_WifiUtil.h"
-
-#include <ifaddrs.h>
-#include <arpa/inet.h>
-#include <net/if.h>
+#import "ESPTools.h"
+#import <ifaddrs.h>
+#import <arpa/inet.h>
+#import <net/if.h>
+#import <SystemConfiguration/CaptiveNetwork.h>
 
 #define IOS_CELLULAR    @"pdp_ip0"
 #define IOS_WIFI        @"en0"
@@ -18,8 +18,32 @@
 #define IP_ADDR_IPv4    @"ipv4"
 #define IP_ADDR_IPv6    @"ipv6"
 
-@implementation ESP_WifiUtil
+@implementation ESPTools
 
++ (nullable NSString *)getCurrentWiFiSsid {
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    id info = nil;
+    for (NSString *ifnam in ifs) {
+        info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        if (info && [info count]) {
+            break;
+        }
+    }
+    // Key: BSSID, SSID, SSIDDATA
+    return [(NSDictionary*)info objectForKey:@"SSID"];
+}
++ (nullable NSString *)getCurrentBSSID {
+    NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
+    id info = nil;
+    for (NSString *ifnam in ifs) {
+        info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
+        if (info && [info count]) {
+            break;
+        }
+    }
+    // Key: BSSID, SSID, SSIDDATA
+    return [(NSDictionary*)info objectForKey:@"BSSID"];
+}
 + (NSString *)getIPAddress:(BOOL)preferIPv4
 {
     NSArray *searchArray = preferIPv4 ?
@@ -27,15 +51,41 @@
     @[ IOS_VPN @"/" IP_ADDR_IPv6, IOS_VPN @"/" IP_ADDR_IPv4, IOS_WIFI @"/" IP_ADDR_IPv6, IOS_WIFI @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4 ] ;
     
     NSDictionary *addresses = [self getIPAddresses];
-//    NSLog(@"addresses: %@", addresses);
+    NSLog(@"addresses: %@", addresses);
     
     __block NSString *address;
-    [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop)
-     {
-         address = addresses[key];
-         if(address) *stop = YES;
-     } ];
+    [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+        address = addresses[key];
+        //筛选出IP地址格式
+        if([self isValidatIP:address]) *stop = YES;
+    } ];
     return address ? address : @"0.0.0.0";
+}
+
++ (BOOL)isValidatIP:(NSString *)ipAddress {
+    if (ipAddress.length == 0) {
+        return NO;
+    }
+    NSString *urlRegEx = @"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+    
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:urlRegEx options:0 error:&error];
+    
+    if (regex != nil) {
+        NSTextCheckingResult *firstMatch=[regex firstMatchInString:ipAddress options:0 range:NSMakeRange(0, [ipAddress length])];
+        
+        if (firstMatch) {
+            NSRange resultRange = [firstMatch rangeAtIndex:0];
+            NSString *result=[ipAddress substringWithRange:resultRange];
+            //输出结果
+            NSLog(@"%@",result);
+            return YES;
+        }
+    }
+    return NO;
 }
 
 + (NSDictionary *)getIPAddresses
@@ -78,18 +128,7 @@
     return [addresses count] ? addresses : nil;
 }
 
-+ (NSString *)getIPAddress4
-{
-    NSString *key = [NSString stringWithFormat:@"%@/%@",IOS_WIFI,IP_ADDR_IPv4];
-    NSString *ipv4 = [[self getIPAddresses]objectForKey:key];
-    return ipv4;
-}
 
-+ (NSString *)getIpAddress6
-{
-    NSString *key = [NSString stringWithFormat:@"%@/%@",IOS_WIFI,IP_ADDR_IPv6];
-    NSString *ipv6 = [[self getIPAddresses]objectForKey:key];
-    return ipv6;
-}
 
 @end
+

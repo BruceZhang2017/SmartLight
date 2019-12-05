@@ -126,7 +126,7 @@ class TCPSocketManager: NSObject {
     }
     
     func createQRCode(pattern: PatternModel) -> String {
-        var value = "[LS,1,"
+        var value = ""
         let items = pattern.items
         for (index, item) in items.enumerated() {
             let uv = item.intensity[0]
@@ -139,7 +139,7 @@ class TCPSocketManager: NSObject {
             if index != items.count - 1 {
                 value += ","
             } else {
-                value += "]"
+                value += ""
             }
         }
         return value

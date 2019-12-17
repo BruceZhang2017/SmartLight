@@ -11,12 +11,30 @@
 	
 
 import UIKit
+import Localize_Swift
 
 class Arrays: NSObject {
     static let barTitleBs = ["CH1", "CH2", "CH3"]
     static let barTitles = ["UV", "DB", "B", "G", "DR", "CW"]
-    static let btnTitles = ["Schedule", "All ON", "ACLM", "Lunnar", "Lightning", "Cloudy"]
-    static let settingTitles = [["Date&Time", "Networks", "Language", "Help"], ["Firmware Version", "Upgrade Firmware"]]
-    static let settingHeadTitles = ["", "Device Information"]
-    static let effects = ["Acclimation", "Lunnar", "Lightning", "Cloudy", "Fan"]
+    static let btnTitles = [
+        "txt_schedule".localized(),
+        "txt_allon".localized(),
+        "txt_aclm".localized(),
+        "txt_lunnar".localized(),
+        "txt_lighting".localized(),
+        "txt_cloudy".localized()]
+    static let settingTitles = [
+        ["txt_datetime".localized(),
+         "txt_networks".localized(),
+         "txt_languages".localized(),
+         "txt_help".localized()],
+        ["txt_firewareversion".localized(),
+         "txt_firewareupgrade".localized()]]
+    static let settingHeadTitles = ["", "txt_deviceinfo".localized()]
+    static let effects = [
+        "txt_acclimation".localized(),
+        "txt_lunnar".localized(),
+        "txt_lighting".localized(),
+        "txt_cloudy".localized(),
+        "txt_fan".localized()]
 }

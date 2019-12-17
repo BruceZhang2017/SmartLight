@@ -13,7 +13,7 @@
 import UIKit
 import Toaster
 
-class SearchDeviceViewController: UIViewController {
+class SearchDeviceViewController: BaseViewController {
     
     var results: [ESPTouchResult] = []
     var wifiList: [String : String] = [:]
@@ -71,12 +71,12 @@ class SearchDeviceViewController: UIViewController {
     }
     
     private func showWifiAlert(ssid: String) {
-        let alert = UIAlertController(title: "Password", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "txt_enterpassword".localized(), message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert, weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
             guard let pwd = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), pwd.count > 0 else {
                 return
             }
@@ -123,7 +123,7 @@ extension SearchDeviceViewController: UITableViewDelegate {
                 return
             }
             let device = DeviceModel() // 先添加一个设备
-            device.name = "Light_\(bssid[bssid.count - 4, bssid.count])"
+            device.name = "\(bssid)"
             device.ip = results[indexPath.row].ip()
             device.deviceState = 0x00
             device.deviceType = 3
@@ -148,7 +148,7 @@ extension SearchDeviceViewController: UITableViewDelegate {
                     return
                 }
                 let device = DeviceModel() // 先添加一个设备
-                device.name = "Light_\(bssid[bssid.count - 4, bssid.count])"
+                device.name = "\(bssid)"
                 device.ip = results[indexPath.row].ip()
                 device.deviceState = 0x00
                 device.deviceType = 3

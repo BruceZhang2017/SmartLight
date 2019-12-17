@@ -38,6 +38,7 @@
    
 "txt_schedule"="Schedule";
 "txt_allon"="All ON";
+"txt_alloff" = "All OFF";
 "txt_aclm"="ACLM";
            
 "txt_scan"="scaning";
@@ -54,7 +55,7 @@
 "txt_adddevice"="Add Device";
 "txt_connected"="Connected";
        
-"txt_datetime"="Date &amp; Time";
+"txt_datetime"="Date&amp;Time";
 "txt_networks"="Networks";
 "txt_languages"="Systems Language";
 "txt_help"="Help";

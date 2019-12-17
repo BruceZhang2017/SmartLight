@@ -125,11 +125,11 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         if tag < 3 {
             if buttons[tag].isSelected {
                 if tag == 1 {
-                    if button.title(for: .normal) == "All ON" {
-                        buttons[tag].setTitle("All OFF", for: .normal) // All ON / All OFF
+                    if button.title(for: .normal) == "txt_allon".localized() {
+                        buttons[tag].setTitle("txt_alloff".localized(), for: .normal) // All ON / All OFF
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 0)
                     } else {
-                        buttons[tag].setTitle("All ON", for: .normal)
+                        buttons[tag].setTitle("txt_allon".localized(), for: .normal)
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
                         
                     }
@@ -137,7 +137,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 return
             } else {
                 if tag == 1 {
-                    if button.title(for: .normal) == "All ON" {
+                    if button.title(for: .normal) == "txt_allon".localized() {
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
                     } else {
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 0)

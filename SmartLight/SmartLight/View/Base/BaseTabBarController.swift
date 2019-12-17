@@ -9,8 +9,8 @@
 //  Copyright © 2019 PDP-ACC. All rights reserved.
 //
 	
-
 import UIKit
+import Localize_Swift
 
 class BaseTabBarController: UITabBarController {
     
@@ -22,9 +22,34 @@ class BaseTabBarController: UITabBarController {
         return false
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setText()
+        NotificationCenter.default.addObserver(self, selector: #selector(setText), name: NSNotification.Name(LCLLanguageChangeNotification), object: nil)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func setText() {
+        guard let items = tabBar.items else {
+            return
+        }
+        let titles = ["txt_dashboard".localized(),
+                      "txt_control".localized(),
+                      "txt_effects".localized(),
+                      "txt_settings".localized()]
+        if items.count == titles.count {
+            for i in 0..<4 {
+                items[i].title = titles[i]
+            }
+        }
     }
 
 }

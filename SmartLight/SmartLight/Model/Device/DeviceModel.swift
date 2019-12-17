@@ -14,7 +14,7 @@ import UIKit
 
 class DeviceModel: NSObject, NSCoding {
     
-    var superModel: DeviceModel?
+    var superModel: Int = -1
     var name: String?
     var child = 0
     var group: Bool = false
@@ -50,7 +50,7 @@ class DeviceModel: NSObject, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
-        superModel = aDecoder.decodeObject(forKey: "superModel") as? DeviceModel
+        superModel = aDecoder.decodeInteger(forKey: "superModel")
         name = aDecoder.decodeObject(forKey: "name") as? String
         child = aDecoder.decodeInteger(forKey: "child")
         group = aDecoder.decodeBool(forKey: "group")

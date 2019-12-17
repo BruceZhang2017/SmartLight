@@ -53,7 +53,7 @@
 "txt_adddevice"="添加设备";
 "txt_connected"="已连接";
         
-"txt_datetime"="日期 &amp; 时间";
+"txt_datetime"="日期&时间";
 "txt_networks"="更新WiFi密码";
 "txt_languages"="多语言";
 "txt_help"="帮助";
@@ -103,24 +103,24 @@
 "txt_minute"="分钟";
     
 "menu_item_about"="About App";
- "about_app_version"="App Version: %s";
- "about_esptouch_version"="EspTouch Version: %s";
- "ssid_title"="SSID: ";
- "bssid_title"="BSSID: ";
- "password_title"="Password: ";
- "device_count_title"="Device count: ";
- "package_broadcast"="Broadcast";
- "package_multicast"="Multicast";
- "confirm"="Confirm";
- "wifi_5g_message"="DeviceWifi";
- "location_disable_message"="Location(GPS) is disable";
- "no_wifi_connection"="No Wifi connection";
- "configuring_message"="Esptouch is configuring, please wait for a moment…";
- "configure_wifi_change_message"="Wifi disconnected or changed";
- "configure_result_failed"="EspTouch failed";
- "configure_result_failed_port"="Create Esptouch task failed, the EspTouch port could be used by other thread";
- "configure_result_success"="EspTouch 完成";
- "configure_result_success_item"="BSSID = %1$s, InetAddress = %2$s";
+"about_app_version"="App Version: %s";
+"about_esptouch_version"="EspTouch Version: %s";
+"ssid_title"="SSID: ";
+"bssid_title"="BSSID: ";
+"password_title"="Password: ";
+"device_count_title"="Device count: ";
+"package_broadcast"="Broadcast";
+"package_multicast"="Multicast";
+"confirm"="Confirm";
+"wifi_5g_message"="DeviceWifi";
+"location_disable_message"="Location(GPS) is disable";
+"no_wifi_connection"="No Wifi connection";
+"configuring_message"="Esptouch is configuring, please wait for a moment…";
+"configure_wifi_change_message"="Wifi disconnected or changed";
+"configure_result_failed"="EspTouch failed";
+"configure_result_failed_port"="Create Esptouch task failed, the EspTouch port could be used by other thread";
+"configure_result_success"="EspTouch 完成";
+"configure_result_success_item"="BSSID = %1$s, InetAddress = %2$s";
     
  "txt_rename"="重命名";
  "txt_sps"="硬体珊瑚 (SPS)";

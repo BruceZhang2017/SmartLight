@@ -12,7 +12,7 @@
 
 import UIKit
 
-class DeviceListViewController: UIViewController {
+class DeviceListViewController: BaseViewController {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var deleteButton: UIButton!
@@ -42,6 +42,10 @@ class DeviceListViewController: UIViewController {
         navigationItem.leftBarButtonItem = leftItem
     }
     
+    override func setText() {
+        
+    }
+    
     @objc private func pushToMenu() {
         navigationController?.popViewController(animated: true)
     }
@@ -55,12 +59,12 @@ class DeviceListViewController: UIViewController {
     }
     
     @IBAction func addGroup(_ sender: Any) {
-        let alert = UIAlertController(title: "New Group Name", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "txt_newgroup".localized(), message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert, weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
             guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
             }
@@ -68,6 +72,7 @@ class DeviceListViewController: UIViewController {
             model.name = name
             model.child = 0
             model.group = true
+            model.ip = "\(Int(Date().timeIntervalSince1970))"
             self?.model.groups.append(model)
             self?.tableView.reloadData()
             DeviceManager.sharedInstance.save()
@@ -77,9 +82,6 @@ class DeviceListViewController: UIViewController {
     
     @IBAction func editDevice(_ sender: Any) {
         if isEdit {
-            //isEdit = false
-            //editOrMoveToButton.setTitle("Edit", for: .normal)
-            //deleteButton.isHidden = true
             if selectedIndex == 0 {
                 return
             }
@@ -91,18 +93,58 @@ class DeviceListViewController: UIViewController {
             if array.count == 0 {
                 return
             }
-            let sheet = UIAlertController(title: nil, message: "Attention: Move to a new group will rewrite all the settings to the same as this group. If moving to a non group from any group, the  settings will not change.", preferredStyle: .actionSheet)
-            sheet.addAction(UIAlertAction(title: "Non-Group", style: .default, handler: nil))
-            for item in array {
-                sheet.addAction(UIAlertAction(title: item.name ?? "", style: .default, handler: { (action) in
-                    
+            var keys: [Int] = []
+            for (index, value) in model.groups.enumerated() {
+                if value.group {
+                    keys.append(index)
+                }
+            }
+            let sheet = UIAlertController(title: nil, message: "txt_group_moveto_int".localized(), preferredStyle: .actionSheet)
+            sheet.addAction(UIAlertAction(title: "Non-Group", style: .default, handler: {
+                [weak self] (action) in
+                let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
+                if child > 0 {
+                    return
+                }
+                guard let item = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
+                    return
+                }
+                if item.superModel < 0 {
+                    return
+                }
+                self?.model.groups[item.superModel].child -= 1
+                item.superModel = -1
+                self?.model.groups.insert(item, at: 0)
+                self?.selectedIndex = 0
+                self?.tableView.reloadData()
+                DeviceManager.sharedInstance.save()
+            }))
+            for (index, item) in array.enumerated() {
+                sheet.addAction(UIAlertAction(title: item.name ?? "", style: .default, handler: { [weak self] (action) in
+                    let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
+                    if child > 0 {
+                        return
+                    }
+                    guard let item = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
+                        return
+                    }
+                    if (self!.selectedIndex - 1) > keys[index] {
+                        item.superModel = keys[index]
+                        self?.model.groups.insert(item, at: keys[index] + 1)
+                    } else {
+                        item.superModel = keys[index] - 1
+                        self?.model.groups.insert(item, at: keys[index])
+                    }
+                    self?.selectedIndex = 0
+                    self?.tableView.reloadData()
+                    DeviceManager.sharedInstance.save()
                 }))
             }
-            sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            sheet.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
             present(sheet, animated: true, completion: nil)
         } else {
             isEdit = true
-            editOrMoveToButton.setTitle("More To", for: .normal)
+            editOrMoveToButton.setTitle("txt_movetogroup".localized(), for: .normal)
             deleteButton.isHidden = false
         }
         tableView.reloadData()
@@ -112,9 +154,9 @@ class DeviceListViewController: UIViewController {
         if selectedIndex == 0 {
             return
         }
-        let alert = UIAlertController(title: "Delete Device", message: "This device will be disconnected, if you want to control it again you will need reconnect it.  Continue?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+        let alert = UIAlertController(title: "txt_deletedevice".localized(), message: "txt_deletedevice_hint".localized(), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
             let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
             if child >  0 {
                 self?.model.groups.removeSubrange(self!.selectedIndex - 1...(self!.selectedIndex - 1 + child))
@@ -139,7 +181,9 @@ extension DeviceListViewController: UITableViewDataSource {
         cell.nameButton?.setTitle( model.groups[indexPath.row].name, for: .normal)
         cell.arrowImageView.isHidden = !model.groups[indexPath.row].group
         cell.stateImageView.isHidden = !isEdit
-        cell.leftLConstraint.constant = isEdit ? 45 : 20
+        let left = model.groups[indexPath.row].superModel >= 0 ? 15 : 0
+        cell.leftLConstraint.constant = CGFloat((isEdit ? 45 : 20) + left)
+        cell.circleImageLeftLConstraint.constant = CGFloat(left + 15)
         cell.nameButton.titleLabel?.font = model.groups[indexPath.row].child == 0 ? UIFont.systemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 16)
         cell.tag = indexPath.row
         cell.delegate = self
@@ -172,12 +216,12 @@ extension DeviceListViewController: UITableViewDelegate {
 
 extension DeviceListViewController: DeviceListTableViewCellDelegate {
     func editName(index: Int) {
-        let alert = UIAlertController(title: "Rename", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "txt_rename".localized(), message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert, weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
             guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
             }

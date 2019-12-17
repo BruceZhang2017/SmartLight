@@ -13,7 +13,7 @@
 import UIKit
 import EFQRCode
 
-class PresetViewController: UIViewController {
+class PresetViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var uploadButton: UIButton!
@@ -25,20 +25,24 @@ class PresetViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    }
+    
+    private func setNavigationRight() {
+        barButtonItem = UIBarButtonItem(title: "txt_edit".localized(), style: .plain, target: self, action: #selector(edit))
+        navigationItem.rightBarButtonItem = barButtonItem
+    }
+    
+    override func setText() {
         patterns = PatternListModel.down()
         if patterns.patterns.count > 0 {
             setNavigationRight()
         }
     }
     
-    private func setNavigationRight() {
-        barButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(edit))
-        navigationItem.rightBarButtonItem = barButtonItem
-    }
-    
     @objc private func edit() {
         isEdit = !isEdit
-        barButtonItem.title = isEdit ? "Done" : "Edit"
+        barButtonItem.title = isEdit ? "txt_done".localized() : "txt_edit".localized()
         tableView.reloadData()
         uploadButton.isHidden = !isEdit
         deleteButton.isHidden = !isEdit
@@ -49,8 +53,8 @@ class PresetViewController: UIViewController {
             return
         }
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Export QR code to Photos", style: .default, handler: { [weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_qrcode_save".localized(), style: .default, handler: { [weak self] (action) in
             self?.createQRCode()
         }))
         present(alert, animated: true, completion: nil)
@@ -61,8 +65,8 @@ class PresetViewController: UIViewController {
             return
         }
         let alert = UIAlertController(title: "提示", message: "确定删除该模式?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
             self?.patterns.patterns.remove(at: self!.current - 1)
             self?.tableView.reloadData()
             self?.patterns.save()
@@ -83,7 +87,7 @@ class PresetViewController: UIViewController {
     }
     
     @objc func image(image: UIImage, didFinishSavingWithError: NSError?, contextInfo: AnyObject) {
-        //print(didFinishSavingWithError ?? <#default value#>)
+        print("保存失败")
     }
     
 }
@@ -115,9 +119,9 @@ extension PresetViewController: UITableViewDataSource, UITableViewDelegate {
             current = indexPath.row + 1
             tableView.reloadData()
         } else {
-            let alert = UIAlertController(title: "Overwrite Current Settings", message: "Selecting apreset will overwrite your current settings.Continues?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+            let alert = UIAlertController(title: "txt_preset_overwrite".localized(), message: "txt_preset_overwrite_hint".localized(), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
                 let models = DeviceManager.sharedInstance.deviceListModel.groups
                 let current = DeviceManager.sharedInstance.currentIndex
                 if current < models.count {
@@ -135,12 +139,12 @@ extension PresetViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension PresetViewController: PresetTableViewCellDelegate {
     func editName(index: Int) {
-        let alert = UIAlertController(title: "Rename", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "txt_rename".localized(), message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in
             
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert, weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
             guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
             }

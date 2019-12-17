@@ -12,11 +12,11 @@
 
 import UIKit
 import SafariServices
+import Localize_Swift
 
 class SettingsTableViewController: UITableViewController {
     
     var currentDate: Date!
-    //var versionLabel: UILabel!
     var scan: LBXScanViewController!
 
     override func viewDidLoad() {
@@ -31,24 +31,6 @@ class SettingsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.barTintColor = Color.main
         self.navigationController?.navigationBar.tintColor = UIColor.white
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-//        if versionLabel == nil {
-//            versionLabel = UILabel().then {
-//                $0.textColor = UIColor.red
-//                $0.font = UIFont.systemFont(ofSize: 16)
-//            }
-//            view.addSubview(versionLabel)
-//            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-//            let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
-//            versionLabel.text = "V\(version) - \(build)"
-//            versionLabel.snp.makeConstraints {
-//                $0.centerX.equalToSuperview()
-//                $0.bottom.equalTo(navigationController!.view.snp.bottom).offset(-120)
-//            }
-//        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -128,8 +110,8 @@ class SettingsTableViewController: UITableViewController {
         alert.addTextField { (textField) in
             
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert] (action) in
             guard let pwd = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), pwd.count > 0 else {
                 return
             }
@@ -138,6 +120,14 @@ class SettingsTableViewController: UITableViewController {
             UserDefaults.standard.synchronize()
         }))
         present(alert, animated: true, completion: nil)
+    }
+    
+    private func getCurrentLanguage() -> String {
+        let currentLanguage = Localize.currentLanguage()
+        if currentLanguage.contains("zh") {
+            return "简体中文"
+        }
+        return "English"
     }
     
     // MARK: - tableView Datasource & delegate
@@ -160,7 +150,7 @@ class SettingsTableViewController: UITableViewController {
             } else if indexPath.row == 1 {
                 cell.detailTextLabel?.text = WIFIManager().getSSID()
             } else if indexPath.row == 2 {
-                cell.detailTextLabel?.text = "English"
+                cell.detailTextLabel?.text = getCurrentLanguage()
             } else if indexPath.row == 3 {
                 
             }
@@ -213,11 +203,11 @@ extension SettingsTableViewController: LBXScanViewControllerDelegate {
         if let result = scanResult.strScanned {
             let array = QRCodeHelper().checkQR(content: result)
             if array.count > 0 {
-                let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                let alert = UIAlertController(title: "txt_preset_overwrite".localized(), message: "txt_preset_overwrite_hint".localized(), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: {[weak self] (action) in
                     self?.navigationController?.popViewController(animated: true)
                 }))
-                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
                     let models = DeviceManager.sharedInstance.deviceListModel.groups
                     let current = DeviceManager.sharedInstance.currentIndex
                     if current < models.count {
@@ -234,10 +224,10 @@ extension SettingsTableViewController: LBXScanViewControllerDelegate {
         }
         
         let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: {[weak self] (action) in
             self?.navigationController?.popViewController(animated: true)
         }))
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
             self?.scan?.startScan()
         }))
         present(alert, animated: true, completion: nil)

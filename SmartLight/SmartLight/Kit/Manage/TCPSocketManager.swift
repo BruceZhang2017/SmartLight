@@ -15,34 +15,59 @@ import UIKit
 class TCPSocketManager: NSObject {
     
     static let sharedInstance = TCPSocketManager()
-    var socket: GCDAsyncSocket!
+    var sockets: [GCDAsyncSocket] = []
     var shakeValue = 0
-    var ip: String = "" // ip地址
     var heartTimer: Timer!
     var connectTimer: Timer!
     
-    override init() {
-        super.init()
+    public func connectDeivce() {
+        let model = DeviceManager.sharedInstance.deviceListModel
+        let current = DeviceManager.sharedInstance.currentIndex
+        if current >= model.groups.count {
+            return
+        }
+        if model.groups[current].group && model.groups[current].child > 0 {
+            if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
+                return
+            }
+            let child = model.groups[current].child
+            for i in 0..<child {
+                let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
+                let ip = model.groups[current + i + 1].ip ?? "192.168.4.1"
+                socket.userData = ip
+                DeviceManager.sharedInstance.connectStatus[ip] = 1
+                sockets.append(socket)
+                connect(ip, socket: socket)
+            }
+        } else {
+            let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
+            var ip = model.groups[current].ip ?? "192.168.4.1"
+            socket.userData = ip
+            DeviceManager.sharedInstance.connectStatus[ip] = 1
+            if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
+                ip = "192.168.4.1"
+            }
+            sockets.append(socket)
+            connect(ip, socket: socket)
+        }
     }
     
-    @objc func connect(_ ip: String = "192.168.4.1") {
-        if socket == nil {
-            socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
-        }
-        self.ip = ip
+    @objc func connect(_ ip: String = "192.168.4.1", socket: GCDAsyncSocket) {
         do {
             log.info("建立Socket连接的IP: \(ip)")
             try socket.connect(toHost: ip, onPort: 8089)
         } catch {
             log.info("Socket 建立失败")
-            perform(#selector(connect(_:)), with: ip, afterDelay: 1)
         }
-        
     }
     
     func disconnect() {
-        socket.disconnect()
-        socket = nil
+        if sockets.count > 0 {
+            for socket in sockets {
+                socket.disconnect()
+            }
+        }
+        sockets.removeAll()
     }
     
     func send(value: String) {
@@ -50,7 +75,9 @@ class TCPSocketManager: NSObject {
         guard let data = (value + "\r\n").data(using: String.Encoding.utf8) else {
             return
         }
-        socket.write(data, withTimeout: -1, tag: 0)
+        for socket in sockets {
+            socket.write(data, withTimeout: -1, tag: 0)
+        }
     }
     
     /// 握手
@@ -217,8 +244,7 @@ class TCPSocketManager: NSObject {
     /// 解析设备信息
     func parseDeviceInfo(value: String) {
         // [RP,设备类型，模式，SCHEDULE/ALLON/ACLM 参数,LUNNAER/LIGHTING/CLOUDY,参数]
-        // [RP,3,1,2,{510,45,60,78,0,0,0},{810,45,60,78,0,0,0},0,{2,510,570,50},1,{2,510,570,9,50},
-        //2,{0,510,570,50,30}]
+    /*[RP,3,36,1,12,{54,100,100,100,0,0,0},{179,0,0,0,0,0,0},{361,100,100,100,100,100,100},{469,0,0,0,0,0,0},{554,100,100,100,100,100,100},{686,0,0,0,0,0,0},{740,100,100,100,100,100,100},{861,0,0,0,0,0,0},{953,100,100,100,100,100,100},{1044,0,0,0,0,0,0},{1115,100,100,100,100,100,100},{1179,0,0,0,0,0,0},1,{2,420,430,79,9},]}*/
         let array = value.components(separatedBy: ",")
         if array.count <= 0 {
             return
@@ -227,70 +253,115 @@ class TCPSocketManager: NSObject {
         let current = DeviceManager.sharedInstance.currentIndex
         let device = deviceListModel.groups[current]
         if array.count > 1 {
-            device.deviceType = Int(array[1]) ?? 6
+            device.deviceType = Int(array[1]) ?? 3
         }
         if array.count > 2 {
             device.deviceState = Int(array[2]) ?? 0
         }
-        if array.count > 2 {
-            var list : [Int: [Int]] = [:]
-            var temIndex = 0
-            var values : [Int] = []
-            for (index, item) in array.enumerated() {
-                if item.contains("{") {
-                    temIndex = index
-                    values.append(Int(item.replacingOccurrences(of: "{", with: "")) ?? 0)
+        var temIndex = 0
+        if array.count > 4 {
+            var type = Int(array[3]) ?? 0
+            if type == 1 {
+                let count = Int(array[4]) ?? 0
+                temIndex = 4
+                var model: PatternModel? = device.pattern
+                if model == nil {
+                    model = PatternModel()
                 }
-                if item.contains("}") {
-                    let v = item.replacingOccurrences(of: "}", with: "")
-                    let v2 = v.replacingOccurrences(of: "]", with: "")
-                    values.append(Int(v2) ?? 0)
-                    list[temIndex] = values
-                    temIndex = 0
-                    values = []
+                var values: [PatternItemModel] = []
+                while values.count < count {
+                    temIndex += 1
+                    let model: PatternItemModel = PatternItemModel()
+                    model.time = Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0
+                    temIndex += 1
+                    for j in 0..<6 {
+                        model.intensity[j] = Int(array[temIndex + j].replacingOccurrences(of: "}", with: "")) ?? 0
+                    }
+                    temIndex += 5
+                    values.append(model)
                 }
-                if temIndex > 0 {
-                    values.append(Int(item) ?? 0)
+                temIndex += 1
+                model?.items = values
+                device.pattern = model
+            } else if type == 3 || type == 5 {
+                temIndex = 3
+                temIndex += 7
+            } else if type == 2 {
+                temIndex = 4
+                var model: PatternModel? = device.pattern
+                if model == nil {
+                     model = PatternModel()
                 }
-            }
-            if list.count > 0 {
-                for (key, value) in list {
-                    if value.count == 7 {
-                        let k = array[key - 1]
-                        let v = Int(k) ?? 0
-                        if key > 3 && isPurnInt(string: k) && v < 3 { // 如果是数据的话，并且小于 3
-                            
-                        }
+                model?.isManual = true
+                var itemModel: PatternItemModel? = model?.manual
+                if itemModel == nil {
+                    itemModel = PatternItemModel()
+                }
+                for i in 0..<6 {
+                    if i != 5 {
+                        itemModel?.intensity[i] = Int(array[temIndex + 1 + i].replacingOccurrences(of: "{", with: "")) ?? 0
                     } else {
-                        let k = array[key - 1]
-                        let v = Int(k) ?? 0
-                        if key > 3 && isPurnInt(string: k) && v < 3 { // 如果是数据的话，并且小于 3
-                            if v == 0 && value.count >= 4 {
-                                let lunnar = Lunnar()
-                                lunnar.enable = value[0] > 1
-                                lunnar.startTime = value[1]
-                                lunnar.endTime = value[2]
-                                lunnar.intensity = value[3]
-                                device.lunnar = lunnar
-                            } else if v == 1 && value.count >= 5 {
-                                let lighting = Lightning()
-                                lighting.enable = value[0] > 1
-                                lighting.startTime = value[1]
-                                lighting.endTime = value[2]
-                                lighting.frequency = value[3]
-                                lighting.intensity = value[4]
-                            } else if v == 2 && value.count >= 5 {
-                                let cloudy = Cloudy()
-                                cloudy.enable = value[0] > 1
-                                cloudy.startTime = value[1]
-                                cloudy.endTime = value[2]
-                                cloudy.intensity = value[3]
-                                cloudy.speed = value[4]
-                            }
-                        }
+                        itemModel?.intensity[i] = Int(array[temIndex + 1 + i].replacingOccurrences(of: "}", with: "")) ?? 0
                     }
                 }
+                device.pattern = model
+            } else if type == 4 {
+                temIndex = 4
+                var model: Acclimation? = device.acclimation
+                if model == nil {
+                     model = Acclimation()
+                }
+                model?.enable = true
+                model?.startTime = Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0
+                temIndex += 1
+                model?.endTime = Int(array[temIndex]) ?? 0
+                temIndex += 1
+                model?.ramp = Int(array[temIndex]) ?? 0
+                temIndex += 1
+                for i in 0..<6 {
+                    if i != 5 {
+                        model?.intesity[i] = Int(array[temIndex + i].replacingOccurrences(of: "{", with: "")) ?? 0
+                    } else {
+                        model?.intesity[i] = Int(array[temIndex + i].replacingOccurrences(of: "}", with: "")) ?? 0
+                    }
+                }
+                device.acclimation = model
+                temIndex += 5
             }
+            type = Int(array[temIndex]) ?? 0
+            if array.count <= temIndex + 1 {
+                return
+            }
+            temIndex += 1
+            if type == 0 && value.count >= 4 {
+                let lunnar = Lunnar()
+                lunnar.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
+                lunnar.startTime = Int(array[temIndex + 1]) ?? 0
+                lunnar.endTime = Int(array[temIndex + 2]) ?? 0
+                lunnar.intensity = Int(array[temIndex + 3].replacingOccurrences(of: "}", with: "")) ?? 0
+                device.lunnar = lunnar
+                temIndex += 4
+            } else if type == 1 && value.count >= 5 {
+                let lighting = Lightning()
+                lighting.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
+                lighting.startTime = Int(array[temIndex + 1]) ?? 0
+                lighting.endTime = Int(array[temIndex + 2]) ?? 0
+                lighting.frequency = Int(array[temIndex + 3]) ?? 0
+                lighting.intensity = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
+                device.lightning = lighting
+                temIndex += 5
+            } else if type == 2 && value.count >= 5 {
+                let cloudy = Cloudy()
+                cloudy.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
+                cloudy.startTime = Int(array[temIndex + 1]) ?? 0
+                cloudy.endTime = Int(array[temIndex + 2]) ?? 0
+                cloudy.intensity = Int(array[temIndex + 3]) ?? 0
+                cloudy.speed = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
+                device.cloudy = cloudy
+                temIndex += 5
+            }
+            deviceListModel.groups[current] = device
+            DeviceManager.sharedInstance.save()
         }
     }
     
@@ -308,17 +379,22 @@ class TCPSocketManager: NSObject {
 extension TCPSocketManager: GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         log.info("Socket连接建立成功")
+        guard let ip = sock.userData as? String else {
+            return
+        }
         DeviceManager.sharedInstance.connectStatus[ip] = 2
         shake(value: shakeValue)
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         log.info("断开连接")
+        guard let ip = sock.userData as? String else {
+            return
+        }
         DeviceManager.sharedInstance.connectStatus[ip] = 0
         shakeValue = 1
-        socket.delegate = nil
-        socket = nil 
-        connect(ip)
+        sock.delegate = self
+        connect(ip, socket: sock)
     }
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
@@ -359,6 +435,6 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
     
     func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
         log.info("Socket写数据成功")
-        socket.readData(withTimeout: -1, tag: 0)
+        sock.readData(withTimeout: -1, tag: 0)
     }
 }

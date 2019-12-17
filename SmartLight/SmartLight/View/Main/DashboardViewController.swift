@@ -12,12 +12,15 @@
 
 import UIKit
 import EFQRCode
+import Localize_Swift
 
 class DashboardViewController: BaseViewController {
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var welcomeView: UIView!
+    @IBOutlet weak var addDeviceLabel: UILabel!
+    @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var deviceNameLabel: UILabel!
     @IBOutlet weak var timeLabelTopLConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomLConstraint: NSLayoutConstraint!
@@ -73,16 +76,7 @@ class DashboardViewController: BaseViewController {
                 item.isEnabled = true
             }
             collectionView.reloadData()
-            let ip = model.groups[current].ip
-            print("当前设备的ip是：\(ip ?? "")")
-            
-            if ip != nil {
-                let current = DeviceManager.sharedInstance.connectStatus[ip!] ?? 0
-                if current == 0 {
-                    DeviceManager.sharedInstance.connectStatus[ip!] = 1
-                    TCPSocketManager.sharedInstance.connect(ip!)
-                }
-            }
+            TCPSocketManager.sharedInstance.connectDeivce()
         }
     }
     
@@ -110,6 +104,11 @@ class DashboardViewController: BaseViewController {
         clockTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(clock), userInfo: nil, repeats: true)
         clockTimer.fire()
         RunLoop.current.add(clockTimer, forMode: .common)
+    }
+    
+    override func setText() {
+        welcomeLabel.text = "txt_welcome".localized()
+        addDeviceLabel.text = "txt_adddevice".localized()
     }
     
     // MARK: - Action
@@ -176,6 +175,8 @@ class DashboardViewController: BaseViewController {
                 at: .centeredHorizontally,
                 animated: true)
             deviceNameLabel.text = model.groups[DeviceManager.sharedInstance.currentIndex].name
+            TCPSocketManager.sharedInstance.disconnect()
+            TCPSocketManager.sharedInstance.connectDeivce()
         }
     }
     
@@ -191,6 +192,8 @@ class DashboardViewController: BaseViewController {
                 at: .centeredHorizontally,
                 animated: true)
             deviceNameLabel.text = model.groups[current].name
+            TCPSocketManager.sharedInstance.disconnect()
+            TCPSocketManager.sharedInstance.connectDeivce()
         }
     }
 }
@@ -204,11 +207,9 @@ extension DashboardViewController: UICollectionViewDataSource {
             if device.group == false {
                 indexs.append(tem)
             } else {
+                indexs.append(tem)
                 if device.child > 0 {
-                    indexs.append(tem)
                     tem += device.child
-                } else {
-                    continue
                 }
             }
             tem += 1
@@ -302,7 +303,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             let low = value & 0x0f
             device.deviceState = result > 0 ? ((high << 4) + 0b0010) : (low + ((high + 8) << 4))
             DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightSchedual(model: 3, device: device, allOn: result > 0)
+            TCPSocketManager.sharedInstance.lightSchedual(model: result > 0 ? 3 : 5, device: device, allOn: result > 0)
             collectionView.reloadData()
         case 2: // ACCL
             let high = (value >> 4) & 0x0f

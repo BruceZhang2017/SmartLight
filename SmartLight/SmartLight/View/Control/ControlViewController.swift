@@ -12,6 +12,7 @@
 
 import UIKit
 import Toaster
+import Localize_Swift
 
 class ControlViewController: BaseViewController {
 
@@ -50,7 +51,7 @@ class ControlViewController: BaseViewController {
         
         initbttonValueViews()
         initCircelView() // 初始化圆
-        refreshTopView()
+        refreshTopView() // 刷新顶部视图
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotification), name: Notification.Name("ControlViewController"), object: nil)
     }
@@ -84,8 +85,7 @@ class ControlViewController: BaseViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func setText() {
         
     }
     
@@ -121,7 +121,7 @@ class ControlViewController: BaseViewController {
                 return
             }
             barValueView.do {
-                $0.titleLabel.text = i == 0 ? "All" : Arrays.barTitles[i - 1]
+                $0.titleLabel.text = i == 0 ? "txt_light_all".localized() : Arrays.barTitles[i - 1]
                 $0.valueLabel.text = "0%"
                 $0.currentValueImageView.backgroundColor = colors[i]
                 $0.settingValueImageView.backgroundColor = colors[i]
@@ -143,12 +143,12 @@ class ControlViewController: BaseViewController {
     }
     
     private func initbttonValueViews() {
-        let buttonTitles = ["中间-加号", "中间-减号", "中间-左箭头", "中间-右箭头", "中间-三角形", "中间-五角星", "中间-更多"]
-        let count = buttonTitles.count
+        let buttonImages = ["中间-加号", "中间-减号", "中间-左箭头", "中间-右箭头", "中间-三角形", "中间-五角星", "中间-更多"]
+        let count = buttonImages.count
         for i in 0..<count {
             let button = UIButton(type: .custom).then {
                 $0.addTarget(self, action: #selector(handleEvent(_:)), for: .touchUpInside)
-                $0.setImage(UIImage(named: buttonTitles[i]), for: .normal)
+                $0.setImage(UIImage(named: buttonImages[i]), for: .normal)
                 $0.tag = i
                 if i == 4 {
                     $0.setImage(UIImage(named: "中间-五角星彩色"), for: .selected)
@@ -370,12 +370,12 @@ class ControlViewController: BaseViewController {
             button.setImage(UIImage(named: "中间-返回"), for: .normal)
             PreviousFunction(count: 150) // 每200ms一次
         case 5:
-            let alert = UIAlertController(title: "Save Current Settings", message: nil, preferredStyle: .alert)
+            let alert = UIAlertController(title: "txt_savefavor".localized(), message: nil, preferredStyle: .alert)
             alert.addTextField { (textField) in
                 
             }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "Save", style: .default, handler: {[weak alert, weak self] (action) in
+            alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
                 guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                     return
                 }
@@ -450,11 +450,11 @@ extension ControlViewController: LBXScanViewControllerDelegate {
         if let result = scanResult.strScanned {
             let array = QRCodeHelper().checkQR(content: result)
             if array.count > 0 {
-                let alert = UIAlertController(title: "Overwrite Current Settins", message: "Selecting a QR Code Data will overwrite your current settings. Continue?", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+                let alert = UIAlertController(title: "txt_preset_overwrite".localized(), message: "txt_preset_overwrite_hint".localized(), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: {[weak self] (action) in
                     self?.navigationController?.popViewController(animated: true)
                 }))
-                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+                alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
                     let models = DeviceManager.sharedInstance.deviceListModel.groups
                     let current = DeviceManager.sharedInstance.currentIndex
                     if current < models.count {
@@ -471,10 +471,10 @@ extension ControlViewController: LBXScanViewControllerDelegate {
         }
         
         let alert = UIAlertController(title: "Unaval", message: "No data found.Continue to scan?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: {[weak self] (action) in
             self?.navigationController?.popViewController(animated: true)
         }))
-        alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {[weak self] (action) in
+        alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
             self?.scan?.startScan()
         }))
         present(alert, animated: true, completion: nil)

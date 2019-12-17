@@ -5,6 +5,7 @@ PODS:
   - EFQRCode (5.0.0):
     - swift_qrcodejs (~> 1.1.1)
   - IQKeyboardManagerSwift (6.4.0)
+  - Localize-Swift (2.0.0)
   - MBProgressHUD (1.1.0)
   - ObjcExceptionBridging (1.0.1):
     - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
@@ -24,6 +25,7 @@ DEPENDENCIES:
   - CocoaAsyncSocket
   - EFQRCode (~> 5.0.0)
   - IQKeyboardManagerSwift
+  - Localize-Swift (~> 2.0)
   - MBProgressHUD
   - SnapKit
   - Then
@@ -37,6 +39,7 @@ SPEC REPOS:
     - CocoaAsyncSocket
     - EFQRCode
     - IQKeyboardManagerSwift
+    - Localize-Swift
     - ObjcExceptionBridging
     - SnapKit
     - swift_qrcodejs
@@ -52,6 +55,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: eafaa68a7e0ec99ead0a7b35015e0bf25d2c8987
   EFQRCode: 07437cfbce3a1e497397a4f3d766c980d8972608
   IQKeyboardManagerSwift: ed9b04ee0e3067ffba543283462d619f944b05e5
+  Localize-Swift: c798ec9286494866f7068f85f7c71283ac5bdab4
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
@@ -60,6 +64,6 @@ SPEC CHECKSUMS:
   Toaster: c1a81b376edcc2470157b4d1ee1e9341d3b96455
   XCGLogger: 0434f15e3909cdc450bb63faf638b8792ab782ab
 
-PODFILE CHECKSUM: 350c7067e628d77a92551475400b2fbdee2f4c09
+PODFILE CHECKSUM: 4d894f33d734cec8ca84e1121df914c945931f02
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.8.4

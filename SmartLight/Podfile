@@ -1,5 +1,6 @@
 platform:ios,"9.0"
 
+source 'https://github.com/CocoaPods/Specs.git'
 target "SmartLight" do
 use_frameworks!
 pod 'SnapKit'
@@ -12,5 +13,6 @@ pod 'CocoaAsyncSocket'
 pod 'XCGLogger'
 pod 'Bugly'
 pod 'MBProgressHUD'
+pod 'Localize-Swift', '~> 2.0'
 
 end

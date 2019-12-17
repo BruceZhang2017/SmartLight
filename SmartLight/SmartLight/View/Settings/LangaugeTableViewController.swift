@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import Localize_Swift
 
 class LangaugeTableViewController: UITableViewController {
 
@@ -33,19 +34,28 @@ class LangaugeTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
 
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String.kCellIdentifier, for: indexPath)
-        cell.textLabel?.text = "English"
+        if indexPath.row == 0 {
+            cell.textLabel?.text = "English"
+        } else {
+            cell.textLabel?.text = "简体中文"
+        }
 
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row == 0 {
+            Localize.setCurrentLanguage("en")
+        } else {
+            Localize.setCurrentLanguage("zh")
+        }
         navigationController?.popViewController(animated: true)
     }
 

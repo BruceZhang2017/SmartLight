@@ -14,13 +14,22 @@ import UIKit
 import SnapKit
 import Then
 import Toaster
+import Localize_Swift
 
 class BaseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setText()
+        NotificationCenter.default.addObserver(self, selector: #selector(setText), name: NSNotification.Name(LCLLanguageChangeNotification), object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func setText() {
+        
+    }
+    
 }

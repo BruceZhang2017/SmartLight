@@ -18,6 +18,7 @@ class DeviceListTableViewCell: UITableViewCell {
     @IBOutlet weak var nameButton: UIButton!
     @IBOutlet weak var arrowImageView: UIImageView!
     @IBOutlet weak var leftLConstraint: NSLayoutConstraint!
+    @IBOutlet weak var circleImageLeftLConstraint: NSLayoutConstraint!
     weak var delegate: DeviceListTableViewCellDelegate?
     
     override func awakeFromNib() {

@@ -177,3 +177,6 @@
 "txt_fan_speed"="风扇速度";
 
 "txt_sysinfo"="系统信息";
+
+"light_effect_settings" = "光效设置";
+"other_settings" = "其他设置";

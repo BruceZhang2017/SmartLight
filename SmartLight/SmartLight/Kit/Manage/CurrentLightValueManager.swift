@@ -86,12 +86,14 @@ class CurrentLightValueManager: NSObject {
                     let start = deviceModel.cloudy?.startTime ?? 0
                     //let end = deviceModel.cloudy?.endTime ?? 0
                     let cycle = deviceModel.cloudy?.speed ?? 0
-                    let value = (currentTime - start) % (cycle * 2)
-                    let max = deviceModel.cloudy?.intensity ?? 0
-                    if value > cycle {
-                        current = CGFloat(max) * CGFloat(cycle * 2 - value) / CGFloat(cycle)
-                    } else {
-                        current = CGFloat(max) * CGFloat(value) / CGFloat(cycle)
+                    if cycle != 0 {
+                        let value = (currentTime - start) % (cycle * 2)
+                        let max = deviceModel.cloudy?.intensity ?? 0
+                        if value > cycle {
+                            current = CGFloat(max) * CGFloat(cycle * 2 - value) / CGFloat(cycle)
+                        } else {
+                            current = CGFloat(max) * CGFloat(value) / CGFloat(cycle)
+                        }
                     }
                 }
             }
@@ -174,7 +176,7 @@ class CurrentLightValueManager: NSObject {
                 }
             }
         }
-        print("当前\(index)当前值为：\(current)")
+        //print("当前\(index)当前值为：\(current)")
         return current
     }
 }

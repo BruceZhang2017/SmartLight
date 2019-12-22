@@ -95,6 +95,12 @@
                                                         <constraint firstAttribute="width" constant="22" id="hkL-a6-5cV"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hql-Jw-KOK">
+                                                    <rect key="frame" x="379" y="25" width="0.0" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="hzo-r5-OXZ" firstAttribute="centerY" secondItem="BOr-9V-B1h" secondAttribute="centerY" id="6oy-gQ-RGT"/>
@@ -102,6 +108,8 @@
                                                 <constraint firstItem="hzo-r5-OXZ" firstAttribute="leading" secondItem="BOr-9V-B1h" secondAttribute="leading" constant="45" id="PS3-V1-fDN"/>
                                                 <constraint firstItem="yGh-Ti-rBs" firstAttribute="leading" secondItem="BOr-9V-B1h" secondAttribute="leading" constant="15" id="bFa-ud-P5b"/>
                                                 <constraint firstItem="Gyk-2E-8xS" firstAttribute="centerY" secondItem="BOr-9V-B1h" secondAttribute="centerY" id="oaH-m6-Uv0"/>
+                                                <constraint firstItem="hql-Jw-KOK" firstAttribute="centerY" secondItem="BOr-9V-B1h" secondAttribute="centerY" id="pjG-Vj-nTL"/>
+                                                <constraint firstItem="hql-Jw-KOK" firstAttribute="trailing" secondItem="Gyk-2E-8xS" secondAttribute="trailing" id="tHu-9S-yXB"/>
                                                 <constraint firstItem="yGh-Ti-rBs" firstAttribute="centerY" secondItem="BOr-9V-B1h" secondAttribute="centerY" id="ycF-gq-POt"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -111,6 +119,7 @@
                                             <outlet property="leftLConstraint" destination="PS3-V1-fDN" id="ez0-Eh-Scv"/>
                                             <outlet property="nameButton" destination="hzo-r5-OXZ" id="Iqe-sm-JLN"/>
                                             <outlet property="stateImageView" destination="yGh-Ti-rBs" id="jMo-s3-Niy"/>
+                                            <outlet property="stateLabel" destination="hql-Jw-KOK" id="XRf-7Q-Pjt"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

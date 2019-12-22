@@ -28,6 +28,7 @@ class TopView: UIView {
         }
     }
     weak var delegate: TopViewDelegate?
+    var canTouch = true
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -285,19 +286,33 @@ class TopView: UIView {
         }
     }
     
-    public func setFloatViewDot(isShown: Bool) {
-        let button = floatView.viewWithTag(2) as! UIButton
-        let imageView = floatView.viewWithTag(3) as! UIImageView
-        let imageViewB = floatView.viewWithTag(4) as! UIImageView
-        let imageViewC = floatView.viewWithTag(5) as! UIImageView
-        button.isHidden = !isShown
-        imageView.isHidden = !isShown
-        imageViewB.isHidden = !isShown
-        imageViewC.isHidden = !isShown
+//    public func setFloatViewDot(isShown: Bool) {
+//        let button = floatView.viewWithTag(2) as! UIButton
+//        let imageView = floatView.viewWithTag(3) as! UIImageView
+//        let imageViewB = floatView.viewWithTag(4) as! UIImageView
+//        let imageViewC = floatView.viewWithTag(5) as! UIImageView
+//        button.isHidden = !isShown
+//        imageView.isHidden = !isShown
+//        imageViewB.isHidden = !isShown
+//        imageViewC.isHidden = !isShown
+//    }
+    
+    func showAllDotButton() {
+        if dotView.subviews.count == 0 {
+            return
+        }
+        for subView in dotView.subviews {
+            if subView is UIButton {
+                subView.isHidden = false
+            }
+        }
     }
     
     // MARK: - Touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !canTouch {
+            return
+        }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("start: \(point.x) \(point.y)")
@@ -314,6 +329,9 @@ class TopView: UIView {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !canTouch {
+            return
+        }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("move: \(point.x) \(point.y)")
@@ -330,6 +348,9 @@ class TopView: UIView {
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !canTouch {
+            return
+        }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("cancel: \(point.x) \(point.y)")
@@ -346,6 +367,9 @@ class TopView: UIView {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !canTouch {
+            return
+        }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
         //print("end: \(point.x) \(point.y)")

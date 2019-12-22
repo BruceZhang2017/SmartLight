@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,11 +17,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="zaz-xc-Mhm">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="796"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="818"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="uOp-gd-ef1" customClass="PresetTableViewCell" customModule="SmartLight" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="414" height="44"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uOp-gd-ef1" id="5JR-Be-hR9">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
@@ -67,7 +65,7 @@
                                 </connections>
                             </tableView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6B-td-HVu">
-                                <rect key="frame" x="20" y="816" width="20" height="28"/>
+                                <rect key="frame" x="20" y="828" width="20" height="28"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" image="qrcode_send">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -77,7 +75,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WJ1-V1-FUr">
-                                <rect key="frame" x="347" y="816" width="47" height="32"/>
+                                <rect key="frame" x="347" y="828" width="47" height="32"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Delete">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -89,12 +87,12 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="WJ1-V1-FUr" firstAttribute="top" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="20" id="5PG-qo-YOJ"/>
+                            <constraint firstItem="WJ1-V1-FUr" firstAttribute="top" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="10" id="5PG-qo-YOJ"/>
                             <constraint firstItem="nyC-6W-aW0" firstAttribute="trailing" secondItem="WJ1-V1-FUr" secondAttribute="trailing" constant="20" id="5aw-ge-w7u"/>
                             <constraint firstItem="zaz-xc-Mhm" firstAttribute="trailing" secondItem="nyC-6W-aW0" secondAttribute="trailing" id="Ce9-5K-M6Q"/>
+                            <constraint firstItem="nyC-6W-aW0" firstAttribute="bottom" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="44" id="GlJ-uX-45G"/>
                             <constraint firstItem="zaz-xc-Mhm" firstAttribute="leading" secondItem="nyC-6W-aW0" secondAttribute="leading" id="Xwb-IW-YQ9"/>
-                            <constraint firstItem="V6B-td-HVu" firstAttribute="top" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="20" id="ZgP-KJ-LkF"/>
-                            <constraint firstAttribute="bottom" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="100" id="lUv-cC-3Fb"/>
+                            <constraint firstItem="V6B-td-HVu" firstAttribute="top" secondItem="zaz-xc-Mhm" secondAttribute="bottom" constant="10" id="ZgP-KJ-LkF"/>
                             <constraint firstItem="zaz-xc-Mhm" firstAttribute="top" secondItem="aft-FH-BaS" secondAttribute="top" id="uU9-Q5-UQy"/>
                             <constraint firstItem="V6B-td-HVu" firstAttribute="leading" secondItem="nyC-6W-aW0" secondAttribute="leading" constant="20" id="x9K-qb-NRw"/>
                         </constraints>

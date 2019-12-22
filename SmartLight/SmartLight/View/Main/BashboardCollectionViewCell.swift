@@ -25,8 +25,8 @@ class BashboardCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        btnViewHeightLConstriant.constant = Dimension.screenWidth <= 320 || Dimension.screenHeight <= 667 ? 60 : 100
-        topLConstraint.constant = AppDelegate.isSameToIphoneX() ? 138 : 78
+        btnViewHeightLConstriant.constant = Dimension.screenWidth <= 320 || Dimension.screenHeight <= 667 ? 60 : 70
+        topLConstraint.constant = AppDelegate.isSameToIphoneX() ? 118 : 78
         if Dimension.screenWidth <= 320 {
             barHeight = 220
         } else {
@@ -84,8 +84,8 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         var imageNormals: [UIImage?] = []
         var imagePresseds: [UIImage?] = []
     
-        imageNormals = [UIImage.schedule_nomal, UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.lunnar_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
-        imagePresseds = [UIImage.schedule_pressed, UIImage.alloff_pressed, UIImage.aclm_pressed, UIImage.lunnar_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
+        imageNormals = [UIImage.alloff_nomal, UIImage.aclm_nomal, UIImage.schedule_nomal, UIImage.lunnar_nomal, UIImage.lightning_nomal, UIImage.cloudy_nomal]
+        imagePresseds = [UIImage.alloff_pressed, UIImage.aclm_pressed,UIImage.schedule_pressed, UIImage.lunnar_pressed, UIImage.lightning_pressed, UIImage.cloudy_pressed]
         
         let width = Dimension.screenWidth <= 320 ? 40 : 50
         let count = Arrays.btnTitles.count
@@ -96,8 +96,8 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 let value = deviceModel.deviceState
                 let high = (value >> 7) & 0x01
                 $0.setTitle(Arrays.btnTitles[i], for: .normal)
-                if i == 1 && high == 1 {
-                    $0.setTitle("ALL OFF", for: .normal)
+                if i == 0 && high == 1 {
+                    $0.setTitle("txt_alloff".localized(), for: .normal)
                 }
                 $0.setTitleColor(Color.barBG, for: .normal)
                 $0.setTitleColor(Color.main, for: .selected)
@@ -124,19 +124,18 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         let tag = button.tag
         if tag < 3 {
             if buttons[tag].isSelected {
-                if tag == 1 {
+                if tag == 0 {
                     if button.title(for: .normal) == "txt_allon".localized() {
                         buttons[tag].setTitle("txt_alloff".localized(), for: .normal) // All ON / All OFF
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 0)
                     } else {
                         buttons[tag].setTitle("txt_allon".localized(), for: .normal)
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
-                        
                     }
                 }
                 return
             } else {
-                if tag == 1 {
+                if tag == 0 {
                     if button.title(for: .normal) == "txt_allon".localized() {
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
                     } else {
@@ -170,9 +169,9 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         let low = value & 0x0f
         let high = (value >> 4) & 0x0f
    
-        buttons[0].isSelected = low == 4
-        buttons[1].isSelected = (low == 2 || ((high >> 3) & 0x01 == 1))
-        buttons[2].isSelected = low == 1
+        buttons[2].isSelected = low == 4
+        buttons[0].isSelected = (low == 2 || ((high >> 3) & 0x01 == 1))
+        buttons[1].isSelected = low == 1
         buttons[3].isSelected = (high & 0b0100) > 0
         buttons[4].isSelected = (high & 0b0010) > 0
         buttons[5].isSelected = (high & 0b0001) > 0

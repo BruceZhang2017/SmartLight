@@ -20,6 +20,7 @@ class DeviceListViewController: BaseViewController {
     private var model : DeviceListModel!
     private var isEdit = false
     private var selectedIndex = 0
+    private var timer: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,16 @@ class DeviceListViewController: BaseViewController {
         self.navigationController?.navigationBar.tintColor = UIColor.white
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        startTimer()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        endTimer()
+    }
+    
     private func setLeftNavigationItem() {
         let leftItem = UIBarButtonItem(image: UIImage.top_menu, style: .plain, target: self, action: #selector(pushToMenu))
         navigationItem.leftBarButtonItem = leftItem
@@ -44,6 +55,20 @@ class DeviceListViewController: BaseViewController {
     
     override func setText() {
         
+    }
+    
+    private func startTimer() {
+        endTimer()
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(handleTimer), userInfo: nil, repeats: true)
+    }
+    
+    private func endTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    @objc private func handleTimer() {
+        tableView.reloadData()
     }
     
     @objc private func pushToMenu() {
@@ -109,6 +134,12 @@ class DeviceListViewController: BaseViewController {
                 guard let item = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
                     return
                 }
+                if let ip = item.ip, ip.count > 0 {
+                    if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
+                        DeviceManager.sharedInstance.connectStatus[ip] = 0
+                        TCPSocketManager.sharedInstance.disconnect(ip: ip)
+                    }
+                }
                 if item.superModel < 0 {
                     return
                 }
@@ -128,6 +159,12 @@ class DeviceListViewController: BaseViewController {
                     guard let item = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
                         return
                     }
+                    if let ip = item.ip, ip.count > 0 {
+                        if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
+                            DeviceManager.sharedInstance.connectStatus[ip] = 0
+                            TCPSocketManager.sharedInstance.disconnect(ip: ip)
+                        }
+                    }
                     if (self!.selectedIndex - 1) > keys[index] {
                         item.superModel = keys[index]
                         self?.model.groups.insert(item, at: keys[index] + 1)
@@ -138,6 +175,7 @@ class DeviceListViewController: BaseViewController {
                     self?.selectedIndex = 0
                     self?.tableView.reloadData()
                     DeviceManager.sharedInstance.save()
+                    NotificationCenter.default.post(name: Notification.Name("DashboardViewController"), object: nil)
                 }))
             }
             sheet.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
@@ -159,13 +197,18 @@ class DeviceListViewController: BaseViewController {
         alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
             let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
             if child >  0 {
+                for i in self!.selectedIndex-1...(self!.selectedIndex - 1 + child) {
+                    TCPSocketManager.sharedInstance.disconnect(ip: self?.model.groups[i].ip ?? "")
+                }
                 self?.model.groups.removeSubrange(self!.selectedIndex - 1...(self!.selectedIndex - 1 + child))
             } else {
+                TCPSocketManager.sharedInstance.disconnect(ip: self?.model.groups[self!.selectedIndex - 1].ip ?? "")
                 self?.model.groups.remove(at: self!.selectedIndex - 1)
             }
             self?.selectedIndex = 0
             self?.tableView.reloadData()
             DeviceManager.sharedInstance.save()
+            NotificationCenter.default.post(name: Notification.Name("DashboardViewController"), object: nil)
         }))
         present(alert, animated: true, completion: nil)
     }
@@ -192,6 +235,21 @@ extension DeviceListViewController: UITableViewDataSource {
         } else {
             cell.stateImageView.image = UIImage(named: "circle_normal")
         }
+        if model.groups[indexPath.row].group == true {
+            cell.stateLabel.text = ""
+        } else {
+            if let ip = model.groups[indexPath.row].ip {
+                let state = DeviceManager.sharedInstance.connectStatus[ip]
+                if state == 2 {
+                    cell.stateLabel.textColor = UIColor.green
+                    cell.stateLabel.text = "txt_connected".localized()
+                } else {
+                    cell.stateLabel.textColor = UIColor.red
+                    cell.stateLabel.text = "txt_disconnect".localized()
+                }
+            }
+        }
+        
         return cell
     }
     
@@ -227,7 +285,8 @@ extension DeviceListViewController: DeviceListTableViewCellDelegate {
             }
             self?.model.groups[index].name = name
             self?.tableView.reloadData()
-             DeviceManager.sharedInstance.save()
+            DeviceManager.sharedInstance.save()
+            
         }))
         present(alert, animated: true, completion: nil)
     }

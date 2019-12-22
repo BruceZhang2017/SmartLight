@@ -26,22 +26,33 @@ class TCPSocketManager: NSObject {
         if current >= model.groups.count {
             return
         }
-        if model.groups[current].group && model.groups[current].child > 0 {
+        if model.groups[current].group == true {
             if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
                 return
             }
             let child = model.groups[current].child
+            if child <= 0 {
+                return
+            }
             for i in 0..<child {
-                let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
                 let ip = model.groups[current + i + 1].ip ?? "192.168.4.1"
+                if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
+                    print("设备已连接：\(ip)")
+                    continue
+                }
+                let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
                 socket.userData = ip
                 DeviceManager.sharedInstance.connectStatus[ip] = 1
                 sockets.append(socket)
                 connect(ip, socket: socket)
             }
         } else {
-            let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
             var ip = model.groups[current].ip ?? "192.168.4.1"
+            if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
+                print("设备已连接：\(ip)")
+                return
+            }
+            let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
             socket.userData = ip
             DeviceManager.sharedInstance.connectStatus[ip] = 1
             if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
@@ -54,8 +65,13 @@ class TCPSocketManager: NSObject {
     
     @objc func connect(_ ip: String = "192.168.4.1", socket: GCDAsyncSocket) {
         do {
-            log.info("建立Socket连接的IP: \(ip)")
-            try socket.connect(toHost: ip, onPort: 8089)
+            if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
+                log.info("建立Socket连接的IP: 192.168.4.1")
+                try socket.connect(toHost: "192.168.4.1", onPort: 8089)
+            } else {
+                log.info("建立Socket连接的IP: \(ip)")
+                try socket.connect(toHost: ip, onPort: 8089)
+            }
         } catch {
             log.info("Socket 建立失败")
         }
@@ -64,10 +80,33 @@ class TCPSocketManager: NSObject {
     func disconnect() {
         if sockets.count > 0 {
             for socket in sockets {
+                let ip = socket.userData as? String ?? ""
+                if ip.count > 0 {
+                    DeviceManager.sharedInstance.connectStatus[ip] = 0
+                }
                 socket.disconnect()
             }
         }
         sockets.removeAll()
+    }
+    
+    func disconnect(ip: String) {
+        if ip == "" {
+            return
+        }
+        if sockets.count > 0 {
+            for (index, socket) in sockets.enumerated() {
+                let ipB = socket.userData as? String ?? ""
+                if ipB.count > 0 && ip == ipB {
+                    if ip.count > 0 {
+                        DeviceManager.sharedInstance.connectStatus[ip] = 0
+                    }
+                    socket.disconnect()
+                    sockets.remove(at: index)
+                    break
+                }
+            }
+        }
     }
     
     func send(value: String) {
@@ -387,14 +426,39 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
-        log.info("断开连接")
-        guard let ip = sock.userData as? String else {
-            return
+        if let error = err as NSError? {
+            log.info("断开连接信息: \(error.code) \(error.domain)")
         }
-        DeviceManager.sharedInstance.connectStatus[ip] = 0
-        shakeValue = 1
-        sock.delegate = self
-        connect(ip, socket: sock)
+        if err != nil {
+            guard let ip = sock.userData as? String else {
+                return
+            }
+            DeviceManager.sharedInstance.connectStatus[ip] = 0
+            if sockets.count == 0 {
+                return
+            }
+            if ip == "" {
+                return
+            }
+            let name = ESPTools.getCurrentWiFiSsid() ?? ""
+            if name.count == 0 {
+                return
+            }
+            var a = false
+            for socket in sockets {
+                let ipB = socket.userData as? String ?? ""
+                if ipB == ip {
+                    a = true
+                    break
+                }
+            }
+            if a == false {
+                return
+            }
+            shakeValue = 1
+            sock.delegate = self
+            connect(ip, socket: sock)
+        }
     }
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {

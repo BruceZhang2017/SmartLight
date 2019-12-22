@@ -70,6 +70,7 @@
 		9A3E1EA022F86E4300A24DB1 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9F22F86E4300A24DB1 /* BaseTabBarController.swift */; };
 		9A3E1EA322F8752D00A24DB1 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1EA222F8752D00A24DB1 /* SettingsTableViewController.swift */; };
 		9A3E1EA522F87CC900A24DB1 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1EA422F87CC900A24DB1 /* Settings.storyboard */; };
+		9A46AD4223AA7571004C6D32 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A46AD4123AA7571004C6D32 /* Reachability.swift */; };
 		9A5B7EEF230446D30099E3A9 /* PatternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EEE230446D30099E3A9 /* PatternModel.swift */; };
 		9A5B7EF12304553A0099E3A9 /* PresetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */; };
 		9A5B7EF3230457050099E3A9 /* PatternListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF2230457050099E3A9 /* PatternListModel.swift */; };
@@ -218,6 +219,7 @@
 		9A3E1E9F22F86E4300A24DB1 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 		9A3E1EA222F8752D00A24DB1 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		9A3E1EA422F87CC900A24DB1 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		9A46AD4123AA7571004C6D32 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		9A5B7EEE230446D30099E3A9 /* PatternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternModel.swift; sourceTree = "<group>"; };
 		9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetViewController.swift; sourceTree = "<group>"; };
 		9A5B7EF2230457050099E3A9 /* PatternListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternListModel.swift; sourceTree = "<group>"; };
@@ -560,6 +562,7 @@
 		9A8900A6231F3173009AF915 /* Manage */ = {
 			isa = PBXGroup;
 			children = (
+				9A46AD4123AA7571004C6D32 /* Reachability.swift */,
 				9A8900A7231F31E2009AF915 /* WIFIManager.swift */,
 				9A8900AB23215555009AF915 /* DeviceManager.swift */,
 				9AE398812385667800A2A632 /* QRCodeHelper.swift */,
@@ -851,6 +854,7 @@
 				9A083AD52379803D0018D54D /* CurrentLightValueManager.swift in Sources */,
 				9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */,
 				9A211CF12325317600C36FC2 /* ESPDatumCode.m in Sources */,
+				9A46AD4223AA7571004C6D32 /* Reachability.swift in Sources */,
 				9AA1AC4222FC67160000F6D2 /* EffectsSettingBTableViewCell.swift in Sources */,
 				9AA1AC3522FC492B0000F6D2 /* EffectsTableViewController.swift in Sources */,
 				9A5B7F05230965870099E3A9 /* Kit.swift in Sources */,
@@ -1109,7 +1113,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1135,7 +1139,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

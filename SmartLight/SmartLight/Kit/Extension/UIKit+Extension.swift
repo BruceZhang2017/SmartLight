@@ -44,18 +44,36 @@ extension UIColor {
 
 extension UIViewController {
     
-    public func showHUD() {
+    public func showHUD(_ text: String = "预览中...") {
         if let _ = view.viewWithTag(8888) as? MBProgressHUD {
            return
         }
         let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud.mode = MBProgressHUDMode.annularDeterminate
-        hud.label.text = "预览中..."
+        hud.mode = MBProgressHUDMode.indeterminate
+        hud.label.text = text
         hud.tag = 8888
     }
     
     public func hideHUD() {
         if let hud = view.viewWithTag(8888) as? MBProgressHUD {
+            hud.hide(animated: true)
+        }
+    }
+}
+
+extension UIView {
+    public func showHUD(_ text: String = "预览中...") {
+        if let _ = viewWithTag(8888) as? MBProgressHUD {
+           return
+        }
+        let hud = MBProgressHUD.showAdded(to: self, animated: true)
+        hud.mode = MBProgressHUDMode.indeterminate
+        hud.label.text = text
+        hud.tag = 8888
+    }
+    
+    public func hideHUD() {
+        if let hud = viewWithTag(8888) as? MBProgressHUD {
             hud.hide(animated: true)
         }
     }

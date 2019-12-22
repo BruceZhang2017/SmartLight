@@ -14,7 +14,7 @@ import UIKit
 
 class EffectsTableViewController: UITableViewController {
     
-    var titles: [String] = []
+    var titles: [[String]] = []
     var scan: LBXScanViewController!
     
     override func viewDidLoad() {
@@ -85,19 +85,29 @@ class EffectsTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return titles.count
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return titles[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
-        cell.textLabel?.text = titles[indexPath.row]
+        cell.textLabel?.text = titles[indexPath.section][indexPath.row]
         cell.accessoryType = .disclosureIndicator
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section > 0 {
+            let allimationVC = CloudyTableViewController(style: .grouped)
+            allimationVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(allimationVC, animated: true)
+            return
+        }
         if indexPath.row == 0 {
             let allimationVC = AcclimationTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
@@ -114,14 +124,17 @@ class EffectsTableViewController: UITableViewController {
             let allimationVC = FanTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
-        } else {
-            let allimationVC = CloudyTableViewController(style: .grouped)
-            allimationVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(allimationVC, animated: true)
         }
-        
     }
 
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "light_effect_settings".localized()
+        } else {
+            return "other_settings".localized()
+        }
+    }
+    
 }
 
 extension EffectsTableViewController: LBXScanViewControllerDelegate {

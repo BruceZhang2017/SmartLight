@@ -29,6 +29,7 @@ class DashboardViewController: BaseViewController {
     var indexs: [Int] = []
     var currentIndex = 0
     var scan: LBXScanViewController!
+    private var reach: Reachability?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +46,8 @@ class DashboardViewController: BaseViewController {
         } else {
             automaticallyAdjustsScrollViewInsets = false
         }
+        monitorNetwork()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNoti), name: Notification.Name("DashboardViewController"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +67,9 @@ class DashboardViewController: BaseViewController {
                 item.isEnabled = false
             }
         } else {
+            if current >= model.groups.count {
+                return
+            }
             deviceNameLabel.text = model.groups[current].name
             navigationItem.leftBarButtonItem?.isEnabled = true
             navigationItem.rightBarButtonItem?.isEnabled = true
@@ -78,6 +84,12 @@ class DashboardViewController: BaseViewController {
             collectionView.reloadData()
             TCPSocketManager.sharedInstance.connectDeivce()
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        reach?.stopNotifier()
+        reach = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -111,6 +123,42 @@ class DashboardViewController: BaseViewController {
         addDeviceLabel.text = "txt_adddevice".localized()
     }
     
+    /// 监听一下当前网络情况
+    private func monitorNetwork() {
+        reach = Reachability(hostname: "www.baidu.com")
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(notification:)), name: Notification.Name.reachabilityChanged, object: nil)
+        try? reach?.startNotifier()
+    }
+    
+    @objc func handleNotification(notification: Notification) {
+        guard let reachability = notification.object as? Reachability else {
+            return
+        }
+        print("当前网络状体：\(reachability.connection.description)")
+        if reachability.connection == Reachability.Connection.wifi {
+            let name = ESPTools.getCurrentWiFiSsid() ?? ""
+            if wifiName != "" && wifiName != name {
+                TCPSocketManager.sharedInstance.connectDeivce()
+            } else if wifiName == "" {
+                TCPSocketManager.sharedInstance.connectDeivce()
+            }
+            wifiName = name
+        } else if reachability.connection == Reachability.Connection.none {
+            let name = ESPTools.getCurrentWiFiSsid() ?? ""
+            if name != "" {
+                if wifiName != "" && wifiName != name {
+                    TCPSocketManager.sharedInstance.connectDeivce()
+                } else if wifiName == "" {
+                    TCPSocketManager.sharedInstance.connectDeivce()
+                }
+            } else {
+                wifiName = ""
+            }
+        } else {
+            wifiName = "none"
+        }
+    }
+    
     // MARK: - Action
     
     @objc private func clock() {
@@ -126,6 +174,7 @@ class DashboardViewController: BaseViewController {
             if array.count == 2 {
                 currentTime = (Int(array[0]) ?? 0) * 60 + (Int(array[1]) ?? 0)
                 collectionView.reloadData()
+                NotificationCenter.default.post(name: Notification.Name("ControlViewController"), object: currentTime)
             }
         }
     }
@@ -154,6 +203,11 @@ class DashboardViewController: BaseViewController {
         scan.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(scan, animated: true)
     }
+    
+    @objc private func handleReconnect() {
+        UIApplication.shared.keyWindow?.hideHUD()
+        TCPSocketManager.sharedInstance.connectDeivce()
+    }
 
     @IBAction func addDevice(_ sender: Any) {
         if !MCLocation.shared.didUpdateLocation(self) {
@@ -176,7 +230,8 @@ class DashboardViewController: BaseViewController {
                 animated: true)
             deviceNameLabel.text = model.groups[DeviceManager.sharedInstance.currentIndex].name
             TCPSocketManager.sharedInstance.disconnect()
-            TCPSocketManager.sharedInstance.connectDeivce()
+            UIApplication.shared.keyWindow?.showHUD("正在切换设备")
+            perform(#selector(handleReconnect), with: nil, afterDelay: 3)
         }
     }
     
@@ -193,13 +248,20 @@ class DashboardViewController: BaseViewController {
                 animated: true)
             deviceNameLabel.text = model.groups[current].name
             TCPSocketManager.sharedInstance.disconnect()
-            TCPSocketManager.sharedInstance.connectDeivce()
+            UIApplication.shared.keyWindow?.showHUD("正在切换设备")
+            perform(#selector(handleReconnect), with: nil, afterDelay: 3)
         }
+    }
+    
+    @objc private func handleNoti() {
+        print("删除设备")
+        currentIndex = 0
+        DeviceManager.sharedInstance.currentIndex = 0
+        collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
     }
 }
 
 extension DashboardViewController: UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         indexs.removeAll()
         var tem = 0
@@ -290,7 +352,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
         let value = device.deviceState
         let cTag = btnTag
         switch cTag {
-        case 0: // SCHEDUAL
+        case 2: // SCHEDUAL
             let high = (value >> 4) & 0x0f
             device.deviceState = (high << 4) + (device.pattern?.isManual == true ? 0x08 : 0x04)
             DeviceManager.sharedInstance.save()
@@ -298,14 +360,14 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             TCPSocketManager.sharedInstance.lightSchedual(model: device.pattern?.isManual == true ? 2 : 1, device: device)
             }
             collectionView.reloadData()
-        case 1: // ALL ON / ALL OFF
+        case 0: // ALL ON / ALL OFF
             let high = (value >> 4) & 0x0f
             let low = value & 0x0f
-            device.deviceState = result > 0 ? ((high << 4) + 0b0010) : (low + ((high + 8) << 4))
+            device.deviceState = result > 0 ? (((high > 8 ? (high - 8) : high) << 4) + 0b0010) : (low + ((high > 8 ? high : (high + 8)) << 4))
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightSchedual(model: result > 0 ? 3 : 5, device: device, allOn: result > 0)
             collectionView.reloadData()
-        case 2: // ACCL
+        case 1: // ACCL
             let high = (value >> 4) & 0x0f
             device.deviceState = (high << 4) + 0x01
             DeviceManager.sharedInstance.save()

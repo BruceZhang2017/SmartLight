@@ -167,5 +167,7 @@
 "txt_fan_speed"="Fan Speed";
 "txt_sysinfo"="System Info";
    
+"light_effect_settings" = "Light effect settings";
+"other_settings" = "Other settings";
 
 

@@ -37,7 +37,7 @@ class TCPSocketManager: NSObject {
             for i in 0..<child {
                 let ip = model.groups[current + i + 1].ip ?? "192.168.4.1"
                 if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
-                    print("设备已连接：\(ip)")
+                    print("设备已连接Group：\(ip)")
                     continue
                 }
                 let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
@@ -49,7 +49,7 @@ class TCPSocketManager: NSObject {
         } else {
             var ip = model.groups[current].ip ?? "192.168.4.1"
             if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
-                print("设备已连接：\(ip)")
+                print("设备已连接Single：\(ip)")
                 return
             }
             let socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
@@ -160,8 +160,8 @@ class TCPSocketManager: NSObject {
         if model == 2 {
             value += "{0,\(uv),\(db),\(b),\(g),\(dr),\(cw)}]"
         } else if model == 1 {
-            guard let items = device.pattern?.items else {
-                return ""
+            guard let items = device.pattern?.items, items.count > 0 else {
+                return "[LS,1,{0,0,0,0,0,0,0}]"
             }
             for (index, item) in items.enumerated() {
                 let uv = item.intensity[0]
@@ -367,40 +367,49 @@ class TCPSocketManager: NSObject {
                 device.acclimation = model
                 temIndex += 5
             }
-            type = Int(array[temIndex]) ?? 0
-            if array.count <= temIndex + 1 {
-                return
-            }
-            temIndex += 1
-            if type == 0 && value.count >= 4 {
-                let lunnar = Lunnar()
-                lunnar.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
-                lunnar.startTime = Int(array[temIndex + 1]) ?? 0
-                lunnar.endTime = Int(array[temIndex + 2]) ?? 0
-                lunnar.intensity = Int(array[temIndex + 3].replacingOccurrences(of: "}", with: "")) ?? 0
-                device.lunnar = lunnar
-                temIndex += 4
-            } else if type == 1 && value.count >= 5 {
-                let lighting = Lightning()
-                lighting.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
-                lighting.startTime = Int(array[temIndex + 1]) ?? 0
-                lighting.endTime = Int(array[temIndex + 2]) ?? 0
-                lighting.frequency = Int(array[temIndex + 3]) ?? 0
-                lighting.intensity = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
-                device.lightning = lighting
-                temIndex += 5
-            } else if type == 2 && value.count >= 5 {
-                let cloudy = Cloudy()
-                cloudy.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
-                cloudy.startTime = Int(array[temIndex + 1]) ?? 0
-                cloudy.endTime = Int(array[temIndex + 2]) ?? 0
-                cloudy.intensity = Int(array[temIndex + 3]) ?? 0
-                cloudy.speed = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
-                device.cloudy = cloudy
-                temIndex += 5
+            if temIndex < array.count {
+                type = Int(array[temIndex]) ?? 0
+                if array.count > temIndex + 1 {
+                    temIndex += 1
+                    if type == 0 && value.count >= 4 {
+                        if array.count >= temIndex + 4 {
+                            let lunnar = Lunnar()
+                            lunnar.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
+                            lunnar.startTime = Int(array[temIndex + 1]) ?? 0
+                            lunnar.endTime = Int(array[temIndex + 2]) ?? 0
+                            lunnar.intensity = Int(array[temIndex + 3].replacingOccurrences(of: "}", with: "")) ?? 0
+                            device.lunnar = lunnar
+                            temIndex += 4
+                        }
+                    } else if type == 1 && value.count >= 5 {
+                        if array.count >= temIndex + 5 {
+                            let lighting = Lightning()
+                            lighting.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
+                            lighting.startTime = Int(array[temIndex + 1]) ?? 0
+                            lighting.endTime = Int(array[temIndex + 2]) ?? 0
+                            lighting.frequency = Int(array[temIndex + 3]) ?? 0
+                            lighting.intensity = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
+                            device.lightning = lighting
+                            temIndex += 5
+                        }
+                    } else if type == 2 && value.count >= 5 {
+                        if array.count >= temIndex + 5 {
+                            let cloudy = Cloudy()
+                            cloudy.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
+                            cloudy.startTime = Int(array[temIndex + 1]) ?? 0
+                            cloudy.endTime = Int(array[temIndex + 2]) ?? 0
+                            cloudy.intensity = Int(array[temIndex + 3]) ?? 0
+                            cloudy.speed = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
+                            device.cloudy = cloudy
+                            temIndex += 5
+                        }
+                    }
+                }
             }
             deviceListModel.groups[current] = device
             DeviceManager.sharedInstance.save()
+            log.info("发送通知刷新界面")
+            NotificationCenter.default.post(name: Notification.Name("DashboardViewController"), object: 1)
         }
     }
     

@@ -169,7 +169,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
         let low = value & 0x0f
         let high = (value >> 4) & 0x0f
    
-        buttons[2].isSelected = low == 4
+        buttons[2].isSelected = (low == 4 || low == 8)
         buttons[0].isSelected = (low == 2 || ((high >> 3) & 0x01 == 1))
         buttons[1].isSelected = low == 1
         buttons[3].isSelected = (high & 0b0100) > 0

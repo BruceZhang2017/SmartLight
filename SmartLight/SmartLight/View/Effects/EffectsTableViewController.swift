@@ -120,7 +120,7 @@ class EffectsTableViewController: UITableViewController {
             let allimationVC = LightningTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
-        } else  if indexPath.row == 4 {
+        } else  if indexPath.row == 3 {
             let allimationVC = FanTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)

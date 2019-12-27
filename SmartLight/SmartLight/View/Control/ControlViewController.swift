@@ -27,8 +27,7 @@ class ControlViewController: BaseViewController {
     var powerValueLabel: UILabel!
     var deviceListModel: DeviceListModel!
     var deviceModel: DeviceModel!
-    var once = false
-    var currentItem = 0 // 当前编辑的点
+    var currentItem = -1 // 当前编辑的点
     var smallShapeLayer: CAShapeLayer!
     var powerShapeLayer: CAShapeLayer!
     var scan: LBXScanViewController!
@@ -36,6 +35,8 @@ class ControlViewController: BaseViewController {
     var currentIndex = 0 // 当前预览节点
     var totalIndex = 0 //  总预览数量
     var detectionTimer: Timer!
+    var currentTime = 0
+    var once = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,24 +65,61 @@ class ControlViewController: BaseViewController {
         currentPattern =  deviceModel.pattern ?? PatternModel()
         patterns = PatternListModel.down()
         refreshTopView() // 刷新顶部视图
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         if deviceModel.deviceType == 3 {
             colors = [Color.yellow, Color.bar6, Color.bar2, Color.bar5]
         } else {
             colors = [Color.yellow, Color.bar1, Color.bar2, Color.bar3, Color.bar4, Color.bar5, Color.bar6]
         }
-        initBarValueViews()
-        if once {
-            return
+        if bottomView.subviews.count == 0 {
+            initBarValueViews()
         }
-        once = true
-        for i in 0..<colors.count {
-            let view = bottomView.viewWithTag(i + 100) as! TouchBarValueView
-            let rect = bottomView.bounds.inset(by: UIEdgeInsets(top: 20, left: 0, bottom: 56, right: 0))
-            view.topLConstraint.constant = rect.size.height
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if currentTime == 0 {
+            clock()
+            let touchView = bottomView.viewWithTag(100) as! TouchBarValueView
+            touchView.setValue(0)
+        }
+        
+        let state = deviceModel.deviceState
+        let low = state & 0x0f
+        if low == 8 && segmentedControl.selectedSegmentIndex == 0 {
+            segmentedControl.selectedSegmentIndex = 1
+            if currentPattern.manual == nil {
+                let item = PatternItemModel()
+                item.time = 0
+                item.intensity = [0, 0, 0, 0, 0, 0, 0]
+                currentPattern.manual = item
+            }
+            refreshSliderValueManual()
+            refreshPower()
+            topView.isHidden = true
+            topManualView.isHidden = false
+        } else {
+            segmentedControl.selectedSegmentIndex = 0
+            topView.isHidden = false
+            topManualView.isHidden = true
+        }
+        
+        if segmentedControl.selectedSegmentIndex == 0 {
+            refreshSliderValue(currentTime: currentTime)
+        }
+    }
+    
+    private func clock() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateStr = dateFormatter.string(from: Date())
+        if dateStr.count > 16 {
+            let start = dateStr.index(dateStr.startIndex, offsetBy: 11)
+            let end = dateStr.index(dateStr.startIndex, offsetBy: 16)
+            let time = String(dateStr[start..<end])
+            let array = time.components(separatedBy: ":")
+            if array.count == 2 {
+                currentTime = (Int(array[0]) ?? 0) * 60 + (Int(array[1]) ?? 0)
+            }
         }
     }
     
@@ -106,10 +144,12 @@ class ControlViewController: BaseViewController {
     /// 处理通知
     @objc private func handleNotification(notification: Notification) {
         if let currentTime = notification.object as? Int {
+            self.currentTime = currentTime
             if detectionTimer == nil &&
                 preTimer == nil &&
                 segmentedControl.selectedSegmentIndex == 0 {
                 topView.floatView.isHidden = false
+                currentItem = -1
                 topView.left = topView.timeToLeft(value: currentTime)
                 topView.floatView.isUserInteractionEnabled = false
                 bottomView.isUserInteractionEnabled = false
@@ -349,6 +389,9 @@ class ControlViewController: BaseViewController {
             refreshPower()
         }
         saveSchedule()
+        if segmentedControl.selectedSegmentIndex == 0 {
+            refreshSliderValue(currentTime: currentTime)
+        }
     }
     
     @objc private func handleEvent(_ sender: Any) {
@@ -380,7 +423,7 @@ class ControlViewController: BaseViewController {
         case 1: // 删除点
             if currentPattern.items.count > 0 {
                 currentPattern.items.removeLast()
-                currentItem = 0
+                currentItem = -1
                 refreshTopView()
                 saveSchedule()
             }
@@ -485,6 +528,12 @@ class ControlViewController: BaseViewController {
     
     private func saveSchedule() {
         deviceModel.pattern = currentPattern
+        let state = deviceModel.deviceState
+        let high = (state >> 4) & 0x0f
+        let low = state & 0x0f
+        if low == 4 || low == 8 {
+            deviceModel.deviceState = (high << 4) + (deviceModel.pattern?.isManual == true ? 8 : 4)
+        }
         deviceListModel.groups[DeviceManager.sharedInstance.currentIndex] = deviceModel
         DeviceManager.sharedInstance.save()
         TCPSocketManager.sharedInstance.lightSchedual(model: deviceModel.pattern?.isManual == true ? 2 : 1, device: deviceModel)

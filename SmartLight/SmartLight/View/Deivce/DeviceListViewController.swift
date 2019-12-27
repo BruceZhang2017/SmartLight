@@ -143,7 +143,12 @@ class DeviceListViewController: BaseViewController {
                 if item.superModel < 0 {
                     return
                 }
-                self?.model.groups[item.superModel].child -= 1
+                if var superItem = self?.model.groups[item.superModel] {
+                    if superItem.child > 0 {
+                        superItem.child -= 1
+                    }
+                    self?.model.groups[item.superModel] = superItem
+                }
                 item.superModel = -1
                 self?.model.groups.insert(item, at: 0)
                 self?.selectedIndex = 0
@@ -168,9 +173,17 @@ class DeviceListViewController: BaseViewController {
                     if (self!.selectedIndex - 1) > keys[index] {
                         item.superModel = keys[index]
                         self?.model.groups.insert(item, at: keys[index] + 1)
+                        if var superItem = self?.model.groups[keys[index]] {
+                            superItem.child += 1
+                            self?.model.groups[keys[index]] = superItem
+                        }
                     } else {
                         item.superModel = keys[index] - 1
                         self?.model.groups.insert(item, at: keys[index])
+                        if var superItem = self?.model.groups[keys[index] - 1] {
+                            superItem.child += 1
+                            self?.model.groups[keys[index] - 1] = superItem
+                        }
                     }
                     self?.selectedIndex = 0
                     self?.tableView.reloadData()
@@ -203,7 +216,16 @@ class DeviceListViewController: BaseViewController {
                 self?.model.groups.removeSubrange(self!.selectedIndex - 1...(self!.selectedIndex - 1 + child))
             } else {
                 TCPSocketManager.sharedInstance.disconnect(ip: self?.model.groups[self!.selectedIndex - 1].ip ?? "")
-                self?.model.groups.remove(at: self!.selectedIndex - 1)
+                let item = self?.model.groups.remove(at: self!.selectedIndex - 1)
+                let superModel = item?.superModel ?? -1
+                if superModel >= 0 {
+                    if var superItem = self?.model.groups[superModel] {
+                        if superItem.child > 0 {
+                            superItem.child -= 1
+                        }
+                        self?.model.groups[superModel] = superItem
+                    }
+                }
             }
             self?.selectedIndex = 0
             self?.tableView.reloadData()

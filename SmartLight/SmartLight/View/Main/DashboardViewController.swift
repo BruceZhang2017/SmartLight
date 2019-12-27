@@ -47,7 +47,7 @@ class DashboardViewController: BaseViewController {
             automaticallyAdjustsScrollViewInsets = false
         }
         monitorNetwork()
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNoti), name: Notification.Name("DashboardViewController"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNoti(notification:)), name: Notification.Name("DashboardViewController"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -253,7 +253,11 @@ class DashboardViewController: BaseViewController {
         }
     }
     
-    @objc private func handleNoti() {
+    @objc private func handleNoti(notification: Notification) {
+        if let value = notification.object as? Int, value > 0 {
+            collectionView.reloadData()
+            return
+        }
         print("删除设备")
         currentIndex = 0
         DeviceManager.sharedInstance.currentIndex = 0
@@ -267,12 +271,11 @@ extension DashboardViewController: UICollectionViewDataSource {
         var tem = 0
         for device in DeviceManager.sharedInstance.deviceListModel.groups {
             if device.group == false {
-                indexs.append(tem)
+                if device.superModel == -1 {
+                    indexs.append(tem)
+                }
             } else {
                 indexs.append(tem)
-                if device.child > 0 {
-                    tem += device.child
-                }
             }
             tem += 1
         }
@@ -348,7 +351,7 @@ extension DashboardViewController: LBXScanViewControllerDelegate {
 
 extension DashboardViewController: BashboardCollectionViewCellDelegate {
     func handleMiddleButtonTap(btnTag: Int, tag: Int, result: Int) {
-        let device = DeviceManager.sharedInstance.deviceListModel.groups[tag]
+        let device = DeviceManager.sharedInstance.deviceListModel.groups[indexs[tag]]
         let value = device.deviceState
         let cTag = btnTag
         switch cTag {
@@ -356,9 +359,10 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             let high = (value >> 4) & 0x0f
             device.deviceState = (high << 4) + (device.pattern?.isManual == true ? 0x08 : 0x04)
             DeviceManager.sharedInstance.save()
-            if let _ = device.pattern {
-            TCPSocketManager.sharedInstance.lightSchedual(model: device.pattern?.isManual == true ? 2 : 1, device: device)
+            if device.pattern == nil {
+                device.pattern = PatternModel()
             }
+            TCPSocketManager.sharedInstance.lightSchedual(model: device.pattern?.isManual == true ? 2 : 1, device: device)
             collectionView.reloadData()
         case 0: // ALL ON / ALL OFF
             let high = (value >> 4) & 0x0f

@@ -15,6 +15,7 @@ import CoreData
 import IQKeyboardManagerSwift
 import Bugly
 import XCGLogger
+import Firebase
 
 let log = XCGLogger.default
 var temperature = 0
@@ -32,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Bugly.start(withAppId: "92ca13740e")
         let filepath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
         log.setup(level: .debug, showThreadName: true, showLevel: true, showFileNames: true, showLineNumbers: true, writeToFile: "\(filepath)/MICMOL.log", fileLevel: .debug)
+        FirebaseApp.configure()
         return true
     }
 

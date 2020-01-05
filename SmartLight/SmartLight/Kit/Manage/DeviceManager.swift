@@ -21,6 +21,9 @@ class DeviceManager: NSObject {
     override init() {
         super.init()
         deviceListModel = down()
+        for device in deviceListModel.groups {
+            setDeviceDefaultValue(device: device)
+        }
     }
     
     func save() {
@@ -36,5 +39,52 @@ class DeviceManager: NSObject {
             }
         }
         return DeviceListModel()
+    }
+    
+    private func setDeviceDefaultValue(device: DeviceModel) {
+        if device.acclimation == nil {
+            let model = Acclimation()
+            model.startTime = 8 * 60 + 30
+            model.endTime = 17 * 60 + 30
+            model.ramp = 2
+            model.intesity = [30, 60, 15, 0, 0, 0, 0]
+            device.acclimation = model
+        }
+        
+        if device.lunnar == nil {
+            let lunnar = Lunnar()
+            lunnar.startTime = 21 * 60
+            lunnar.endTime = 6 * 60
+            lunnar.intensity = 1
+            device.lunnar = lunnar
+        }
+        
+        if device.lightning == nil {
+            let lighting = Lightning()
+            lighting.startTime = 15 * 60
+            lighting.endTime = 17 * 60
+            lighting.interval = 2
+            lighting.frequency = 4
+            lighting.intensity = 50
+            device.lightning = lighting
+        }
+        
+        if device.cloudy == nil {
+            let cloudy = Cloudy()
+            cloudy.startTime = 12 * 60 + 30
+            cloudy.endTime = 15 * 60
+            cloudy.intensity = 60
+            cloudy.speed = 10
+            device.cloudy = cloudy
+        }
+        
+        if device.fan == nil {
+            let fan = Fan()
+            fan.enable = false
+            fan.startTime = 10 * 60
+            fan.endTime = 16 * 60
+            fan.intensity = 60
+            device.fan = fan
+        }
     }
 }

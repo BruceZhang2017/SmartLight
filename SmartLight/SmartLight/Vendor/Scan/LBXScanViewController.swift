@@ -52,6 +52,13 @@ open class LBXScanViewController: UIViewController, UIImagePickerControllerDeleg
               // [self.view addSubview:_qRScanView];
         self.view.backgroundColor = UIColor.black
         self.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "album".localized(), style: .plain, target: self, action: #selector(openAlbum))
+        
+    }
+    
+    @objc func openAlbum() {
+        openPhotoAlbum()
     }
     
     open func setNeedCodeImage(needCodeImg:Bool)
@@ -162,39 +169,28 @@ open class LBXScanViewController: UIViewController, UIImagePickerControllerDeleg
         scanObj?.stop()
     }
     
-    open func openPhotoAlbum()
-    {
+    open func openPhotoAlbum() {
         LBXPermissions.authorizePhotoWith { [weak self] (granted) in
-            
             let picker = UIImagePickerController()
-            
             picker.sourceType = UIImagePickerController.SourceType.photoLibrary
-            
-            picker.delegate = self;
-            
-            picker.allowsEditing = true
-            
+            picker.delegate = self
+            //picker.allowsEditing = true
            self?.present(picker, animated: true, completion: nil)
         }
     }
     
     //MARK: -----相册选择图片识别二维码 （条形码没有找到系统方法）
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
-    {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: nil)
-        
         var image:UIImage? = info[UIImagePickerController.InfoKey.editedImage.rawValue] as? UIImage
         
-        if (image == nil )
-        {
+        if (image == nil ) {
             image = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage
         }
         
-        if(image != nil)
-        {
+        if(image != nil) {
             let arrayResult = LBXScanWrapper.recognizeQRImage(image: image!)
-            if arrayResult.count > 0
-            {
+            if arrayResult.count > 0 {
                 handleCodeResult(arrayResult: arrayResult)
                 return
             }
@@ -203,23 +199,41 @@ open class LBXScanViewController: UIViewController, UIImagePickerControllerDeleg
         showMsg(title: nil, message: NSLocalizedString("Identify failed", comment: "Identify failed"))
     }
     
-    func showMsg(title:String?,message:String?)
-    {
-        
-        let alertController = UIAlertController(title: nil, message:message, preferredStyle: UIAlertController.Style.alert)
-        let alertAction = UIAlertAction(title: NSLocalizedString("OK", comment: "OK"), style: UIAlertAction.Style.default) { (alertAction) in
-                
-//                if let strongSelf = self
-//                {
-//                    strongSelf.startScan()
-//                }
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        var image:UIImage? = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+          
+        if (image == nil ) {
+            image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        }
+          
+        if(image != nil) {
+            let arrayResult = LBXScanWrapper.recognizeQRImage(image: image!)
+            if arrayResult.count > 0 {
+                handleCodeResult(arrayResult: arrayResult)
+                return
             }
+          }
         
-            alertController.addAction(alertAction)
-            present(alertController, animated: true, completion: nil)
+          showMsg(title: nil, message: NSLocalizedString("Identify failed", comment: "Identify failed"))
     }
-    deinit
-    {
-//        print("LBXScanViewController deinit")
+    
+    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+    }
+    
+    func showMsg(title:String?,message:String?){
+        let alertController = UIAlertController(title: nil, message:message, preferredStyle: UIAlertController.Style.alert)
+        let alertAction = UIAlertAction(title: NSLocalizedString("OK", comment: "OK"), style: UIAlertAction.Style.default) { [weak self] (alertAction) in
+            if let strongSelf = self {
+                strongSelf.startScan()
+            }
+        }
+        alertController.addAction(alertAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    deinit {
+        print("LBXScanViewController deinit")
     }
 }

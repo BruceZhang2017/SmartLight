@@ -34,7 +34,8 @@ class DashboardViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false 
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isScrollEnabled = false 
         setLeftNavigationItem()
         setRightNavigationItem()
         setTitleView()
@@ -357,7 +358,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
         switch cTag {
         case 2: // SCHEDUAL
             let high = (value >> 4) & 0x0f
-            device.deviceState = (high << 4) + (device.pattern?.isManual == true ? 0x08 : 0x04)
+            device.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + (device.pattern?.isManual == true ? 0x08 : 0x04)
             DeviceManager.sharedInstance.save()
             if device.pattern == nil {
                 device.pattern = PatternModel()
@@ -366,14 +367,18 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             collectionView.reloadData()
         case 0: // ALL ON / ALL OFF
             let high = (value >> 4) & 0x0f
-            let low = value & 0x0f
-            device.deviceState = result > 0 ? (((high > 8 ? (high - 8) : high) << 4) + 0b0010) : (low + ((high > 8 ? high : (high + 8)) << 4))
+            if result > 0 {
+                device.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + 2
+            } else {
+                device.deviceState = 0 + ((high >= 8 ? high : (high + 8)) << 4)
+            }
+            
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightSchedual(model: result > 0 ? 3 : 5, device: device, allOn: result > 0)
             collectionView.reloadData()
         case 1: // ACCL
             let high = (value >> 4) & 0x0f
-            device.deviceState = (high << 4) + 0x01
+            device.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + 0x01
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightSchedual(model: 4, device: device)
             collectionView.reloadData()

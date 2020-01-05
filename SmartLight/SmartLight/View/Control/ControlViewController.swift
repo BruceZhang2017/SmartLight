@@ -85,7 +85,7 @@ class ControlViewController: BaseViewController {
         
         let state = deviceModel.deviceState
         let low = state & 0x0f
-        if low == 8 && segmentedControl.selectedSegmentIndex == 0 {
+        if low == 8 {
             segmentedControl.selectedSegmentIndex = 1
             if currentPattern.manual == nil {
                 let item = PatternItemModel()
@@ -440,7 +440,7 @@ class ControlViewController: BaseViewController {
             startDetectionTimer()
             bottomView.isUserInteractionEnabled = true
             if topView.floatView.isUserInteractionEnabled == true {
-                let w = 10 * (Dimension.screenWidth - 40) / 1440
+                let w = 1 * (Dimension.screenWidth - 40) / 1440 // 修改为1分钟
                 if currentItem > 0 {
                     let pre = topView.timeToLeft(value: currentPattern.items[currentItem - 1].time)
                     if topView.left - w >= pre + 40 {
@@ -463,7 +463,7 @@ class ControlViewController: BaseViewController {
             startDetectionTimer()
             bottomView.isUserInteractionEnabled = true
             if topView.floatView.isUserInteractionEnabled == true {
-                let w = 10 * (Dimension.screenWidth - 40) / 1440
+                let w = 1 * (Dimension.screenWidth - 40) / 1440 // 修改为1分钟
                 if currentItem < currentPattern.items.count - 1 {
                     let pre = topView.timeToLeft(value: currentPattern.items[currentItem + 1].time)
                     if topView.left + w + 40 >= pre {
@@ -530,10 +530,8 @@ class ControlViewController: BaseViewController {
         deviceModel.pattern = currentPattern
         let state = deviceModel.deviceState
         let high = (state >> 4) & 0x0f
-        let low = state & 0x0f
-        if low == 4 || low == 8 {
-            deviceModel.deviceState = (high << 4) + (deviceModel.pattern?.isManual == true ? 8 : 4)
-        }
+        //let low = state & 0x0f
+        deviceModel.deviceState = (high << 4) + (deviceModel.pattern?.isManual == true ? 8 : 4)
         deviceListModel.groups[DeviceManager.sharedInstance.currentIndex] = deviceModel
         DeviceManager.sharedInstance.save()
         TCPSocketManager.sharedInstance.lightSchedual(model: deviceModel.pattern?.isManual == true ? 2 : 1, device: deviceModel)

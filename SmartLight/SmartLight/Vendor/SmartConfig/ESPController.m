@@ -92,6 +92,12 @@
         dispatch_queue_t  queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_async(queue, ^{
             // execute the task
+            if (apSsid==nil||[apSsid isEqualToString:@""]) {
+                if (self.delegate != nil) {
+                    [self.delegate callbackForBadScan];
+                }
+                return;
+            }
             NSArray *esptouchResultArray = [self executeForResultsWithSsid:apSsid bssid:apBssid password:apPwd taskCount:taskCount broadcast:broadcast];
             // show the result to the user in UI Main Thread
             dispatch_async(dispatch_get_main_queue(), ^{

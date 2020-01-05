@@ -98,9 +98,14 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.setTitle(Arrays.btnTitles[i], for: .normal)
                 if i == 0 && high == 1 {
                     $0.setTitle("txt_alloff".localized(), for: .normal)
+                    $0.setBackgroundImage(UIImage(named: "ON"), for: .normal)
+                    $0.setBackgroundImage(UIImage(named: "ON"), for: .selected)
                 }
                 $0.setTitleColor(Color.barBG, for: .normal)
                 $0.setTitleColor(Color.main, for: .selected)
+                if i == 0 && high == 1 {
+                    $0.setTitleColor(UIColor.red, for: .selected)
+                }
                 $0.titleEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
                 $0.titleLabel?.font = UIFont.systemFont(ofSize: Dimension.screenWidth <= 320 ? 6 : 8)
                 $0.addTarget(self, action: #selector(handleButtonTapEvent(_:)), for: .touchUpInside)
@@ -128,9 +133,11 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                     if button.title(for: .normal) == "txt_allon".localized() {
                         buttons[tag].setTitle("txt_alloff".localized(), for: .normal) // All ON / All OFF
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 0)
+                        buttons[tag].setTitleColor(UIColor.red, for: .selected)
                     } else {
                         buttons[tag].setTitle("txt_allon".localized(), for: .normal)
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
+                        buttons[tag].setTitleColor(Color.main, for: .selected)
                     }
                 }
                 return

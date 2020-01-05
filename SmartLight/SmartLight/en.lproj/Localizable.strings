@@ -55,7 +55,7 @@
 "txt_adddevice"="Add Device";
 "txt_connected"="Connected";
        
-"txt_datetime"="Date&amp;Time";
+"txt_datetime"="Date&Time";
 "txt_networks"="Networks";
 "txt_languages"="Systems Language";
 "txt_help"="Help";
@@ -169,5 +169,7 @@
    
 "light_effect_settings" = "Light effect settings";
 "other_settings" = "Other settings";
+
+"album" = "Album";
 
 

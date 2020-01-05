@@ -126,7 +126,7 @@ class CloudyTableViewController: EffectsSettingTableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HEAD") as! TableViewHeadView
         if section == 0 {
-            headView.titleLabel.text = "Quickly Setup"
+            headView.titleLabel.text = " "
             headView.contentLabel.text = ""
         } else if section == 1 {
             headView.titleLabel.text = "Intensity".uppercased()

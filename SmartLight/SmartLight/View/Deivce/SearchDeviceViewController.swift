@@ -91,6 +91,43 @@ class SearchDeviceViewController: BaseViewController {
         UserDefaults.standard.synchronize()
         initializeSmartConfig()
     }
+    
+    private func setDeviceDefaultValue(device: DeviceModel) {
+        let model = Acclimation()
+        model.startTime = 8 * 60 + 30
+        model.endTime = 17 * 60 + 30
+        model.ramp = 2
+        model.intesity = [30, 60, 15, 0, 0, 0, 0]
+        device.acclimation = model
+        
+        let lunnar = Lunnar()
+        lunnar.startTime = 21 * 60
+        lunnar.endTime = 6 * 60
+        lunnar.intensity = 1
+        device.lunnar = lunnar
+        
+        let lighting = Lightning()
+        lighting.startTime = 15 * 60
+        lighting.endTime = 17 * 60
+        lighting.interval = 2
+        lighting.frequency = 4
+        lighting.intensity = 50
+        device.lightning = lighting
+        
+        let cloudy = Cloudy()
+        cloudy.startTime = 12 * 60 + 30
+        cloudy.endTime = 15 * 60
+        cloudy.intensity = 60
+        cloudy.speed = 10
+        device.cloudy = cloudy
+        
+        let fan = Fan()
+        fan.enable = false
+        fan.startTime = 10 * 60
+        fan.endTime = 16 * 60
+        fan.intensity = 60
+        device.fan = fan
+    }
 
 }
 
@@ -127,7 +164,7 @@ extension SearchDeviceViewController: UITableViewDelegate {
             device.ip = results[indexPath.row].ip()
             device.deviceState = 0x00
             device.deviceType = 3
-            
+            setDeviceDefaultValue(device: device)
             model.groups.append(device)
             DeviceManager.sharedInstance.save()
             pushToMenu()
@@ -153,6 +190,7 @@ extension SearchDeviceViewController: UITableViewDelegate {
                 device.deviceState = 0x00
                 device.deviceType = 3
                 model.groups.append(device)
+                setDeviceDefaultValue(device: device)
                 DeviceManager.sharedInstance.save()
             }
             pushToMenu()
@@ -164,11 +202,21 @@ extension SearchDeviceViewController: UITableViewDelegate {
 }
 
 extension SearchDeviceViewController: ESPControllerDelegate {
+    func callbackForBadScan() {
+        DispatchQueue.main.async {
+            [weak self] in
+            Toast(text: "请开启WIFI").show()
+            self?.navigationController?.popViewController(animated: true)
+        }
+    }
+    
     func scanWIFI(_ result: [ESPTouchResult]!) {
         if result == nil {
             results.removeAll()
-            Toast(text: "Smartconfig失败，请退出重试").show()
-            navigationController?.popViewController(animated: true)
+            //Toast(text: "Smartconfig失败，请退出重试").show()
+            //navigationController?.popViewController(animated: true)
+            controller?.tapConfirmForResults()
+            controller?.tapConfirmForResults()
         } else {
             results = result!
         }

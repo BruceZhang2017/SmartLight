@@ -12,10 +12,11 @@
 @protocol ESPControllerDelegate <NSObject>
 
 - (void)scanWIFI: (NSArray<ESPTouchResult*> *)result;
+- (void)callbackForBadScan;
 
 @end
 
-@interface ESPController : NSObject
+@interface ESPController: NSObject
 
 - (void) tapConfirmForResults;
 

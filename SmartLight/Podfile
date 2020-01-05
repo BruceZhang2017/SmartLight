@@ -14,5 +14,9 @@ pod 'XCGLogger'
 pod 'Bugly'
 pod 'MBProgressHUD'
 pod 'Localize-Swift', '~> 2.0'
+pod 'Firebase/Analytics'
+# Pods for PodTest
+pod 'Fabric', '~> 1.10.2'
+pod 'Crashlytics', '~> 3.14.0'
 
 end

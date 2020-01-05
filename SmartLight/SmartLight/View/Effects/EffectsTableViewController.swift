@@ -103,7 +103,7 @@ class EffectsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section > 0 {
-            let allimationVC = CloudyTableViewController(style: .grouped)
+            let allimationVC = FanTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
             return
@@ -121,7 +121,7 @@ class EffectsTableViewController: UITableViewController {
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
         } else  if indexPath.row == 3 {
-            let allimationVC = FanTableViewController(style: .grouped)
+            let allimationVC = CloudyTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(allimationVC, animated: true)
         }

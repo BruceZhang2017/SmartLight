@@ -87,6 +87,7 @@
 		9A5B7F0923098FE30099E3A9 /* Lunnar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7F0823098FE20099E3A9 /* Lunnar.swift */; };
 		9A5B7F1123099D890099E3A9 /* Lightning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7F1023099D890099E3A9 /* Lightning.swift */; };
 		9A5B7F132309A1520099E3A9 /* Cloudy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7F122309A1520099E3A9 /* Cloudy.swift */; };
+		9A5B883A23C20724009CE2CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A5B883923C20724009CE2CE /* GoogleService-Info.plist */; };
 		9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63722F6684E00487DC5 /* Foundation+Extension.swift */; };
 		9A79F63A22F668F100487DC5 /* UIKit+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63922F668F100487DC5 /* UIKit+Extension.swift */; };
 		9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A79F63C22F669BD00487DC5 /* Colors.swift */; };
@@ -236,6 +237,7 @@
 		9A5B7F0823098FE20099E3A9 /* Lunnar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lunnar.swift; sourceTree = "<group>"; };
 		9A5B7F1023099D890099E3A9 /* Lightning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lightning.swift; sourceTree = "<group>"; };
 		9A5B7F122309A1520099E3A9 /* Cloudy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cloudy.swift; sourceTree = "<group>"; };
+		9A5B883923C20724009CE2CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9A79F63722F6684E00487DC5 /* Foundation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Foundation+Extension.swift"; sourceTree = "<group>"; };
 		9A79F63922F668F100487DC5 /* UIKit+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Extension.swift"; sourceTree = "<group>"; };
 		9A79F63C22F669BD00487DC5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				9A101B6122F5C9410033E96B /* Assets.xcassets */,
 				9A101B6322F5C9410033E96B /* LaunchScreen.storyboard */,
 				9A101B6622F5C9410033E96B /* Info.plist */,
+				9A5B883923C20724009CE2CE /* GoogleService-Info.plist */,
 				9A083AD22379625B0018D54D /* Localizable.strings */,
 				9A101B5E22F5C9400033E96B /* SmartLight.xcdatamodeld */,
 			);
@@ -652,6 +655,7 @@
 				9A101B5122F5C9400033E96B /* Frameworks */,
 				9A101B5222F5C9400033E96B /* Resources */,
 				616A6145BF0382E9694F3E87 /* [CP] Embed Pods Frameworks */,
+				9A5B883B23C2085B009CE2CE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -771,6 +775,7 @@
 				9AA1AC3722FC49420000F6D2 /* Effects.storyboard in Resources */,
 				9A083AD02379625B0018D54D /* Localizable.strings in Resources */,
 				9A3E1EA522F87CC900A24DB1 /* Settings.storyboard in Resources */,
+				9A5B883A23C20724009CE2CE /* GoogleService-Info.plist in Resources */,
 				9A10201723030031000F36D7 /* TouchBarValueView.xib in Resources */,
 				9A10200123004035000F36D7 /* Device.storyboard in Resources */,
 				9AA1AC3222FA9BE00000F6D2 /* Public.storyboard in Resources */,
@@ -810,6 +815,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SmartLight/Pods-SmartLight-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9A5B883B23C2085B009CE2CE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
 		};
 		E9C3FB0B057FD35AA0F58114 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1113,7 +1136,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1139,7 +1162,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

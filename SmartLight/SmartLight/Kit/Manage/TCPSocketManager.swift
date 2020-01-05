@@ -35,6 +35,9 @@ class TCPSocketManager: NSObject {
                 return
             }
             for i in 0..<child {
+                if current + i + 1 >= model.groups.count {
+                    return
+                }
                 let ip = model.groups[current + i + 1].ip ?? "192.168.4.1"
                 if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
                     print("设备已连接Group：\(ip)")
@@ -378,7 +381,7 @@ class TCPSocketManager: NSObject {
                             lunnar.startTime = Int(array[temIndex + 1]) ?? 0
                             lunnar.endTime = Int(array[temIndex + 2]) ?? 0
                             lunnar.intensity = Int(array[temIndex + 3].replacingOccurrences(of: "}", with: "")) ?? 0
-                            device.lunnar = lunnar
+                            //device.lunnar = lunnar
                             temIndex += 4
                         }
                     } else if type == 1 && value.count >= 5 {
@@ -389,7 +392,7 @@ class TCPSocketManager: NSObject {
                             lighting.endTime = Int(array[temIndex + 2]) ?? 0
                             lighting.frequency = Int(array[temIndex + 3]) ?? 0
                             lighting.intensity = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
-                            device.lightning = lighting
+                            //device.lightning = lighting
                             temIndex += 5
                         }
                     } else if type == 2 && value.count >= 5 {
@@ -400,7 +403,7 @@ class TCPSocketManager: NSObject {
                             cloudy.endTime = Int(array[temIndex + 2]) ?? 0
                             cloudy.intensity = Int(array[temIndex + 3]) ?? 0
                             cloudy.speed = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "")) ?? 0
-                            device.cloudy = cloudy
+                            //device.cloudy = cloudy
                             temIndex += 5
                         }
                     }

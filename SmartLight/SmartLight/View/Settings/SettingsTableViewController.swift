@@ -96,8 +96,7 @@ class SettingsTableViewController: UITableViewController {
     
     private func currentDate(date: Date) -> String {
         let dateFormate = DateFormatter()
-        dateFormate.dateStyle = .medium
-        dateFormate.timeStyle = .medium
+        dateFormate.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let stringOfDate = dateFormate.string(from: date)
         return stringOfDate
     }

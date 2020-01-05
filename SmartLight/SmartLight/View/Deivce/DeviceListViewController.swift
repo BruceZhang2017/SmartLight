@@ -98,6 +98,7 @@ class DeviceListViewController: BaseViewController {
             model.child = 0
             model.group = true
             model.ip = "\(Int(Date().timeIntervalSince1970))"
+            self?.setDeviceDefaultValue(device: model)
             self?.model.groups.append(model)
             self?.tableView.reloadData()
             DeviceManager.sharedInstance.save()
@@ -105,9 +106,52 @@ class DeviceListViewController: BaseViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    private func setDeviceDefaultValue(device: DeviceModel) {
+        let model = Acclimation()
+        model.startTime = 8 * 60 + 30
+        model.endTime = 17 * 60 + 30
+        model.ramp = 2
+        model.intesity = [30, 60, 15, 0, 0, 0, 0]
+        device.acclimation = model
+        
+        let lunnar = Lunnar()
+        lunnar.startTime = 21 * 60
+        lunnar.endTime = 6 * 60
+        lunnar.intensity = 1
+        device.lunnar = lunnar
+        
+        let lighting = Lightning()
+        lighting.startTime = 15 * 60
+        lighting.endTime = 17 * 60
+        lighting.interval = 2
+        lighting.frequency = 4
+        lighting.intensity = 50
+        device.lightning = lighting
+        
+        let cloudy = Cloudy()
+        cloudy.startTime = 12 * 60 + 30
+        cloudy.endTime = 15 * 60
+        cloudy.intensity = 60
+        cloudy.speed = 10
+        device.cloudy = cloudy
+        
+        let fan = Fan()
+        fan.enable = false
+        fan.startTime = 10 * 60
+        fan.endTime = 16 * 60
+        fan.intensity = 60
+        device.fan = fan
+    }
+    
     @IBAction func editDevice(_ sender: Any) {
         if isEdit {
             if selectedIndex == 0 {
+                return
+            }
+            if selectedIndex - 1 < 0 || (selectedIndex - 1) >= model.groups.count {
+                return
+            }
+            if model.groups.count == 0 {
                 return
             }
             let item = model.groups[selectedIndex - 1]
@@ -127,6 +171,12 @@ class DeviceListViewController: BaseViewController {
             let sheet = UIAlertController(title: nil, message: "txt_group_moveto_int".localized(), preferredStyle: .actionSheet)
             sheet.addAction(UIAlertAction(title: "Non-Group", style: .default, handler: {
                 [weak self] (action) in
+                if self!.selectedIndex - 1 < 0 {
+                    return
+                }
+                if self!.selectedIndex - 1 >= self!.model.groups.count {
+                    return
+                }
                 let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
                 if child > 0 {
                     return
@@ -143,7 +193,10 @@ class DeviceListViewController: BaseViewController {
                 if item.superModel < 0 {
                     return
                 }
-                if var superItem = self?.model.groups[item.superModel] {
+                if item.superModel >= self!.model.groups.count {
+                    return
+                }
+                if let superItem = self?.model.groups[item.superModel] {
                     if superItem.child > 0 {
                         superItem.child -= 1
                     }
@@ -157,6 +210,13 @@ class DeviceListViewController: BaseViewController {
             }))
             for (index, item) in array.enumerated() {
                 sheet.addAction(UIAlertAction(title: item.name ?? "", style: .default, handler: { [weak self] (action) in
+                    log.info("移动设备: \(self!.selectedIndex)")
+                    if self!.selectedIndex - 1 < 0 {
+                        return
+                    }
+                    if self!.selectedIndex - 1 >= self!.model.groups.count {
+                        return
+                    }
                     let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
                     if child > 0 {
                         return
@@ -170,17 +230,32 @@ class DeviceListViewController: BaseViewController {
                             TCPSocketManager.sharedInstance.disconnect(ip: ip)
                         }
                     }
+                    if index >= keys.count {
+                        return
+                    }
                     if (self!.selectedIndex - 1) > keys[index] {
                         item.superModel = keys[index]
                         self?.model.groups.insert(item, at: keys[index] + 1)
-                        if var superItem = self?.model.groups[keys[index]] {
+                        if let superItem = self?.model.groups[keys[index]] {
                             superItem.child += 1
+                            if keys[index] >=  self!.model.groups.count {
+                                return
+                            }
                             self?.model.groups[keys[index]] = superItem
                         }
                     } else {
+                        if keys[index] < 0 {
+                            return
+                        }
                         item.superModel = keys[index] - 1
                         self?.model.groups.insert(item, at: keys[index])
-                        if var superItem = self?.model.groups[keys[index] - 1] {
+                        if keys[index] - 1 < 0 {
+                            return
+                        }
+                        if keys[index] - 1 >= self!.model.groups.count {
+                            return
+                        }
+                        if let superItem = self?.model.groups[keys[index] - 1] {
                             superItem.child += 1
                             self?.model.groups[keys[index] - 1] = superItem
                         }
@@ -208,18 +283,28 @@ class DeviceListViewController: BaseViewController {
         let alert = UIAlertController(title: "txt_deletedevice".localized(), message: "txt_deletedevice_hint".localized(), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
+            log.info("删除设备: \(self!.selectedIndex)")
+            if self!.selectedIndex - 1 < 0 {
+                return
+            }
+            if self!.selectedIndex - 1 >= self!.model.groups.count {
+                return
+            }
             let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
-            if child >  0 {
+            if child > 0 {
                 for i in self!.selectedIndex-1...(self!.selectedIndex - 1 + child) {
                     TCPSocketManager.sharedInstance.disconnect(ip: self?.model.groups[i].ip ?? "")
+                }
+                if self!.selectedIndex - 1 + child >=  self!.model.groups.count {
+                    return
                 }
                 self?.model.groups.removeSubrange(self!.selectedIndex - 1...(self!.selectedIndex - 1 + child))
             } else {
                 TCPSocketManager.sharedInstance.disconnect(ip: self?.model.groups[self!.selectedIndex - 1].ip ?? "")
                 let item = self?.model.groups.remove(at: self!.selectedIndex - 1)
                 let superModel = item?.superModel ?? -1
-                if superModel >= 0 {
-                    if var superItem = self?.model.groups[superModel] {
+                if superModel >= 0 && superModel < self!.model.groups.count {
+                    if let superItem = self?.model.groups[superModel] {
                         if superItem.child > 0 {
                             superItem.child -= 1
                         }
@@ -274,8 +359,6 @@ extension DeviceListViewController: UITableViewDataSource {
         
         return cell
     }
-    
-    
 }
 
 extension DeviceListViewController: UITableViewDelegate {
@@ -303,6 +386,9 @@ extension DeviceListViewController: DeviceListTableViewCellDelegate {
         alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
             guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                return
+            }
+            if index >= self!.model.groups.count {
                 return
             }
             self?.model.groups[index].name = name

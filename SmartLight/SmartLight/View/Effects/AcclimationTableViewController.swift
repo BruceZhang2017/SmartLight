@@ -63,6 +63,7 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
             preTimer?.invalidate()
             preTimer = nil
             hideHUD()
+            currentIndex = 0
             handleAcclimation() // 发送真实的SCHEDULE
             return
         }
@@ -109,7 +110,7 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
             if indexPath.row == 0 {
                 cell.mSwitch.isHidden = false
                 cell.desLabel.isHidden = true
-                cell.mSwitch.isOn = acclimation.enable
+                cell.mSwitch.isOn = (deviceModel.deviceState & 0x01) > 0
             } else {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
@@ -253,14 +254,15 @@ extension AcclimationTableViewController: EffectsSettingTableViewCellDelegate {
             tableView.reloadData()
             return
         }
-        acclimation.enable = value
+        let high = (deviceModel.deviceState >> 4) & 0x0f
+        deviceModel.deviceState = (high << 4) + (value ? 1 : 0)
         tableView.reloadData()
         deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()
-        if value {
-            PreviousFunction(count: 50) // 先预览200ms一次
-        } else {
+//        if value {
+//            PreviousFunction(count: 50) // 先预览200ms一次
+//        } else {
             handleAcclimation()
-        }
+        //}
     }
 }

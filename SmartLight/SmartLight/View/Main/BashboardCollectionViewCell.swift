@@ -161,8 +161,8 @@ class BashboardCollectionViewCell: UICollectionViewCell {
     func refreshUI(deviceModel: DeviceModel, currentTime: Int) {
         for (index, barValueView) in barValueViews.enumerated() {
             let manager = CurrentLightValueManager.sharedInstance
-            let currentValue = manager.calCurrent(deviceModel: deviceModel, currentTime: currentTime, index: index)
-            let maxValue = manager.calMax(deviceModel: deviceModel, index: index)
+            let currentValue = manager.calCurrentPlanB(deviceModel: deviceModel, currentTime: currentTime, index: index)
+            let maxValue = manager.calMaxPlanB(deviceModel: deviceModel, index: index)
             let max = CGFloat(100 - maxValue) / 100 * (barHeight - 71) + CGFloat(20)
             barValueView.valueLabel.text = "\(Int(currentValue))%"
             let current = CGFloat(100 - currentValue) / 100 * (barHeight - 71) + CGFloat(20)

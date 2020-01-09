@@ -193,8 +193,15 @@ extension SearchDeviceViewController: UITableViewDelegate {
                 setDeviceDefaultValue(device: device)
                 DeviceManager.sharedInstance.save()
             }
-            pushToMenu()
             var viewControllers = navigationController!.viewControllers
+            for viewController in viewControllers {
+                if viewController is DeviceListViewController {
+                    navigationController?.popToViewController(viewController, animated: true)
+                    return
+                }
+            }
+            pushToMenu()
+            viewControllers = navigationController!.viewControllers
             viewControllers.remove(at: 1)
             navigationController?.viewControllers = viewControllers
         }

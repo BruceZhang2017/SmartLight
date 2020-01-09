@@ -41,6 +41,7 @@ class DeviceListViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         startTimer()
+        tableView.reloadData()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -97,7 +98,9 @@ class DeviceListViewController: BaseViewController {
             model.name = name
             model.child = 0
             model.group = true
-            model.ip = "\(Int(Date().timeIntervalSince1970))"
+            let time = Int(Date().timeIntervalSince1970)
+            model.ip = "\(time)"
+            model.superModel = time
             self?.setDeviceDefaultValue(device: model)
             self?.model.groups.append(model)
             self?.tableView.reloadData()
@@ -162,12 +165,6 @@ class DeviceListViewController: BaseViewController {
             if array.count == 0 {
                 return
             }
-            var keys: [Int] = []
-            for (index, value) in model.groups.enumerated() {
-                if value.group {
-                    keys.append(index)
-                }
-            }
             let sheet = UIAlertController(title: nil, message: "txt_group_moveto_int".localized(), preferredStyle: .actionSheet)
             sheet.addAction(UIAlertAction(title: "Non-Group", style: .default, handler: {
                 [weak self] (action) in
@@ -193,14 +190,14 @@ class DeviceListViewController: BaseViewController {
                 if item.superModel < 0 {
                     return
                 }
-                if item.superModel >= self!.model.groups.count {
-                    return
-                }
-                if let superItem = self?.model.groups[item.superModel] {
-                    if superItem.child > 0 {
-                        superItem.child -= 1
+                for (index, sItem) in self!.model.groups.enumerated() {
+                    if sItem.superModel == item.superModel && sItem.group == true {
+                        if sItem.child > 0 {
+                            sItem.child -= 1
+                        }
+                        self?.model.groups[index] = sItem
+                        break
                     }
-                    self?.model.groups[item.superModel] = superItem
                 }
                 item.superModel = -1
                 self?.model.groups.insert(item, at: 0)
@@ -208,7 +205,7 @@ class DeviceListViewController: BaseViewController {
                 self?.tableView.reloadData()
                 DeviceManager.sharedInstance.save()
             }))
-            for (index, item) in array.enumerated() {
+            for (_, item) in array.enumerated() {
                 sheet.addAction(UIAlertAction(title: item.name ?? "", style: .default, handler: { [weak self] (action) in
                     log.info("移动设备: \(self!.selectedIndex)")
                     if self!.selectedIndex - 1 < 0 {
@@ -221,43 +218,22 @@ class DeviceListViewController: BaseViewController {
                     if child > 0 {
                         return
                     }
-                    guard let item = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
+                    guard let sItem = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
                         return
                     }
-                    if let ip = item.ip, ip.count > 0 {
+                    if let ip = sItem.ip, ip.count > 0 {
                         if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
                             DeviceManager.sharedInstance.connectStatus[ip] = 0
                             TCPSocketManager.sharedInstance.disconnect(ip: ip)
                         }
                     }
-                    if index >= keys.count {
-                        return
-                    }
-                    if (self!.selectedIndex - 1) > keys[index] {
-                        item.superModel = keys[index]
-                        self?.model.groups.insert(item, at: keys[index] + 1)
-                        if let superItem = self?.model.groups[keys[index]] {
-                            superItem.child += 1
-                            if keys[index] >=  self!.model.groups.count {
-                                return
-                            }
-                            self?.model.groups[keys[index]] = superItem
-                        }
-                    } else {
-                        if keys[index] < 0 {
-                            return
-                        }
-                        item.superModel = keys[index] - 1
-                        self?.model.groups.insert(item, at: keys[index])
-                        if keys[index] - 1 < 0 {
-                            return
-                        }
-                        if keys[index] - 1 >= self!.model.groups.count {
-                            return
-                        }
-                        if let superItem = self?.model.groups[keys[index] - 1] {
-                            superItem.child += 1
-                            self?.model.groups[keys[index] - 1] = superItem
+                    sItem.superModel = item.superModel
+                    for (index,ssItem) in self!.model.groups.enumerated() {
+                        if ssItem.superModel == item.superModel && ssItem.group == true {
+                            self?.model.groups.insert(sItem, at: index + 1)
+                            item.child += 1
+                            self?.model.groups[index] = item
+                            break
                         }
                     }
                     self?.selectedIndex = 0
@@ -293,6 +269,9 @@ class DeviceListViewController: BaseViewController {
             let child = self?.model.groups[self!.selectedIndex - 1].child ?? 0
             if child > 0 {
                 for i in self!.selectedIndex-1...(self!.selectedIndex - 1 + child) {
+                    if i >= self!.model.groups.count {
+                        return
+                    }
                     TCPSocketManager.sharedInstance.disconnect(ip: self?.model.groups[i].ip ?? "")
                 }
                 if self!.selectedIndex - 1 + child >=  self!.model.groups.count {
@@ -301,14 +280,16 @@ class DeviceListViewController: BaseViewController {
                 self?.model.groups.removeSubrange(self!.selectedIndex - 1...(self!.selectedIndex - 1 + child))
             } else {
                 TCPSocketManager.sharedInstance.disconnect(ip: self?.model.groups[self!.selectedIndex - 1].ip ?? "")
-                let item = self?.model.groups.remove(at: self!.selectedIndex - 1)
-                let superModel = item?.superModel ?? -1
-                if superModel >= 0 && superModel < self!.model.groups.count {
-                    if let superItem = self?.model.groups[superModel] {
-                        if superItem.child > 0 {
-                            superItem.child -= 1
+                guard let item = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
+                    return
+                }
+                if item.superModel > 0 {
+                    for (index,ssItem) in self!.model.groups.enumerated() {
+                        if ssItem.superModel == item.superModel && ssItem.group == true {
+                            ssItem.child -= 1
+                            self?.model.groups[index] = ssItem
+                            break
                         }
-                        self?.model.groups[superModel] = superItem
                     }
                 }
             }
@@ -331,7 +312,7 @@ extension DeviceListViewController: UITableViewDataSource {
         cell.nameButton?.setTitle( model.groups[indexPath.row].name, for: .normal)
         cell.arrowImageView.isHidden = !model.groups[indexPath.row].group
         cell.stateImageView.isHidden = !isEdit
-        let left = model.groups[indexPath.row].superModel >= 0 ? 15 : 0
+        let left = model.groups[indexPath.row].superModel >= 0 && model.groups[indexPath.row].group == false ? 15 : 0
         cell.leftLConstraint.constant = CGFloat((isEdit ? 45 : 20) + left)
         cell.circleImageLeftLConstraint.constant = CGFloat(left + 15)
         cell.nameButton.titleLabel?.font = model.groups[indexPath.row].child == 0 ? UIFont.systemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 16)

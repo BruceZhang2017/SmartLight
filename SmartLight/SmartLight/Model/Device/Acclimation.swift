@@ -13,7 +13,6 @@
 import UIKit
 
 class Acclimation: NSObject, NSCoding {
-    var enable: Bool = false
     var startTime: Int = 0
     var endTime: Int = 0
     var ramp: Int = 0
@@ -24,7 +23,6 @@ class Acclimation: NSObject, NSCoding {
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(enable, forKey: "enable")
         aCoder.encode(startTime, forKey: "startTime")
         aCoder.encode(endTime, forKey: "endTime")
         aCoder.encode(ramp, forKey: "ramp")
@@ -33,7 +31,6 @@ class Acclimation: NSObject, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
-        enable = aDecoder.decodeBool(forKey: "enable")
         startTime = aDecoder.decodeInteger(forKey: "startTime")
         endTime = aDecoder.decodeInteger(forKey: "endTime")
         ramp = aDecoder.decodeInteger(forKey: "ramp")

@@ -443,18 +443,24 @@ class ControlViewController: BaseViewController {
                 let w = 1 * (Dimension.screenWidth - 40) / 1440 // 修改为1分钟
                 if currentItem > 0 {
                     let pre = topView.timeToLeft(value: currentPattern.items[currentItem - 1].time)
+                    print("左移：\(pre)")
                     if topView.left - w >= pre + 40 {
                         return
                     }
+                    topView.left -= w
+                    currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
+                    refreshTopView()
+                    saveSchedule()
                 } else {
+                    print("左移")
                     if topView.left - w <= 0 {
                         return
                     }
+                    topView.left -= w
+                    currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
+                    refreshTopView()
+                    saveSchedule()
                 }
-                topView.left -= w
-                currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
-                refreshTopView()
-                saveSchedule()
             }
         case 3: // 右移
             if detectionTimer == nil {
@@ -466,18 +472,24 @@ class ControlViewController: BaseViewController {
                 let w = 1 * (Dimension.screenWidth - 40) / 1440 // 修改为1分钟
                 if currentItem < currentPattern.items.count - 1 {
                     let pre = topView.timeToLeft(value: currentPattern.items[currentItem + 1].time)
+                    print("右移：\(pre)")
                     if topView.left + w + 40 >= pre {
                         return
                     }
+                    topView.left += w
+                    currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
+                    refreshTopView()
+                    saveSchedule()
                 } else {
+                    print("右移")
                     if topView.left + w + 40 >= Dimension.screenWidth - 40 {
                         return
                     }
+                    topView.left += w
+                    currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
+                    refreshTopView()
+                    saveSchedule()
                 }
-                topView.left += w
-                currentPattern.items[currentItem].time = topView.leftToTimeInt(value: topView.left)
-                refreshTopView()
-                saveSchedule()
             }
         case 4:// 预览
             print("设置预览")

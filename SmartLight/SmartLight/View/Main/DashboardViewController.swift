@@ -389,7 +389,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             if device.lunnar == nil {
                 device.lunnar = Lunnar()
             }
-            device.lunnar?.enable = result > 0
+            
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightEffect(type: 0, result: result + 1, device: device)
             collectionView.reloadData()
@@ -400,7 +400,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             if device.lightning == nil {
                 device.lightning = Lightning()
             }
-            device.lightning?.enable = result > 0
+            
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightEffect(type: 1, result: result + 1, device: device)
             collectionView.reloadData()
@@ -411,7 +411,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             if device.cloudy == nil {
                 device.cloudy = Cloudy()
             }
-            device.cloudy?.enable = result > 0
+            
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightEffect(type: 2, result: result + 1, device: device)
             collectionView.reloadData()

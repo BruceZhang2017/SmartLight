@@ -353,7 +353,6 @@ class TCPSocketManager: NSObject {
                 if model == nil {
                      model = Acclimation()
                 }
-                model?.enable = true
                 model?.startTime = Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0
                 temIndex += 1
                 model?.endTime = Int(array[temIndex]) ?? 0
@@ -367,7 +366,7 @@ class TCPSocketManager: NSObject {
                         model?.intesity[i] = Int(array[temIndex + i].replacingOccurrences(of: "}", with: "")) ?? 0
                     }
                 }
-                device.acclimation = model
+                //device.acclimation = model
                 temIndex += 5
             }
             if temIndex < array.count {
@@ -377,7 +376,6 @@ class TCPSocketManager: NSObject {
                     if type == 0 && value.count >= 4 {
                         if array.count >= temIndex + 4 {
                             let lunnar = Lunnar()
-                            lunnar.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
                             lunnar.startTime = Int(array[temIndex + 1]) ?? 0
                             lunnar.endTime = Int(array[temIndex + 2]) ?? 0
                             lunnar.intensity = Int(array[temIndex + 3].replacingOccurrences(of: "}", with: "")) ?? 0
@@ -387,7 +385,6 @@ class TCPSocketManager: NSObject {
                     } else if type == 1 && value.count >= 5 {
                         if array.count >= temIndex + 5 {
                             let lighting = Lightning()
-                            lighting.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
                             lighting.startTime = Int(array[temIndex + 1]) ?? 0
                             lighting.endTime = Int(array[temIndex + 2]) ?? 0
                             lighting.frequency = Int(array[temIndex + 3]) ?? 0
@@ -398,7 +395,6 @@ class TCPSocketManager: NSObject {
                     } else if type == 2 && value.count >= 5 {
                         if array.count >= temIndex + 5 {
                             let cloudy = Cloudy()
-                            cloudy.enable = (Int(array[temIndex].replacingOccurrences(of: "{", with: "")) ?? 0) > 1
                             cloudy.startTime = Int(array[temIndex + 1]) ?? 0
                             cloudy.endTime = Int(array[temIndex + 2]) ?? 0
                             cloudy.intensity = Int(array[temIndex + 3]) ?? 0

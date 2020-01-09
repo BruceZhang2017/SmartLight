@@ -31,7 +31,8 @@ class LightningTableViewController: EffectsSettingTableViewController {
     }
     
     private func handleLightning() {
-        TCPSocketManager.sharedInstance.lightEffect(type: 1, result: ligtning.enable ? 2 : 1, device: deviceModel)
+        let state = deviceModel.deviceState
+        TCPSocketManager.sharedInstance.lightEffect(type: 1, result: (state & 0b00100000) > 0 ? 2 : 1, device: deviceModel)
     }
     
     // 10秒内预览 1s 一次
@@ -48,6 +49,7 @@ class LightningTableViewController: EffectsSettingTableViewController {
             preTimer?.invalidate()
             preTimer = nil
             hideHUD()
+            currentIndex = 0
             handleLightning() // 发送真实的SCHEDULE
             return
         }
@@ -86,7 +88,7 @@ class LightningTableViewController: EffectsSettingTableViewController {
             if indexPath.row == 0 {
                 cell.mSwitch.isHidden = false
                 cell.desLabel.isHidden = true
-                cell.mSwitch.isOn = ligtning.enable
+                cell.mSwitch.isOn = (deviceModel.deviceState & 0b00100000) > 0
             } else {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
@@ -206,13 +208,13 @@ extension LightningTableViewController: EffectsSettingTableViewCellDelegate {
             tableView.reloadData()
             return
         }
-        ligtning.enable = value
+
         tableView.reloadData()
         deviceModel.lightning = ligtning
         let state = deviceModel.deviceState
         let low = state & 0x0f
         let high = (state >> 4) & 0x0f
-        deviceModel.deviceState = (((value ? 0x02 : 0x00) + high & 0b0101) << 4) + low
+        deviceModel.deviceState = (((value ? 0x02 : 0x00) + high & 0b1101) << 4) + low
         DeviceManager.sharedInstance.save()
         if value {
             PreviousFunction(count: ligtning.interval) // 先预览200ms一次

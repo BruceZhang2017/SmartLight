@@ -13,7 +13,6 @@
 import UIKit
 
 class Lightning: NSObject, NSCoding {
-    var enable = false
     var startTime = 0
     var endTime = 0
     var interval = 0
@@ -25,7 +24,6 @@ class Lightning: NSObject, NSCoding {
     }
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(enable, forKey: "enable")
         aCoder.encode(startTime, forKey: "startTime")
         aCoder.encode(endTime, forKey: "endTime")
         aCoder.encode(interval, forKey: "interval")
@@ -35,7 +33,6 @@ class Lightning: NSObject, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
-        enable = aDecoder.decodeBool(forKey: "enable")
         startTime = aDecoder.decodeInteger(forKey: "startTime")
         endTime = aDecoder.decodeInteger(forKey: "endTime")
         interval = aDecoder.decodeInteger(forKey: "interval")

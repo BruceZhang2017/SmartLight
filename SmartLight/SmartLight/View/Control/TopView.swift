@@ -29,6 +29,7 @@ class TopView: UIView {
     }
     weak var delegate: TopViewDelegate?
     var canTouch = true
+    var totalHeight: CGFloat = 0
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -79,6 +80,7 @@ class TopView: UIView {
         let topHeight = AppDelegate.isSameToIphoneX() ? 88 : 64
         let bottomHeight = AppDelegate.isSameToIphoneX() ? 83 : 49
         let height = (Dimension.screenHeight - CGFloat(topHeight + bottomHeight + 1)) / 2
+        totalHeight = height
         drawHeight = height - CGFloat(51 + 40 + 44)
         drawView = UIView()
         addSubview(drawView)
@@ -315,6 +317,9 @@ class TopView: UIView {
         }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
+        if point.y >= totalHeight - 88 && point.y <= totalHeight {
+            return
+        }
         //print("start: \(point.x) \(point.y)")
         let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         let time = leftToTimeInt(value: tem)
@@ -322,6 +327,9 @@ class TopView: UIView {
             return
         }
         if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        if point.x >= Dimension.screenWidth - 20 {
             return
         }
         left = tem
@@ -334,6 +342,9 @@ class TopView: UIView {
         }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
+        if point.y >= totalHeight - 88 && point.y <= totalHeight {
+            return
+        }
         //print("move: \(point.x) \(point.y)")
         let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         let time = leftToTimeInt(value: tem)
@@ -341,6 +352,9 @@ class TopView: UIView {
             return
         }
         if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        if point.x >= Dimension.screenWidth - 20 {
             return
         }
         left = tem
@@ -353,6 +367,9 @@ class TopView: UIView {
         }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
+        if point.y >= totalHeight - 88 && point.y <= totalHeight {
+            return
+        }
         //print("cancel: \(point.x) \(point.y)")
         let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         let time = leftToTimeInt(value: tem)
@@ -360,6 +377,9 @@ class TopView: UIView {
             return
         }
         if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        if point.x >= Dimension.screenWidth - 20 {
             return
         }
         left = tem
@@ -372,6 +392,9 @@ class TopView: UIView {
         }
         let touch = (touches as NSSet).anyObject() as AnyObject
         let point = touch.location(in:self)
+        if point.y >= totalHeight - 88 && point.y <= totalHeight {
+            return
+        }
         //print("end: \(point.x) \(point.y)")
         let tem = min(Dimension.screenWidth - 20, max(0, point.x - 20))
         let time = leftToTimeInt(value: tem)
@@ -379,6 +402,9 @@ class TopView: UIView {
             return
         }
         if (delegate?.readAfterValue() ?? 0) > 0 && (delegate?.readAfterValue() ?? 0) <= time {
+            return
+        }
+        if point.x >= Dimension.screenWidth - 20 {
             return
         }
         left = tem

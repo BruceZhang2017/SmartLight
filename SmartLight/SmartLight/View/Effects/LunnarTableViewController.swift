@@ -30,7 +30,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
     }
     
     private func handleLunnar() {
-        TCPSocketManager.sharedInstance.lightEffect(type: 0, result: lunnar.enable ? 2 : 1, device: deviceModel)
+        TCPSocketManager.sharedInstance.lightEffect(type: 0, result: (deviceModel.deviceState & 0b01000000) > 0 ? 2 : 1, device: deviceModel)
     }
     
     // 10秒内预览 1s 一次
@@ -48,6 +48,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
             preTimer?.invalidate()
             preTimer = nil
             hideHUD()
+            currentIndex = 0
             handleLunnar() // 发送真实的SCHEDULE
             return
         }
@@ -86,7 +87,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
             if indexPath.row == 0 {
                 cell.mSwitch.isHidden = false
                 cell.desLabel.isHidden = true
-                cell.mSwitch.isOn = lunnar.enable
+                cell.mSwitch.isOn = (deviceModel.deviceState & 0b01000000) > 0
             } else {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
@@ -180,13 +181,12 @@ extension LunnarTableViewController: EffectsSettingTableViewCellDelegate {
             tableView.reloadData()
             return
         }
-        lunnar.enable = value
         tableView.reloadData()
         deviceModel.lunnar = lunnar
         let state = deviceModel.deviceState
         let low = state & 0x0f
         let high = (state >> 4) & 0x0f
-        deviceModel.deviceState = (((value ? 0x04 : 0x00) + high & 0b0011) << 4) + low
+        deviceModel.deviceState = (((value ? 0x04 : 0x00) + high & 0b1011) << 4) + low
         DeviceManager.sharedInstance.save()
         if value {
             PreviousFunction(count: 50) // 先预览200ms一次

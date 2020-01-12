@@ -101,12 +101,12 @@ class CloudyTableViewController: EffectsSettingTableViewController {
                 cell.desLabel.isHidden = false
             }
             if indexPath.row == 0 {
-                cell.titleLabel.text = "Enable"
+                cell.titleLabel.text = "txt_enable".localized()
             } else if indexPath.row == 1 {
-                cell.titleLabel.text = "Start Date"
+                cell.titleLabel.text = "txt_starttime".localized()
                 cell.desLabel.text = cloudy.startTime.timeIntToStr()
             } else if indexPath.row == 2 {
-                cell.titleLabel.text = "End Date"
+                cell.titleLabel.text = "txt_endtime".localized()
                 cell.desLabel.text = cloudy.endTime.timeIntToStr()
             }
             return cell
@@ -130,10 +130,10 @@ class CloudyTableViewController: EffectsSettingTableViewController {
             headView.titleLabel.text = " "
             headView.contentLabel.text = ""
         } else if section == 1 {
-            headView.titleLabel.text = "Intensity".uppercased()
+            headView.titleLabel.text = "txt_intensity".localized().uppercased()
             headView.contentLabel.text = "\(cloudy.intensity)%"
         }else {
-            headView.titleLabel.text = "Speed".uppercased()
+            headView.titleLabel.text = "txt_speed".localized().uppercased()
             headView.contentLabel.text = "\(cloudy.speed)%"
         }
         return headView

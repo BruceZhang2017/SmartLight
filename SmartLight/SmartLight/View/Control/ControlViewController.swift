@@ -59,6 +59,7 @@ class ControlViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        title = "txt_control".localized()
         self.navigationController?.navigationBar.barTintColor = Color.main
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
@@ -124,7 +125,8 @@ class ControlViewController: BaseViewController {
     }
     
     override func setText() {
-        
+        segmentedControl.setTitle("txt_auto".localized(), forSegmentAt: 0)
+        segmentedControl.setTitle("txt_manual".localized(), forSegmentAt: 1)
     }
     
     private func startDetectionTimer() {
@@ -210,7 +212,7 @@ class ControlViewController: BaseViewController {
                 return
             }
             barValueView.do {
-                $0.titleLabel.text = i == 0 ? "txt_light_all".localized() : Arrays.barTitles[i - 1]
+                $0.titleLabel.text = i == 0 ? "txt_light_all".localized() : (deviceModel.deviceType == 3 ? Arrays.barTitleBs[i - 1] : Arrays.barTitles[i - 1])
                 $0.valueLabel.text = "0%"
                 $0.currentValueImageView.backgroundColor = colors[i]
                 $0.settingValueImageView.backgroundColor = colors[i]
@@ -354,6 +356,7 @@ class ControlViewController: BaseViewController {
     }
     
     @objc private func pushToQRCode() {
+        title = "back".localized()
         var style = LBXScanViewStyle()
         style.centerUpOffset = 44
         style.photoframeAngleStyle = LBXScanViewPhotoframeAngleStyle.Inner

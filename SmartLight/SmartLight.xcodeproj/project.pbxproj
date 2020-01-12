@@ -96,6 +96,7 @@
 		9A8900AA23200490009AF915 /* LangaugeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900A923200490009AF915 /* LangaugeTableViewController.swift */; };
 		9A8900AC23215556009AF915 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900AB23215555009AF915 /* DeviceManager.swift */; };
 		9A8900B923239973009AF915 /* TCPSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8900B823239973009AF915 /* TCPSocketManager.swift */; };
+		9A9F961623CA325C00088956 /* TableViewFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A9F961523CA325C00088956 /* TableViewFooterView.swift */; };
 		9AA1AC3022FA9BB60000F6D2 /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */; };
 		9AA1AC3222FA9BE00000F6D2 /* Public.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */; };
 		9AA1AC3522FC492B0000F6D2 /* EffectsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */; };
@@ -247,6 +248,7 @@
 		9A8900A923200490009AF915 /* LangaugeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LangaugeTableViewController.swift; sourceTree = "<group>"; };
 		9A8900AB23215555009AF915 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
 		9A8900B823239973009AF915 /* TCPSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPSocketManager.swift; sourceTree = "<group>"; };
+		9A9F961523CA325C00088956 /* TableViewFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewFooterView.swift; sourceTree = "<group>"; };
 		9AA1AC2F22FA9BB60000F6D2 /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		9AA1AC3122FA9BE00000F6D2 /* Public.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Public.storyboard; sourceTree = "<group>"; };
 		9AA1AC3422FC492B0000F6D2 /* EffectsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsTableViewController.swift; sourceTree = "<group>"; };
@@ -607,6 +609,7 @@
 				9A5B7EFC2307EFA70099E3A9 /* CloudyTableViewController.swift */,
 				9A083AE0237C5C6D0018D54D /* FanTableViewController.swift */,
 				9A083AE4237C5DE70018D54D /* TableViewHeaderView.swift */,
+				9A9F961523CA325C00088956 /* TableViewFooterView.swift */,
 				9AA1AC3C22FC64C80000F6D2 /* EffectsSettingTableViewCell.swift */,
 				9AA1AC3D22FC64C80000F6D2 /* EffectsSettingTableViewCell.xib */,
 				9AA1AC4022FC67160000F6D2 /* EffectsSettingBTableViewCell.swift */,
@@ -871,6 +874,7 @@
 				9A10200523005F58000F36D7 /* WIFIListViewController.swift in Sources */,
 				9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */,
 				9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */,
+				9A9F961623CA325C00088956 /* TableViewFooterView.swift in Sources */,
 				9A1020222303D26C000F36D7 /* LBXScanNetAnimation.swift in Sources */,
 				9A211CF92325317600C36FC2 /* ESPDataCode.m in Sources */,
 				9A3E1E8A22F8590500A24DB1 /* BaseViewController.swift in Sources */,
@@ -1136,7 +1140,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1162,7 +1166,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

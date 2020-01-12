@@ -17,11 +17,13 @@ class SearchDeviceViewController: BaseViewController {
     
     var results: [ESPTouchResult] = []
     var wifiList: [String : String] = [:]
+    @IBOutlet weak var topLabel: UILabel!
     var controller: ESPController!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        topLabel.text = "txt_deviceslist_top".localized()
         //results = [ESPTouchResult(isSuc: true, andBssid: "000000000000", andInetAddrData: Data(repeating: 0x00, count: 3))]
     }
     

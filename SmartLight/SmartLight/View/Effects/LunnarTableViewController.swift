@@ -93,12 +93,12 @@ class LunnarTableViewController: EffectsSettingTableViewController {
                 cell.desLabel.isHidden = false
             }
             if indexPath.row == 0 {
-                cell.titleLabel.text = "Enable"
+                cell.titleLabel.text = "txt_enable".localized()
             } else if indexPath.row == 1 {
-                cell.titleLabel.text = "Start Date"
+                cell.titleLabel.text = "txt_starttime".localized()
                 cell.desLabel.text = lunnar.startTime.timeIntToStr()
             } else if indexPath.row == 2 {
-                cell.titleLabel.text = "End Date"
+                cell.titleLabel.text = "txt_endtime".localized()
                 cell.desLabel.text = lunnar.endTime.timeIntToStr()
             }
             cell.selectionStyle = .none
@@ -116,7 +116,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
             headView.titleLabel.text = " "
             headView.contentLabel.text = ""
         } else {
-            headView.titleLabel.text = "Intensity".uppercased()
+            headView.titleLabel.text = "txt_intensity".localized().uppercased()
             headView.contentLabel.text = "\(lunnar.intensity)%"
         }
         return headView

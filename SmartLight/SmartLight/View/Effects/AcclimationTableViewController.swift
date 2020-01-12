@@ -116,16 +116,16 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
                 cell.desLabel.isHidden = false
             }
             if indexPath.row == 0 {
-                cell.titleLabel.text = "Enable"
+                cell.titleLabel.text = "txt_enable".localized()
             } else if indexPath.row == 1 {
-                cell.titleLabel.text = "Start Date"
+                cell.titleLabel.text = "txt_starttime".localized()
                 cell.desLabel.text = acclimation.startTime.timeIntToStr()
             } else if indexPath.row == 2 {
-                cell.titleLabel.text = "End Date"
+                cell.titleLabel.text = "txt_endtime".localized()
                 cell.desLabel.text = acclimation.endTime.timeIntToStr()
             } else {
-                cell.titleLabel.text = "Ramp"
-                cell.desLabel.text =  "\(acclimation.ramp) hour"
+                cell.titleLabel.text = "txt_ramp".localized()
+                cell.desLabel.text =  "\(acclimation.ramp) " + "txt_hour".localized()
             }
             cell.selectionStyle = .none
             return cell
@@ -135,7 +135,7 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
         if indexPath.row < count {
             cell.leftLabel.text =  deviceModel.deviceType == 3 ? Arrays.barTitleBs[indexPath.row] : Arrays.barTitles[indexPath.row]
         } else {
-            cell.leftLabel.text = "All"
+            cell.leftLabel.text = "txt_light_all".localized()
         }
         cell.mSlider.thumbTintColor = colors[indexPath.row]
         cell.mSlider.minimumTrackTintColor = colors[indexPath.row]
@@ -158,9 +158,9 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
         let headView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "HEAD") as! TableViewHeadView
         headView.contentLabel.text = ""
         if section == 0 {
-            headView.titleLabel.text = "Quickly Setup".uppercased()
+            headView.titleLabel.text = "txt_quicksetup".localized().uppercased()
         } else if section == 1 {
-            headView.titleLabel.text = "Ramp Intensity".uppercased()
+            headView.titleLabel.text = "txt_ramp_intensity".localized().uppercased()
         }
         return headView
     }
@@ -255,7 +255,7 @@ extension AcclimationTableViewController: EffectsSettingTableViewCellDelegate {
             return
         }
         let high = (deviceModel.deviceState >> 4) & 0x0f
-        deviceModel.deviceState = (high << 4) + (value ? 1 : 0)
+        deviceModel.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + (value ? 1 : 0)
         tableView.reloadData()
         deviceModel.acclimation = acclimation
         DeviceManager.sharedInstance.save()

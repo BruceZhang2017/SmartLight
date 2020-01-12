@@ -22,6 +22,7 @@ class DashboardViewController: BaseViewController {
     @IBOutlet weak var addDeviceLabel: UILabel!
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var deviceNameLabel: UILabel!
+    @IBOutlet weak var devicesLabel: UILabel!
     @IBOutlet weak var timeLabelTopLConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomLConstraint: NSLayoutConstraint!
     var clockTimer: Timer!
@@ -53,6 +54,7 @@ class DashboardViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        title = "txt_dashboard".localized()
         self.navigationController?.navigationBar.barTintColor = Color.main
         let model = DeviceManager.sharedInstance.deviceListModel
         let current = DeviceManager.sharedInstance.currentIndex
@@ -122,6 +124,7 @@ class DashboardViewController: BaseViewController {
     override func setText() {
         welcomeLabel.text = "txt_welcome".localized()
         addDeviceLabel.text = "txt_adddevice".localized()
+        devicesLabel.text = "txt_devices".localized()
     }
     
     /// 监听一下当前网络情况
@@ -187,6 +190,7 @@ class DashboardViewController: BaseViewController {
     }
     
     @objc private func pushToQRCode() {
+        title = "back".localized()
         var style = LBXScanViewStyle()
         style.centerUpOffset = 44
         style.photoframeAngleStyle = LBXScanViewPhotoframeAngleStyle.Inner

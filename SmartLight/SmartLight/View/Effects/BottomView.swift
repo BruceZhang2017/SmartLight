@@ -35,11 +35,17 @@ class BottomView: UIView {
     }
 
     private func initLabelValueViews() {
-        let labels = ["12AM", "4AM", "8AM", "12PM", "4PM", "8PM", "12AM"]
+        let labels = ["12" + "am".localized(),
+                      "4" + "am".localized(),
+                      "8" + "am".localized(),
+                      "12" + "pm".localized(),
+                      "4" + "pm".localized(),
+                      "8" + "pm".localized(),
+                      "12" + "am".localized()]
         for i in 0..<labels.count {
             let label = UILabel().then {
                 $0.textColor = UIColor.darkGray
-                $0.font = UIFont.systemFont(ofSize: 10)
+                $0.font = UIFont.systemFont(ofSize: 9)
                 $0.text = labels[i]
             }
             let w = CGFloat(30 * labels.count)
@@ -130,8 +136,8 @@ class BottomView: UIView {
             $0.width.equalTo(CGFloat(accl.ramp) / CGFloat(24) * (Dimension.screenWidth - 40))
         }
         if accl.ramp > 0 {
-            rampALabel.text = "ramp\(accl.ramp)"
-            rampBLabel.text = "ramp\(accl.ramp)"
+            rampALabel.text = "txt_ramp".localized() + "\(accl.ramp)"
+            rampBLabel.text = "txt_ramp".localized() + "\(accl.ramp)"
         } else {
             rampALabel.text = ""
             rampBLabel.text = ""

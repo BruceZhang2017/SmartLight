@@ -41,11 +41,17 @@ class TopView: UIView {
     }
 
     private func initLabelValueViews() {
-        let labels = ["12AM", "4AM", "8AM", "12PM", "4PM", "8PM", "12AM"]
+        let labels = ["12" + "am".localized(),
+                      "4" + "am".localized(),
+                      "8" + "am".localized(),
+                      "12" + "pm".localized(),
+                      "4" + "pm".localized(),
+                      "8" + "pm".localized(),
+                      "12" + "am".localized()]
         for i in 0..<labels.count {
             let label = UILabel().then {
                 $0.textColor = UIColor.darkGray
-                $0.font = UIFont.systemFont(ofSize: 10)
+                $0.font = UIFont.systemFont(ofSize: 9)
                 $0.text = labels[i]
             }
             let w = CGFloat(30 * labels.count)
@@ -220,8 +226,8 @@ class TopView: UIView {
         moveTimeLabel = UILabel().then {
             $0.textAlignment = .center
             $0.textColor = UIColor.white
-            $0.font = UIFont.systemFont(ofSize: 8)
-            $0.text = "12:00 AM"
+            $0.font = UIFont.systemFont(ofSize: 7)
+            $0.text = "12:00 " + "am".localized()
         }
         floatView.addSubview(moveTimeLabel)
         moveTimeLabel.snp.makeConstraints {
@@ -416,12 +422,12 @@ class TopView: UIView {
         var h = time / 60
         let m = time % 60
         if h >= 12 {
-            return String(format: "%02d", h) + ":" + String(format: "%02d", m) + " PM"
+            return String(format: "%02d", h) + ":" + String(format: "%02d", m) + " " + "pm".localized()
         } else {
             if h == 0 {
                 h = 12
             }
-            return String(format: "%02d", h) + ":" + String(format: "%02d", m) + " AM"
+            return String(format: "%02d", h) + ":" + String(format: "%02d", m) + " " + "am".localized()
         }
     }
     

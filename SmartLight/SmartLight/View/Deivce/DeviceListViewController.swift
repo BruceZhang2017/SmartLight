@@ -14,7 +14,9 @@ import UIKit
 
 class DeviceListViewController: BaseViewController {
 
+    @IBOutlet weak var addDeviceLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var addGroupButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var editOrMoveToButton: UIButton!
     private var model : DeviceListModel!
@@ -26,6 +28,11 @@ class DeviceListViewController: BaseViewController {
         super.viewDidLoad()
         setLeftNavigationItem()
         model = DeviceManager.sharedInstance.deviceListModel
+        addDeviceLabel.text = "txt_adddevice".localized()
+        addGroupButton.setTitle("txt_addgroup".localized(), for: .normal)
+        editOrMoveToButton.setTitle("txt_edit".localized(), for: .normal)
+        deleteButton.setTitle("txt_delete".localized(), for: .normal)
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -166,7 +173,7 @@ class DeviceListViewController: BaseViewController {
                 return
             }
             let sheet = UIAlertController(title: nil, message: "txt_group_moveto_int".localized(), preferredStyle: .actionSheet)
-            sheet.addAction(UIAlertAction(title: "Non-Group", style: .default, handler: {
+            sheet.addAction(UIAlertAction(title: "no group".localized(), style: .default, handler: {
                 [weak self] (action) in
                 if self!.selectedIndex - 1 < 0 {
                     return

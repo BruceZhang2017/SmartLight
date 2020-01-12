@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="arP-Tm-jBG">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="arP-Tm-jBG">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,21 +18,21 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" tag="1" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" textLabel="qXS-Vf-BjX" detailTextLabel="INR-zw-HzI" style="IBUITableViewCellStyleValue1" id="XpE-gv-sRZ">
-                                <rect key="frame" x="0.0" y="55.5" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="XpE-gv-sRZ" id="xb8-RM-7sT">
-                                    <rect key="frame" x="0.0" y="0.0" width="376" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="383" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Date&amp;Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qXS-Vf-BjX">
-                                            <rect key="frame" x="20" y="12" width="84.5" height="20.5"/>
+                                            <rect key="frame" x="20" y="12" width="85" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="INR-zw-HzI">
-                                            <rect key="frame" x="371.5" y="12" width="4.5" height="20.5"/>
+                                            <rect key="frame" x="370.5" y="12" width="4.5" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -63,7 +61,7 @@
             <objects>
                 <viewController storyboardIdentifier="OTAViewController" hidesBottomBarWhenPushed="YES" useStoryboardIdentifierAsRestorationIdentifier="YES" id="m3f-qs-ouV" customClass="OTAViewController" customModule="SmartLight" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="onS-Eg-wIx">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Put Firmware link as bellow:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ybq-fq-jQP">
@@ -77,7 +75,6 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="2LY-n9-u3C"/>
                                 </constraints>
-                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -207,12 +204,16 @@
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="attentionLabel" destination="79C-sl-y4D" id="BRf-ys-dIs"/>
+                        <outlet property="attentionLabel" destination="79C-sl-y4D" id="9GT-O8-Dps"/>
                         <outlet property="downloadButton" destination="EhF-no-cFB" id="d3b-f5-74n"/>
                         <outlet property="fwLabel" destination="cTH-oX-CuH" id="3UZ-SM-UAn"/>
                         <outlet property="noteLabel" destination="hoT-Cd-Rqg" id="Izk-vh-dff"/>
                         <outlet property="rightLConstraint" destination="w5J-Mn-9Uq" id="CP9-hd-cYH"/>
                         <outlet property="textField" destination="itC-5l-o5v" id="ogy-mW-bHT"/>
+                        <outlet property="titleLabel" destination="Ybq-fq-jQP" id="M3x-a9-0do"/>
+                        <outlet property="upgradeFirmwareALabel" destination="FjM-DB-NfG" id="bK8-dW-ad8"/>
+                        <outlet property="upgradeFirmwareBLabel" destination="G6m-U4-wGc" id="5b9-UE-dNb"/>
+                        <outlet property="upgradeNowButton" destination="0Dm-iA-LUX" id="DbU-7B-qGr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q1O-Mk-DQy" userLabel="First Responder" sceneMemberID="firstResponder"/>

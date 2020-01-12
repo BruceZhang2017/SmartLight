@@ -1,89 +1,87 @@
-/* 
-  Localizable.strings
-  SmartLight
-
-  Created by ANKER on 2019/11/11.
-  Copyright © 2019 PDP-ACC. All rights reserved.
+/*
+ Localizable.strings
+ SmartLight
+ Created by ANKER on 2019/11/11.
+ Copyright © 2019 PDP-ACC. All rights reserved.
 */
-
 "app_name"="MicMol";
 "txt_empty"="Empty";
-    
+ 
 "txt_confirm"="好的";
 "txt_cancel"="取消";
 "txt_save"="保存";
 "txt_skip"="跳过";
 "txt_done"="完成";
 "txt_ok"="好的";
-    
+ 
 "txt_quicksetup"="快速设置";
-"txt_enterpassword"="输入密码";
+"txt_enterpassword"="输⼊密码";
 "txt_updatepassword"="更新密码";
-    
+ 
 "txt_dashboard"="仪表板";
 "txt_control"="控制";
 "txt_effects"="光效";
 "txt_settings"="设置";
-    
+ 
 "txt_preset"="预设程序";
 "txt_edit"="编辑";
 "txt_savefavor"="保存当前预设";
 "txt_delete"="删除";
-            
+ 
 "txt_disconnect"="离线";
-    
-"txt_qrcode_save"="将二维码导出到相册";
-    
-"txt_schedule"="日程";
+ 
+"txt_qrcode_save"="将⼆维码导出到相册";
+ 
+"txt_schedule"="⽇程";
 "txt_allon"="全开";
 "txt_alloff"="全关";
 "txt_aclm"="驯化";
-            
+ 
 "txt_scan"="扫描";
-"txt_autoscan"="将二维码放入框内";
-    
-"txt_enable"="启用";
+"txt_autoscan"="将⼆维码放⼊框内";
+ 
+"txt_enable"="启⽤";
 "txt_acclimation"="驯化";
-"txt_lunnar"="新月";
+"txt_lunnar"="新⽉";
 "txt_lighting"="闪电";
 "txt_cloudy"="多云";
-            
-"txt_welcome"="欢迎使用 ✪MicMol 智能控制系统!";
+ 
+"txt_welcome"="欢迎使⽤ ✪MicMol 智能控制系统!";
 "txt_devices"="设备";
 "txt_adddevice"="添加设备";
 "txt_connected"="已连接";
-        
-"txt_datetime"="日期&时间";
+ 
+"txt_datetime"="⽇期&时间";
 "txt_networks"="更新WiFi密码";
-"txt_languages"="多语言";
+"txt_languages"="多语⾔";
 "txt_help"="帮助";
-    
+ 
 "txt_deviceinfo"="设备信息";
 "txt_firewareversion"="固件版本";
 "txt_firewareupgrade"="固件升级";
-    
-"txt_languages_list"="多语言";
+ 
+"txt_languages_list"="多语⾔";
 "txt_english"="English";
-"txt_simplified_chinese"="简体中文";
-"txt_traditional_chinese"="簡體中文";
+"txt_simplified_chinese"="简体中⽂";
+"txt_traditional_chinese"="簡體中⽂";
 "txt_spain"="Español";
 "txt_german"="Deutsch";
 "txt_french"="Français";
 "txt_italy"="Italiano";
-"txt_netherlands"="Nederlands";
+"txt_netherlands"="Netherlands";
 "txt_portugal"="Português";
 "txt_sweden"="Svenska";
 "txt_bahasa_malaysia"="Bahasa Melayu";
-"txt_japan"="日本語";
+"txt_japan"="⽇本語";
 "txt_korea"="한국어";
-"txt_arab"="العربية";
-    
+"txt_arab"=" ةيبرعلا ";
+ 
 "txt_starttime"="开始时间";
 "txt_endtime"="结束时间";
-    
-"txt_deviceslist_top"="设备将在可用时显示";
+ 
+"txt_deviceslist_top"="设备将在可⽤时显示";
 "txt_wifilist_top"="连接到家庭WiFi以控制多个设备";
-        
+ 
 "txt_light_all"="ALL";
 "txt_light_uv"="CH1";
 "txt_light_db"="CH2";
@@ -92,16 +90,16 @@
 "txt_light_dr"="CH5";
 "txt_light_cw"="CH6";
 "txt_light_percent"="50%";
-    
+ 
 "txt_ramp"="斜坡";
 "txt_ramp_intensity"="斜坡光照强度";
 "txt_intensity"="光照强度";
 "txt_lighting_frequency"="次数";
 "txt_speed"="光照速度";
-        
-"txt_hour"="小时";
+ 
+"txt_hour"="⼩时";
 "txt_minute"="分钟";
-    
+ 
 "menu_item_about"="About App";
 "about_app_version"="App Version: %s";
 "about_esptouch_version"="EspTouch Version: %s";
@@ -121,64 +119,55 @@
 "configure_result_failed_port"="Create Esptouch task failed, the EspTouch port could be used by other thread";
 "configure_result_success"="EspTouch 完成";
 "configure_result_success_item"="BSSID = %1$s, InetAddress = %2$s";
-    
+ 
  "txt_rename"="重命名";
  "txt_sps"="硬体珊瑚 (SPS)";
  "txt_lps"="软体珊瑚 (LPS)";
- "txt_fot"="纯鱼缸 (FOT)";
- "txt_planted"="水草缸";
- "txt_reeftank"="海水混合缸";
- "txt_livingroom"="客厅鱼缸";
-
+ "txt_fot"="纯⻥缸 (FOT)";
+ "txt_planted"="⽔草缸";
+ "txt_reeftank"="海⽔混合缸";
+ "txt_livingroom"="客厅⻥缸";
  "txt_firmware_ver"="iMO 1.0";
- "txt_firmware_hint"="Put Firmware link as below;";
- "txt_firmware_note"="Note: Put the firmware link into the blank, which will download it automatically. Please make sure your phone is connected the network.";
- "txt_firmware_attention"="Attention: Please make sure the device is connected to your phone, the firmware will install automatically. Please DO NOT power off of your device while upgrading, or it can damage your device.";
- "txt_firmware_upgrade_now"="Upgrade Now";
- "txt_firmware_upgrade_progress"="Completed";
+ "txt_firmware_hint"="将固件链接放入下框内;";
+ "txt_firmware_note"="注意：将固件链接放入空白处，点击确认后会自动下载。 请确保您的手机已连接网络。";
+ "txt_firmware_attention"="注意：请确保设备已连接在手机上，固件将自动安装，请不要在升级时关闭设备电源，否则会破坏设备。";
+ "txt_firmware_upgrade_now"="现在升级";
+ "txt_firmware_upgrade_progress"="完成更新";
  "txt_filename"="V2.0 DPK";
-
- "txt_auto"="自动模式";
- "txt_manual"="手动模式";
-
+ "txt_auto"="⾃动模式";
+ "txt_manual"="⼿动模式";
  "txt_download_success"="下载成功!";
-
  "txt_times"="时间";
-
  "txt_url"="http://www.micmol.com/fw/fw.dpk";
-
  "txt_preset_overwrite"="覆盖当前设置";
- "txt_preset_overwrite_hint"="选择后会使用该预设覆盖您当前的设置，继续？";
-
+ "txt_preset_overwrite_hint"="选择后会使⽤该预设覆盖您当前的设置，继续？";
  "txt_addgroup"="添加组";
  "txt_newgroup"="新组名";
  "txt_movetogroup"="移动到";
- "txt_group_moveto_int"="注意：移动到任何组，将重写所有设置与此组相同。如果从任何组移出至无组类，则当前设置不会更改。";
-
+ "txt_group_moveto_int"="注意：移动到任何组，将重写所有设置与此组相同。如果从任何组移出⾄⽆组类，则当前设置不会更改。";
  "txt_deletedevice"="删除设备";
  "txt_deletedevice_hint"="删除此设备将断开连接，如果你想再次控制它，你需要重新连接它。 继续？";
-
-
 "txt_time_invalid"="结束时间必须晚于开始时间";
-"txt_ramp_invalid"="斜坡时间无效";
+"txt_ramp_invalid"="斜坡时间⽆效";
 "txt_preview_done"="预览结束";
 "txt_preview_ongoing"="预览中...";
-
 "txt_lighting_interval"="间隔天数";
-
 "txt_day"="天";
 "txt_time"="次";
-"txt_fan"="风扇";
-
-"txt_water_temp"="水体温度";
+"txt_fan"="制冷⻛扇";
+"txt_water_temp"="⽔体温度";
 "txt_water_temp1"="25C";
 "txt_water_temp2"="77F";
-
-"txt_fan_speed"="风扇速度";
-
+"txt_fan_speed"="⻛扇速度";
 "txt_sysinfo"="系统信息";
-
 "light_effect_settings" = "光效设置";
-"other_settings" = "其他设置";
-
+"other_settings" = "其他设备";
 "album" = "相册";
+"txt_fan_attention" = "注意事项：\n\n1. 自动模式: 冷却风扇将按以下设置运行；\n  水温小于23C - 风扇速度0％\n  水温大于24C - 风扇速度25％\n  水温大于26C - 风扇速度50％\n  水温大于28C - 风扇速度75％\n  水温大于30C - 风扇速度100％\n\n2. 请确保温度传感器在水下，否则冷却风扇将无法工作。";
+
+"am" = "上午";
+"pm" = "下午";
+"no group" = "无组类";
+"back" = "返回";
+"tip" = "提示";
+"delete_mode" = "确定删除该模式?";

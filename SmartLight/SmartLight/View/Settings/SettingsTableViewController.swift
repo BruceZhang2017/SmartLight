@@ -18,6 +18,7 @@ class SettingsTableViewController: UITableViewController {
     
     var currentDate: Date!
     var scan: LBXScanViewController!
+    var titles: [[String]] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,8 +30,11 @@ class SettingsTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        title = "txt_settings".localized()
         self.navigationController?.navigationBar.barTintColor = Color.main
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        titles = Arrays.settingTitles
+        tableView.reloadData()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -76,6 +80,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @objc private func pushToQRCode() {
+        title = "back".localized()
         var style = LBXScanViewStyle()
         style.centerUpOffset = 44
         style.photoframeAngleStyle = LBXScanViewPhotoframeAngleStyle.Inner
@@ -132,16 +137,16 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - tableView Datasource & delegate
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return Arrays.settingHeadTitles.count
+        return titles.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Arrays.settingTitles[section].count
+        return titles[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
-        cell.textLabel?.text = Arrays.settingTitles[indexPath.section][indexPath.row]
+        cell.textLabel?.text = titles[indexPath.section][indexPath.row].localized()
         cell.accessoryType = indexPath.section == 0 || indexPath.row > 0 ? .disclosureIndicator : .none
         if indexPath.section == 0 {
             if indexPath.row == 0 {
@@ -193,7 +198,7 @@ class SettingsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return Arrays.settingHeadTitles[section]
+        return Arrays.settingHeadTitles[section].localized()
     }
 }
 

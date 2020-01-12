@@ -44,7 +44,7 @@ extension UIColor {
 
 extension UIViewController {
     
-    public func showHUD(_ text: String = "预览中...") {
+    public func showHUD(_ text: String = "txt_preview_ongoing".localized()) {
         if let _ = view.viewWithTag(8888) as? MBProgressHUD {
            return
         }
@@ -62,7 +62,7 @@ extension UIViewController {
 }
 
 extension UIView {
-    public func showHUD(_ text: String = "预览中...") {
+    public func showHUD(_ text: String = "txt_preview_ongoing".localized()) {
         if let _ = viewWithTag(8888) as? MBProgressHUD {
            return
         }

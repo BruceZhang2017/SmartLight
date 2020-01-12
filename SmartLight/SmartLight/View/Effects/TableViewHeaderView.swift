@@ -31,7 +31,7 @@ class TableViewHeaderView: UIView {
         titleLabel = UILabel().then {
             $0.textColor = UIColor.black
             $0.font = UIFont.systemFont(ofSize: 16)
-            $0.text = "Water Temperature"
+            $0.text = "txt_water_temp".localized()
         }
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints {

@@ -38,12 +38,12 @@ extension Int {
         let m = self % 60
         if Kit().getDeviceTimeSystemIs12() {
             if h > 12 {
-                return "\(String(format: "%02i", h - 12)):\(String(format: "%02i", m)) PM"
+                return "\(String(format: "%02i", h - 12)):\(String(format: "%02i", m)) " + "pm".localized()
             } else {
                 if h == 0 {
                     h = 12
                 }
-                return "\(String(format: "%02i", h)):\(String(format: "%02i", m)) AM"
+                return "\(String(format: "%02i", h)):\(String(format: "%02i", m)) " + "am".localized()
             }
         } else {
             return "\(String(format: "%02i", h)):\(String(format: "%02i", m))"

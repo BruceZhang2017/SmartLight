@@ -1,80 +1,89 @@
-/* 
-  Localizable.strings
-  SmartLight
-
-  Created by ANKER on 2019/11/11.
-  Copyright © 2019 PDP-ACC. All rights reserved.
+/*
+ Localizable.strings
+ SmartLight
+ Created by ANKER on 2019/11/11.
+ Copyright © 2019 PDP-ACC. All rights reserved.
 */
-
-"app_name"="Wifi Light";
-   
+"app_name"="WiFi Light";
+ 
 "txt_empty"="Empty";
-   
-"txt_confirm"="Ok";
+ 
+"txt_confirm"="OK";
 "txt_cancel"="Cancel";
 "txt_save"="Save";
 "txt_skip"="Skip";
 "txt_done"="Done";
 "txt_ok"="Okay";
-   
-"txt_quicksetup"="Quickly Setup";
-       
+ 
+"txt_quicksetup"="Quick Setup";
+ 
 "txt_enterpassword"="Enter Password";
 "txt_updatepassword"="Update Password";
-   
+ 
 "txt_dashboard"="Dashboard";
 "txt_control"="Control";
 "txt_effects"="Effects";
 "txt_settings"="Settings";
-   
+ 
 "txt_preset"="Preset";
 "txt_edit"="Edit";
 "txt_savefavor"="Save Current Settings";
 "txt_delete"="Delete";
-           
-"txt_disconnect"="offline";
-   
+ 
+"txt_disconnect"="Offline";
+ 
 "txt_qrcode_save"="Export QR code to Photos";
-   
+ 
 "txt_schedule"="Schedule";
 "txt_allon"="All ON";
 "txt_alloff" = "All OFF";
 "txt_aclm"="ACLM";
-           
+ 
 "txt_scan"="scaning";
 "txt_autoscan"="put in box";
-   
+ 
 "txt_enable"="Enable";
 "txt_acclimation"="Acclimation";
-"txt_lunnar"="Lunnar";
+"txt_lunnar"="Lunar";
 "txt_lighting"="Lighting";
 "txt_cloudy"="Cloudy";
-           
+ 
 "txt_welcome"="Welcome!";
 "txt_devices"="Devices";
 "txt_adddevice"="Add Device";
 "txt_connected"="Connected";
-       
+ 
 "txt_datetime"="Date&Time";
 "txt_networks"="Networks";
 "txt_languages"="Systems Language";
 "txt_help"="Help";
-   
+ 
 "txt_deviceinfo"="Device Information";
 "txt_firewareversion"="Firmware Version";
 "txt_firewareupgrade"="Upgrade Firmware";
-   
-"txt_languages_list"="Languages";
+ 
+"txt_languages_list"="多语⾔";
 "txt_english"="English";
-"txt_german"="German";
-"txt_spanish"="Spanish";
-   
+"txt_simplified_chinese"="简体中⽂";
+"txt_traditional_chinese"="簡體中⽂";
+"txt_spain"="Español";
+"txt_german"="Deutsch";
+"txt_french"="Français";
+"txt_italy"="Italiano";
+"txt_netherlands"="Netherlands";
+"txt_portugal"="Português";
+"txt_sweden"="Svenska";
+"txt_bahasa_malaysia"="Bahasa Melayu";
+"txt_japan"="⽇本語";
+"txt_korea"="한국어";
+"txt_arab"="ةيبرعلا";
+ 
 "txt_starttime"="Start Time";
 "txt_endtime"="End Time";
-   
+ 
 "txt_deviceslist_top"="Devices will appear as they become available.";
-"txt_wifilist_top"="Connect to your home wifi to control multiple devices.";
-       
+"txt_WiFilist_top"="Connect to your home WiFi to control multiple devices.";
+ 
 "txt_light_all"="ALL";
 "txt_light_uv"="CH1";
 "txt_light_db"="CH2";
@@ -83,16 +92,16 @@
 "txt_light_dr"="CH5";
 "txt_light_cw"="CH6";
 "txt_light_percent"="50%";
-   
+ 
 "txt_ramp"="Ramp";
 "txt_ramp_intensity"="Ramp Intensity";
 "txt_intensity"="Intensity";
 "txt_lighting_frequency"="Frequency";
 "txt_speed"="Speed";
-       
+ 
 "txt_hour"="Hour";
 "txt_minute"="Minute";
-   
+ 
 "menu_item_about"="About App";
 "about_app_version"="App Version: %s";
 "about_esptouch_version"="EspTouch Version: %s";
@@ -103,73 +112,77 @@
 "package_broadcast"="Broadcast";
 "package_multicast"="Multicast";
 "confirm"="Confirm";
-"wifi_5g_message"="Device don\'t support 5G Wifi, please make sure the currently connected Wifi is 2.4G";
+"WiFi_5g_message"="Device don\'t support 5G WiFi, please make sure the currently connected WiFi is 2.4G";
 "location_disable_message"="Location(GPS) is disable";
-"no_wifi_connection"="No Wifi connection";
+"no_WiFi_connection"="No WiFi connection";
 "configuring_message"="Esptouch is configuring, please wait for a moment…";
-"configure_wifi_change_message"="Wifi disconnected or changed";
+"configure_WiFi_change_message"="WiFi disconnected or changed";
 "configure_result_failed"="EspTouch failed";
 "configure_result_failed_port"="Create Esptouch task failed, the EspTouch port could be used by other thread";
 "configure_result_success"="EspTouch 完成";
 "configure_result_success_item"="BSSID = %1$s, InetAddress = %2$s";
-       
+ 
 "txt_rename"="Rename";
 "txt_sps"="SPS";
 "txt_lps"="LPS";
 "txt_fot"="FOT";
 "txt_planted"="Planted";
 "txt_reeftank"="Reef Tank";
-"txt_livingroom"="Living Room";
-   
+ 
 "txt_firmware_ver"="iMO 1.0";
 "txt_firmware_hint"="Put Firmware link as bellow:";
 "txt_firmware_note"="Note: Put the firmware link in to the blank which will download it automatic. Please make sure your phone is connected the network.";
-"txt_firmware_attention"="Attention:Please make sure the device is connected on your phone,the firmware will in stalling automatic,please DO NOT power off of your device under upgrading,or will destroy your device.";
+"txt_firmware_attention"="Attention: Please make sure the device is connected on your phone, the firmware will in stalling automatic, please DO NOT power off of your device under upgrading, or will destroy your device.";
 "txt_firmware_upgrade_now"="Upgrade Now";
 "txt_firmware_upgrade_progress"="Completed";
 "txt_filename"="V2.0 DPK";
-   
+ 
 "txt_auto"="Auto";
 "txt_manual"="Manual";
-   
+ 
 "txt_download_success"="Download Success";
-   
+ 
 "txt_times"="Time";
-   
+ 
 "txt_url"="http://www.micmol.com/fw/fw.dpk";
-   
+ 
 "txt_preset_overwrite"="Overwrite Current Settings";
 "txt_preset_overwrite_hint"="Selecting a preset will overwrite your current settings.Continue?";
-   
+ 
 "txt_addgroup"="Add Group";
 "txt_newgroup"="New Group Name";
 "txt_movetogroup"="Move To";
-"txt_group_moveto_int"="Attention:Move to any group, willrewirte all the settings as same as the group.If move to non-group from any group,the current settings will no change.";
-   
+"txt_group_moveto_int"="Attention: Move to any group, will rewirte all the settings as same as the group.If move to non-group from any group, the current settings will no change.";
+ 
 "txt_deletedevice"="Delete Device";
-"txt_deletedevice_hint"="Delete this device will be disconnect,if you want to control it again,you need reconnect it. Continue?";
-   
-"txt_time_invalid"="end time should late on start time";
-"txt_ramp_invalid"="ramp time invalid";
-"txt_preview_done"="preview done";
-"txt_preview_ongoing"="Preview Ongoing...";
-   
+"txt_deletedevice_hint"="Delete this device will be disconnect, if you want to control it again, you need reconnect it. Continue?";
+ 
+"txt_time_invalid"="The end time should late on start time";
+"txt_ramp_invalid"="Ramp time invalid";
+"txt_preview_done"="Preview done";
+"txt_preview_ongoing"="Preview ongoing...";
+ 
 "txt_lighting_interval"="Interval";
-   
+ 
 "txt_day"="Days";
 "txt_time"="Times";
-"txt_fan"="Fan";
-   
+"txt_fan"="Cooling Fan";
+ 
 "txt_water_temp"="Water Temperature";
 "txt_water_temp1"="25C";
 "txt_water_temp2"="77F";
-   
+ 
 "txt_fan_speed"="Fan Speed";
 "txt_sysinfo"="System Info";
-   
-"light_effect_settings" = "Light effect settings";
-"other_settings" = "Other settings";
-
+ 
+"light_effect_settings" = "Effect settings";
+"other_settings" = "Other Devices";
 "album" = "Album";
+"txt_fan_attention" = "Attentions:\n\n1. Auto mode: The cooling fan will run according to the following settings;\n  Water Temperature < 23C - Fan speed 0%\n  Water Temperature > 24C - Fan speed 25%\n  Water Temperature > 26C - Fan speed 50%\n  Water Temperature > 28C - Fan speed 75%\n  Water Temperature > 30C - Fan speed 100%\n\n2. Make sure the temperature sensor is underwater,otherwise the cooling fan will not work.";
 
-
+"am" = "AM";
+"pm" = "PM";
+"no group" = "Non-Group";
+"back" = "Back";
+"tip" = "Tip";
+"delete_mode" = "Delete this Pattern?";

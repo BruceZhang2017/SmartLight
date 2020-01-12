@@ -49,7 +49,7 @@ class PatternListModel: NSObject, NSCoding {
     static func preLoadData() -> [PatternModel] {
         var array : [PatternModel] = []
         let model = PatternModel()
-        model.name = "SPS"
+        model.name = "txt_sps".localized()
         var items: [PatternItemModel] = []
         let item = PatternItemModel()
         item.time = 480
@@ -79,7 +79,7 @@ class PatternListModel: NSObject, NSCoding {
         array.append(model)
         
         let model2 = PatternModel()
-        model2.name = "LPS"
+        model2.name = "txt_lps".localized()
         var items2: [PatternItemModel] = []
         let item2 = PatternItemModel()
         item2.time = 480
@@ -109,7 +109,7 @@ class PatternListModel: NSObject, NSCoding {
         array.append(model2)
         
         let model3 = PatternModel()
-        model3.name = "FOT"
+        model3.name = "txt_fot".localized()
         var items3: [PatternItemModel] = []
         let item3 = PatternItemModel()
         item3.time = 480
@@ -139,7 +139,7 @@ class PatternListModel: NSObject, NSCoding {
         array.append(model3)
         
         let model4 = PatternModel()
-        model4.name = "Reef Tank"
+        model4.name = "txt_reeftank".localized()
         var items4: [PatternItemModel] = []
         let item4 = PatternItemModel()
         item4.time = 480
@@ -169,7 +169,7 @@ class PatternListModel: NSObject, NSCoding {
         array.append(model4)
         
         let model5 = PatternModel()
-        model5.name = "Planted"
+        model5.name = "txt_planted".localized()
         var items5: [PatternItemModel] = []
         let item5 = PatternItemModel()
         item5.time = 480

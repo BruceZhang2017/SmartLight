@@ -94,19 +94,19 @@ class LightningTableViewController: EffectsSettingTableViewController {
                 cell.desLabel.isHidden = false
             }
             if indexPath.row == 0 {
-                cell.titleLabel.text = "Enable"
+                cell.titleLabel.text = "txt_enable".localized()
             } else if indexPath.row == 1 {
-                cell.titleLabel.text = "Start Date"
+                cell.titleLabel.text = "txt_starttime".localized()
                 cell.desLabel.text = ligtning.startTime.timeIntToStr()
             } else if indexPath.row == 2 {
-                cell.titleLabel.text = "End Date"
+                cell.titleLabel.text = "txt_endtime".localized()
                 cell.desLabel.text = ligtning.endTime.timeIntToStr()
             } else if indexPath.row == 3 {
-                cell.titleLabel.text = "Interval"
-                cell.desLabel.text = "\(ligtning.interval) 天"
+                cell.titleLabel.text = "txt_lighting_interval".localized()
+                cell.desLabel.text = "\(ligtning.interval) " + "txt_day".localized()
             } else {
-                cell.titleLabel.text = "Frequency"
-                cell.desLabel.text = "\(ligtning.frequency) 次"
+                cell.titleLabel.text = "txt_lighting_frequency".localized()
+                cell.desLabel.text = "\(ligtning.frequency) " + "txt_time".localized()
             }
             return cell
         }
@@ -122,7 +122,7 @@ class LightningTableViewController: EffectsSettingTableViewController {
             headView.titleLabel.text = " "
             headView.contentLabel.text = ""
         } else {
-            headView.titleLabel.text = "Intensity".uppercased()
+            headView.titleLabel.text = "txt_intensity".localized().uppercased()
             headView.contentLabel.text = "\(ligtning.intensity)%"
         }
         return headView

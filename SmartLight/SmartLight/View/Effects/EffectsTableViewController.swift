@@ -66,6 +66,7 @@ class EffectsTableViewController: UITableViewController {
     }
     
     @objc private func pushToQRCode() {
+        title = "back".localized()
         var style = LBXScanViewStyle()
         style.centerUpOffset = 44
         style.photoframeAngleStyle = LBXScanViewPhotoframeAngleStyle.Inner
@@ -96,14 +97,14 @@ class EffectsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
-        cell.textLabel?.text = titles[indexPath.section][indexPath.row]
+        cell.textLabel?.text = titles[indexPath.section][indexPath.row].localized()
         cell.accessoryType = .disclosureIndicator
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        title = titles[indexPath.section][indexPath.row]
+        title = titles[indexPath.section][indexPath.row].localized()
         if indexPath.section > 0 {
             let allimationVC = FanTableViewController(style: .grouped)
             allimationVC.hidesBottomBarWhenPushed = true

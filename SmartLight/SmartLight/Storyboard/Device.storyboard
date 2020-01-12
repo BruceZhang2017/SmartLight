@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -156,8 +156,10 @@
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
-                        <outlet property="deleteButton" destination="Lwp-ma-XXF" id="pmV-ln-pFE"/>
-                        <outlet property="editOrMoveToButton" destination="DrI-CM-vg1" id="2P8-px-J7d"/>
+                        <outlet property="addDeviceLabel" destination="zf6-Yg-MPr" id="kH5-nn-5ME"/>
+                        <outlet property="addGroupButton" destination="Rtg-jd-oIN" id="jaf-cW-2vC"/>
+                        <outlet property="deleteButton" destination="Lwp-ma-XXF" id="F86-tP-wZh"/>
+                        <outlet property="editOrMoveToButton" destination="DrI-CM-vg1" id="soK-Pk-OGE"/>
                         <outlet property="tableView" destination="Cld-Lg-Jld" id="ShU-JZ-Uiv"/>
                         <segue destination="bo8-ve-r6X" kind="show" id="yA8-n5-XIV"/>
                     </connections>
@@ -177,8 +179,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JJ0-Ph-ATD">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Devices will appear as they become available." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dgy-ch-Htc">
-                                        <rect key="frame" x="59.5" y="21.5" width="295" height="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dgy-ch-Htc">
+                                        <rect key="frame" x="207" y="30" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -199,7 +201,7 @@
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KVa-NM-qQh" id="DHn-Wj-N2D">
-                                            <rect key="frame" x="0.0" y="0.0" width="382.5" height="80"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="383" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" tag="1" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Aqua 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rMK-qT-04T">
@@ -241,6 +243,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="tableView" destination="9du-fa-wNu" id="gID-Sm-ML1"/>
+                        <outlet property="topLabel" destination="dgy-ch-Htc" id="2Tv-56-7HI"/>
                         <segue destination="8FD-9Q-Omg" kind="show" identifier="WIFIList" id="5ak-P1-XAV"/>
                     </connections>
                 </viewController>

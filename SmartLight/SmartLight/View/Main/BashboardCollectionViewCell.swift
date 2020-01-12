@@ -95,7 +95,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.setBackgroundImage(imagePresseds[i], for: .selected)
                 let value = deviceModel.deviceState
                 let high = (value >> 7) & 0x01
-                $0.setTitle(Arrays.btnTitles[i], for: .normal)
+                $0.setTitle(Arrays.btnTitles[i].localized(), for: .normal)
                 if i == 0 && high == 1 {
                     $0.setTitle("txt_alloff".localized(), for: .normal)
                     $0.setBackgroundImage(UIImage(named: "ON"), for: .normal)

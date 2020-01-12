@@ -16,9 +16,13 @@ import Alamofire
 
 class OTAViewController: BaseViewController {
 
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var upgradeFirmwareALabel: UILabel!
+    @IBOutlet weak var upgradeFirmwareBLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var fwLabel: UILabel!
     @IBOutlet weak var noteLabel: UILabel!
+    @IBOutlet weak var upgradeNowButton: UIButton!
     @IBOutlet weak var attentionLabel: UILabel!
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var rightLConstraint: NSLayoutConstraint!
@@ -30,6 +34,13 @@ class OTAViewController: BaseViewController {
         textField.backgroundColor = UIColor.white
         textField.layer.borderColor = Color.main.cgColor
         textField.layer.borderWidth = 0.5
+        
+        titleLabel.text = "txt_firmware_hint".localized()
+        upgradeFirmwareALabel.text = "txt_firewareupgrade".localized()
+        upgradeFirmwareBLabel.text = "txt_firewareupgrade".localized()
+        noteLabel.text = "txt_firmware_note".localized()
+        upgradeNowButton.setTitle("txt_firmware_upgrade_now".localized(), for: .normal)
+        attentionLabel.text = "txt_firmware_attention".localized()
     }
     
     override func viewWillAppear(_ animated: Bool) {

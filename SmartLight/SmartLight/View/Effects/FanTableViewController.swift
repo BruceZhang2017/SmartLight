@@ -21,6 +21,7 @@ class FanTableViewController: EffectsSettingTableViewController {
     var currentIndex = 0
     var totalIndex = 0
     var headerView: TableViewHeaderView!
+    var footerView: TableViewFooterView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,10 @@ class FanTableViewController: EffectsSettingTableViewController {
         tableView.register(TableViewHeadView.classForCoder(), forHeaderFooterViewReuseIdentifier: "HEAD")
         headerView = TableViewHeaderView(frame: CGRect(x: 0, y: 0, width: Dimension.screenWidth, height: 90))
         tableView.tableHeaderView = headerView
+        let attrString = NSAttributedString(string: "txt_fan_attention".localized(), attributes: [.font: UIFont.systemFont(ofSize: 10)])
+        let height = attrString.boundingRect(with: CGSize(width: Dimension.screenWidth - 30, height: 1000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil).size.height + 60
+        footerView = TableViewFooterView(frame: CGRect(x: 0, y: 0, width: Dimension.screenWidth, height: height))
+        tableView.tableFooterView = footerView
     }
     
     private func handleFan() {
@@ -67,14 +72,14 @@ class FanTableViewController: EffectsSettingTableViewController {
                 cell.desLabel.isHidden = false
             }
             if indexPath.row == 0 {
-                cell.titleLabel.text = "Auto"
+                cell.titleLabel.text = "txt_auto".localized()
             } else if indexPath.row == 1 {
-                cell.titleLabel.text = "Manual"
+                cell.titleLabel.text = "txt_manual".localized()
             } else if indexPath.row == 2 {
-                cell.titleLabel.text = "Start Date"
+                cell.titleLabel.text = "txt_starttime".localized()
                 cell.desLabel.text = fan.startTime.timeIntToStr()
             } else if indexPath.row == 3 {
-                cell.titleLabel.text = "End Date"
+                cell.titleLabel.text = "txt_endtime".localized()
                 cell.desLabel.text = fan.endTime.timeIntToStr()
             }
             cell.selectionStyle = .none
@@ -92,7 +97,7 @@ class FanTableViewController: EffectsSettingTableViewController {
             headView.titleLabel.text = ""
             headView.contentLabel.text = ""
         } else {
-            headView.titleLabel.text = "Fan Speed".uppercased()
+            headView.titleLabel.text = "txt_fan_speed".localized().uppercased()
             headView.contentLabel.text = "\(fan.intensity)%"
         }
         return headView

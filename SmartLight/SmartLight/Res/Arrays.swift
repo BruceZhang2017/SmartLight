@@ -17,24 +17,24 @@ class Arrays: NSObject {
     static let barTitleBs = ["CH1", "CH2", "CH3"]
     static let barTitles = ["UV", "DB", "B", "G", "DR", "CW"]
     static let btnTitles = [
-        "txt_allon".localized(),
-        "txt_aclm".localized(),
-        "txt_schedule".localized(),
-        "txt_lunnar".localized(),
-        "txt_lighting".localized(),
-        "txt_cloudy".localized()]
+        "txt_allon",
+        "txt_aclm",
+        "txt_schedule",
+        "txt_lunnar",
+        "txt_lighting",
+        "txt_cloudy"]
     static let settingTitles = [
-        ["txt_datetime".localized(),
-         "txt_networks".localized(),
-         "txt_languages".localized(),
-         "txt_help".localized()],
-        ["txt_firewareversion".localized(),
-         "txt_firewareupgrade".localized()]]
-    static let settingHeadTitles = ["txt_sysinfo".localized(), "txt_deviceinfo".localized()]
+        ["txt_datetime",
+         "txt_networks",
+         "txt_languages",
+         "txt_help"],
+        ["txt_firewareversion",
+         "txt_firewareupgrade"]]
+    static let settingHeadTitles = ["txt_sysinfo", "txt_deviceinfo"]
     static let effects = [
-        ["txt_acclimation".localized(),
-        "txt_lunnar".localized(),
-        "txt_lighting".localized(),
-        "txt_cloudy".localized()],
-        ["txt_fan".localized()]]
+        ["txt_acclimation",
+        "txt_lunnar",
+        "txt_lighting",
+        "txt_cloudy"],
+        ["txt_fan"]]
 }

@@ -25,7 +25,7 @@ class PresetViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        deleteButton.setTitle("txt_delete".localized(), for: .normal)
     }
     
     private func setNavigationRight() {
@@ -64,7 +64,7 @@ class PresetViewController: BaseViewController {
         if current == 0 {
             return
         }
-        let alert = UIAlertController(title: "提示", message: "确定删除该模式?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "tip".localized(), message: "delete_mode".localized(), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "txt_ok".localized(), style: .default, handler: {[weak self] (action) in
             self?.patterns.patterns.remove(at: self!.current - 1)

@@ -70,6 +70,7 @@
 		9A3E1EA022F86E4300A24DB1 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1E9F22F86E4300A24DB1 /* BaseTabBarController.swift */; };
 		9A3E1EA322F8752D00A24DB1 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3E1EA222F8752D00A24DB1 /* SettingsTableViewController.swift */; };
 		9A3E1EA522F87CC900A24DB1 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1EA422F87CC900A24DB1 /* Settings.storyboard */; };
+		9A3ED57023CCC87E00876A0A /* AutoThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3ED56F23CCC87E00876A0A /* AutoThread.swift */; };
 		9A46AD4223AA7571004C6D32 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A46AD4123AA7571004C6D32 /* Reachability.swift */; };
 		9A5B7EEF230446D30099E3A9 /* PatternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EEE230446D30099E3A9 /* PatternModel.swift */; };
 		9A5B7EF12304553A0099E3A9 /* PresetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */; };
@@ -221,6 +222,7 @@
 		9A3E1E9F22F86E4300A24DB1 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 		9A3E1EA222F8752D00A24DB1 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		9A3E1EA422F87CC900A24DB1 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		9A3ED56F23CCC87E00876A0A /* AutoThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoThread.swift; sourceTree = "<group>"; };
 		9A46AD4123AA7571004C6D32 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		9A5B7EEE230446D30099E3A9 /* PatternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternModel.swift; sourceTree = "<group>"; };
 		9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetViewController.swift; sourceTree = "<group>"; };
@@ -574,6 +576,7 @@
 				9A8900B823239973009AF915 /* TCPSocketManager.swift */,
 				9A083AD42379803D0018D54D /* CurrentLightValueManager.swift */,
 				9A311C09238FEE6E0099EC02 /* MCLocation.swift */,
+				9A3ED56F23CCC87E00876A0A /* AutoThread.swift */,
 			);
 			path = Manage;
 			sourceTree = "<group>";
@@ -874,6 +877,7 @@
 				9A10200523005F58000F36D7 /* WIFIListViewController.swift in Sources */,
 				9A79F63822F6684E00487DC5 /* Foundation+Extension.swift in Sources */,
 				9A79F63D22F669BD00487DC5 /* Colors.swift in Sources */,
+				9A3ED57023CCC87E00876A0A /* AutoThread.swift in Sources */,
 				9A9F961623CA325C00088956 /* TableViewFooterView.swift in Sources */,
 				9A1020222303D26C000F36D7 /* LBXScanNetAnimation.swift in Sources */,
 				9A211CF92325317600C36FC2 /* ESPDataCode.m in Sources */,
@@ -1140,7 +1144,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1166,7 +1170,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 16;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

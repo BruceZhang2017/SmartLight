@@ -19,6 +19,7 @@ class TCPSocketManager: NSObject {
     var shakeValue = 0
     var heartTimer: Timer!
     var connectTimer: Timer!
+    private var threads: [AutoThread] = []
     
     public func connectDeivce() {
         let model = DeviceManager.sharedInstance.deviceListModel
@@ -48,6 +49,7 @@ class TCPSocketManager: NSObject {
                 DeviceManager.sharedInstance.connectStatus[ip] = 1
                 sockets.append(socket)
                 connect(ip, socket: socket)
+                uploadDeviceToCloud(model: model.groups[current + i + 1], index: current)
             }
         } else {
             var ip = model.groups[current].ip ?? "192.168.4.1"
@@ -63,6 +65,46 @@ class TCPSocketManager: NSObject {
             }
             sockets.append(socket)
             connect(ip, socket: socket)
+            uploadDeviceToCloud(model: model.groups[current], index: current)
+        }
+    }
+    
+    private func uploadDeviceToCloud( model: DeviceModel, index: Int) {
+        if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
+            return
+        }
+        if model.macAddress.count <= 0 {
+            return
+        }
+        if model.uploadToCloud { // 已经上报过，则不再上报
+            return
+        }
+        let thread = AutoThread(mac: model.macAddress)
+        if threads.contains(thread) {
+            return
+        }
+        threads.append(thread)
+        thread.callback = {
+            [weak self] in
+            self?.saveDevices(index: index)
+            self?.deleteThread(thread)
+        }
+    }
+    
+    private func saveDevices(index: Int) {
+        let model = DeviceManager.sharedInstance.deviceListModel
+        let device = model.groups[index]
+        device.uploadToCloud = true
+        model.groups[index] = device
+        DeviceManager.sharedInstance.save()
+    }
+    
+    private func deleteThread(_ thread: AutoThread) {
+        for (index, item) in threads.enumerated() {
+            if item.mac == thread.mac {
+                threads.remove(at: index)
+                break
+            }
         }
     }
     
@@ -130,6 +172,18 @@ class TCPSocketManager: NSObject {
     /// 获取版本号
     func getVersion() {
         send(value: "[VER]")
+    }
+    
+    /// 更新WIFI名称和密码给设备
+    func sendWIFINameAndPWD() {
+        let ssid = WIFIManager().getSSID()
+        let wifiList = UserDefaults.standard.object(forKey: .kWIFIPWD) as? [String : String] ?? [:]
+        print("wifiList: \(wifiList)")
+        let password = wifiList[ssid] ?? ""
+        if ssid == "SmartLEDLight" {
+            return
+        }
+        send(value: "[WPU,\(ssid),\(password)]")
     }
     
     /// 同步当前时间
@@ -486,6 +540,7 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
         } else if value.contains("[LS]") { // 灯光预设
             
         } else if value.contains("[RP") {
+            sendWIFINameAndPWD()
             parseDeviceInfo(value: value)
             startHeartTimer()
         } else if value.contains("[VER") {

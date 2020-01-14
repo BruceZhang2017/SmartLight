@@ -30,6 +30,23 @@ extension String {
         let e = index(startIndex, offsetBy: end)
         return String(self[s..<e])
     }
+    
+    func macStrToMacAddress() -> String {
+        let count = self.count
+        if count % 2 != 0 {
+            return ""
+        }
+        var mac = ""
+        for i in 0..<count / 2 {
+            let start = index(startIndex, offsetBy: i * 2)
+            let end = index(startIndex, offsetBy: (i + 1) * 2)
+            mac.append(String(uppercased()[start..<end]))
+            if i != count / 2 - 1 {
+                mac.append(":")
+            }
+        }
+        return mac
+    }
 }
 
 extension Int {

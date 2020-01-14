@@ -74,6 +74,7 @@ class ControlViewController: BaseViewController {
         if bottomView.subviews.count == 0 {
             initBarValueViews()
         }
+        topView?.refreshLabel()
     }
     
     override func viewDidAppear(_ animated: Bool) {

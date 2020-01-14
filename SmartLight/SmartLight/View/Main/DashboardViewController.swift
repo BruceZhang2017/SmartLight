@@ -235,7 +235,7 @@ class DashboardViewController: BaseViewController {
                 animated: true)
             deviceNameLabel.text = model.groups[DeviceManager.sharedInstance.currentIndex].name
             TCPSocketManager.sharedInstance.disconnect()
-            UIApplication.shared.keyWindow?.showHUD("正在切换设备")
+            UIApplication.shared.keyWindow?.showHUD("switching_devcie".localized())
             perform(#selector(handleReconnect), with: nil, afterDelay: 3)
         }
     }
@@ -253,7 +253,7 @@ class DashboardViewController: BaseViewController {
                 animated: true)
             deviceNameLabel.text = model.groups[current].name
             TCPSocketManager.sharedInstance.disconnect()
-            UIApplication.shared.keyWindow?.showHUD("正在切换设备")
+            UIApplication.shared.keyWindow?.showHUD("switching_devcie".localized())
             perform(#selector(handleReconnect), with: nil, afterDelay: 3)
         }
     }

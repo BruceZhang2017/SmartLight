@@ -42,16 +42,17 @@ class TopView: UIView {
 
     private func initLabelValueViews() {
         let labels = ["12" + "am".localized(),
-                      "4" + "am".localized(),
-                      "8" + "am".localized(),
-                      "12" + "pm".localized(),
-                      "4" + "pm".localized(),
-                      "8" + "pm".localized(),
-                      "12" + "am".localized()]
+        "4" + "am".localized(),
+        "8" + "am".localized(),
+        "12" + "pm".localized(),
+        "4" + "pm".localized(),
+        "8" + "pm".localized(),
+        "12" + "am".localized()]
         for i in 0..<labels.count {
             let label = UILabel().then {
                 $0.textColor = UIColor.darkGray
                 $0.font = UIFont.systemFont(ofSize: 9)
+                $0.tag = 10000 + i
                 $0.text = labels[i]
             }
             let w = CGFloat(30 * labels.count)
@@ -312,6 +313,25 @@ class TopView: UIView {
         for subView in dotView.subviews {
             if subView is UIButton {
                 subView.isHidden = false
+            }
+        }
+    }
+    
+    func refreshLabel() {
+        let labels = ["12" + "am".localized(),
+        "4" + "am".localized(),
+        "8" + "am".localized(),
+        "12" + "pm".localized(),
+        "4" + "pm".localized(),
+        "8" + "pm".localized(),
+        "12" + "am".localized()]
+        for subView in subviews {
+            if subView.tag >= 10000 {
+                if subView.tag - 10000 < labels.count {
+                    if let label = subView as? UILabel {
+                        label.text = labels[subView.tag - 10000]
+                    }
+                }
             }
         }
     }

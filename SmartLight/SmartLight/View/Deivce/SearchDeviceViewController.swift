@@ -142,7 +142,7 @@ extension SearchDeviceViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath)
         if let nameLabel = cell.viewWithTag(1) as? UILabel {
             if let bssid = results[indexPath.row].bssid, bssid.count > 4 {
-                nameLabel.text = "Light_\(bssid[bssid.count - 4, bssid.count])"
+                nameLabel.text = "\(bssid)"
             }
         }
         if let ipLabel = cell.viewWithTag(2) as? UILabel {
@@ -163,6 +163,7 @@ extension SearchDeviceViewController: UITableViewDelegate {
             }
             let device = DeviceModel() // 先添加一个设备
             device.name = "\(bssid)"
+            device.macAddress = bssid.macStrToMacAddress()
             device.ip = results[indexPath.row].ip()
             device.deviceState = 0x00
             device.deviceType = 3
@@ -188,6 +189,7 @@ extension SearchDeviceViewController: UITableViewDelegate {
                 }
                 let device = DeviceModel() // 先添加一个设备
                 device.name = "\(bssid)"
+                device.macAddress = bssid.macStrToMacAddress()
                 device.ip = results[indexPath.row].ip()
                 device.deviceState = 0x00
                 device.deviceType = 3

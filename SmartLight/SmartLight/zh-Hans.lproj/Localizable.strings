@@ -171,3 +171,5 @@
 "back" = "返回";
 "tip" = "提示";
 "delete_mode" = "确定删除该模式?";
+"switching_devcie" = "正在切换设备";
+"download_url_link" = "请输入地址";

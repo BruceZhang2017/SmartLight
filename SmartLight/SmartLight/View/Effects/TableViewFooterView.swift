@@ -30,7 +30,7 @@ class TableViewFooterView: UIView {
         titleLabel = UILabel().then {
             $0.numberOfLines = 0
             $0.textColor = UIColor.black
-            $0.font = UIFont.systemFont(ofSize: 10)
+            $0.font = UIFont.systemFont(ofSize: Dimension.screenWidth <= 320 ? 8 : 12)
             $0.text = "txt_fan_attention".localized()
         }
         addSubview(titleLabel)

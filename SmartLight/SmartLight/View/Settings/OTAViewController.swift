@@ -60,7 +60,7 @@ class OTAViewController: BaseViewController {
     @IBAction func download(_ sender: Any) {
         textField.resignFirstResponder()
         guard let url = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), url.count > 0 else {
-            Toast(text: "请输入地址").show()
+            Toast(text: "download_url_link".localized()).show()
             return
         }
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in

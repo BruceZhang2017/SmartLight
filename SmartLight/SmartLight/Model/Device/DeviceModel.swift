@@ -27,6 +27,8 @@ class DeviceModel: NSObject, NSCoding {
     var ip: String?
     var deviceType = 3 // 3和6
     var deviceState = 0 // 使用位来存储
+    var uploadToCloud = false
+    var macAddress = ""
     
     override init() {
         super.init()
@@ -46,6 +48,8 @@ class DeviceModel: NSObject, NSCoding {
         aCoder.encode(ip, forKey: "ip")
         aCoder.encode(deviceType, forKey: "deviceType")
         aCoder.encode(deviceState, forKey: "deviceState")
+        aCoder.encode(uploadToCloud, forKey: "uploadToCloud")
+        aCoder.encode(macAddress, forKey: "macAddress")
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
@@ -63,5 +67,7 @@ class DeviceModel: NSObject, NSCoding {
         ip = aDecoder.decodeObject(forKey: "ip") as? String
         deviceType = aDecoder.decodeInteger(forKey: "deviceType")
         deviceState = aDecoder.decodeInteger(forKey: "deviceState")
+        uploadToCloud = aDecoder.decodeBool(forKey: "uploadToCloud")
+        macAddress = aDecoder.decodeObject(forKey: "macAddress") as? String ?? ""
     }
 }

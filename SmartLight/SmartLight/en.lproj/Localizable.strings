@@ -186,3 +186,5 @@
 "back" = "Back";
 "tip" = "Tip";
 "delete_mode" = "Delete this Pattern?";
+"switching_devcie" = "Switching device";
+"download_url_link" = "Please input URL";

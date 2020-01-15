@@ -95,6 +95,7 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.setBackgroundImage(imagePresseds[i], for: .selected)
                 let value = deviceModel.deviceState
                 let high = (value >> 7) & 0x01
+                let low = value & 0x0f
                 $0.setTitle(Arrays.btnTitles[i].localized(), for: .normal)
                 if i == 0 && high == 1 {
                     $0.setTitle("txt_alloff".localized(), for: .normal)
@@ -110,6 +111,18 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 $0.titleLabel?.font = UIFont.systemFont(ofSize: Dimension.screenWidth <= 320 ? 6 : 8)
                 $0.addTarget(self, action: #selector(handleButtonTapEvent(_:)), for: .touchUpInside)
                 $0.tag = i
+                if i == 2 {
+                    if low == 4 {
+                        $0.setBackgroundImage(UIImage(named: "autoblue"), for: .selected) // autogrey
+                        $0.setTitle("txt_auto2".localized(), for: .normal)
+                    } else if low == 8 {
+                        $0.setBackgroundImage(UIImage(named: "manualblue"), for: .selected) // autogrey
+                        $0.setTitle("txt_manual2".localized(), for: .normal)
+                    } else {
+                        $0.setBackgroundImage(UIImage(named: "autogrey"), for: .selected) // autogrey
+                        $0.setTitle("txt_auto2".localized(), for: .normal)
+                    }
+                }
             }
             btnView.addSubview(button)
             buttons.append(button)
@@ -138,6 +151,17 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                         buttons[tag].setTitle("txt_allon".localized(), for: .normal)
                         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
                         buttons[tag].setTitleColor(Color.main, for: .selected)
+                    }
+                }
+                if tag == 2 {
+                    if button.title(for: .normal) == "txt_auto2".localized() {
+                        buttons[tag].setTitle("txt_manual2".localized(), for: .normal) // All ON / All OFF
+                        buttons[tag].setBackgroundImage(UIImage(named: "manualblue"), for: .selected)
+                        delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 2)
+                    } else {
+                        buttons[tag].setTitle("txt_auto2".localized(), for: .normal)
+                        buttons[tag].setBackgroundImage(UIImage(named: "autoblue"), for: .selected)
+                        delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: 1)
                     }
                 }
                 return

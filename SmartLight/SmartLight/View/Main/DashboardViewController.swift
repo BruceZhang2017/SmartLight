@@ -361,13 +361,16 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
         let cTag = btnTag
         switch cTag {
         case 2: // SCHEDUAL
+            if result == 0 {
+                return
+            }
             let high = (value >> 4) & 0x0f
-            device.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + (device.pattern?.isManual == true ? 0x08 : 0x04)
+            device.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + (result == 2 ? 0x08 : 0x04)
             DeviceManager.sharedInstance.save()
             if device.pattern == nil {
                 device.pattern = PatternModel()
             }
-            TCPSocketManager.sharedInstance.lightSchedual(model: device.pattern?.isManual == true ? 2 : 1, device: device)
+            TCPSocketManager.sharedInstance.lightSchedual(model: result, device: device)
             collectionView.reloadData()
         case 0: // ALL ON / ALL OFF
             let high = (value >> 4) & 0x0f

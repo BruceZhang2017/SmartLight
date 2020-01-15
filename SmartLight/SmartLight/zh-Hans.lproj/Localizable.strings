@@ -136,6 +136,8 @@
  "txt_filename"="V2.0 DPK";
  "txt_auto"="⾃动模式";
  "txt_manual"="⼿动模式";
+"txt_auto2"="⾃动";
+"txt_manual2"="⼿动";
  "txt_download_success"="下载成功!";
  "txt_times"="时间";
  "txt_url"="http://www.micmol.com/fw/fw.dpk";

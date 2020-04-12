@@ -403,7 +403,7 @@ class TCPSocketManager: NSObject {
                     if model == nil {
                          model = PatternModel()
                     }
-                    model?.isManual = true
+                    model?.isManual = (device.deviceState >> 3 & 0x01) > 0
                     var itemModel: PatternItemModel? = model?.manual
                     if itemModel == nil {
                         itemModel = PatternItemModel()

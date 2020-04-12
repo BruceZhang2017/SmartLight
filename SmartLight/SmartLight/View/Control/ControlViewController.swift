@@ -411,22 +411,42 @@ class ControlViewController: BaseViewController {
             if (currentPattern.items.last?.time ?? 0) >= 23 * 60 {
                 return
             }
+            if currentItem >= 0 && currentItem < currentPattern.items.count - 1 {
+                if currentPattern.items[currentItem + 1].time - currentPattern.items[currentItem].time <= 60 {
+                    return
+                }
+            }
             startDetectionTimer()
             bottomView.isUserInteractionEnabled = true
             topView.floatView.isUserInteractionEnabled = true
             let item = PatternItemModel()
-            let last = currentPattern.items.last?.time ?? 0
-            item.time =  last > 0 ? (last + 60) : 0 // 在最后一个点往后移动1小时
+            if currentItem >= 0 {
+                item.time = currentPattern.items[currentItem].time + 60
+            } else {
+                let last = currentPattern.items.last?.time ?? 0
+                item.time =  last > 0 ? (last + 60) : 0 // 在最后一个点往后移动1小时
+            }
             item.intensity = currentPattern.items.last?.intensity ?? [0, 0, 0, 0, 0, 0, 0]
-            currentPattern.items.append(item)
-            currentItem = currentPattern.items.count - 1
+            if currentItem >= 0 {
+                currentPattern.items.insert(item, at: currentItem + 1)
+                currentItem = currentItem + 1
+            } else {
+                currentPattern.items.append(item)
+                currentItem = currentPattern.items.count - 1
+            }
             topView.floatView.isHidden = false
             topView.left = topView.timeToLeft(value: item.time)
             refreshTopView()
             saveSchedule()
         case 1: // 删除点
             if currentPattern.items.count > 0 {
-                currentPattern.items.removeLast()
+                if currentItem == -1 {
+                    currentPattern.items.removeLast()
+                } else {
+                    if currentItem < currentPattern.items.count {
+                        currentPattern.items.remove(at: currentItem)
+                    }
+                }
                 currentItem = -1
                 refreshTopView()
                 saveSchedule()
@@ -547,10 +567,12 @@ class ControlViewController: BaseViewController {
         let state = deviceModel.deviceState
         let high = (state >> 4) & 0x0f
         //let low = state & 0x0f
-        deviceModel.deviceState = (high << 4) + (deviceModel.pattern?.isManual == true ? 8 : 4)
+        let isManual = (deviceModel.pattern?.isManual ?? false) == true
+        print("当前模式是手动吗？\(isManual)")
+        deviceModel.deviceState = (high << 4) + (isManual ? 8 : 4)
         deviceListModel.groups[DeviceManager.sharedInstance.currentIndex] = deviceModel
         DeviceManager.sharedInstance.save()
-        TCPSocketManager.sharedInstance.lightSchedual(model: deviceModel.pattern?.isManual == true ? 2 : 1, device: deviceModel)
+        TCPSocketManager.sharedInstance.lightSchedual(model: isManual ? 2 : 1, device: deviceModel)
     }
     
     // 30秒内预览 200ms 一次

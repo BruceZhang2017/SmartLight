@@ -92,6 +92,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
             }
+            cell.mSwitch.isUserInteractionEnabled = !CheckDeviceState().checkCurrentDeviceStateIsAllOnOrAllOff()
             if indexPath.row == 0 {
                 cell.titleLabel.text = "txt_enable".localized()
             } else if indexPath.row == 1 {
@@ -107,6 +108,7 @@ class LunnarTableViewController: EffectsSettingTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellBIdentifier, for: indexPath) as! EffectsSettingBTableViewCell
         cell.delegate = self
         cell.mSlider.value = Float(lunnar.intensity) / Float(100)
+        cell.selectionStyle = .none
         return cell
     }
     

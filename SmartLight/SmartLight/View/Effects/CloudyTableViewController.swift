@@ -100,6 +100,7 @@ class CloudyTableViewController: EffectsSettingTableViewController {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
             }
+            cell.mSwitch.isUserInteractionEnabled = !CheckDeviceState().checkCurrentDeviceStateIsAllOnOrAllOff()
             if indexPath.row == 0 {
                 cell.titleLabel.text = "txt_enable".localized()
             } else if indexPath.row == 1 {
@@ -109,6 +110,7 @@ class CloudyTableViewController: EffectsSettingTableViewController {
                 cell.titleLabel.text = "txt_endtime".localized()
                 cell.desLabel.text = cloudy.endTime.timeIntToStr()
             }
+            cell.selectionStyle = .none
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellBIdentifier, for: indexPath) as! EffectsSettingBTableViewCell
@@ -117,9 +119,11 @@ class CloudyTableViewController: EffectsSettingTableViewController {
         if indexPath.section == 1 {
             cell.mSlider.value = Float(cloudy.intensity) / Float(100)
         } else {
-            cell.mSlider.value = Float(cloudy.speed) / Float(100)
             cell.mSlider.minimumValueImage = UIImage(named: "乌龟")
             cell.mSlider.maximumValueImage = UIImage(named: "兔子")
+            cell.mSlider.minimumValue = 10
+            cell.mSlider.maximumValue = 120
+            cell.mSlider.value = Float(cloudy.speed)
         }
         return cell
     }
@@ -134,7 +138,7 @@ class CloudyTableViewController: EffectsSettingTableViewController {
             headView.contentLabel.text = "\(cloudy.intensity)%"
         }else {
             headView.titleLabel.text = "txt_speed".localized().uppercased()
-            headView.contentLabel.text = "\(cloudy.speed)%"
+            headView.contentLabel.text = "\(cloudy.speed)\("time_s".localized())"
         }
         return headView
     }
@@ -187,7 +191,7 @@ extension CloudyTableViewController: EffectsSettingBTableViewCellDelegate {
         if tag == 1 {
             cloudy.intensity = value
         } else {
-            cloudy.speed = value
+            cloudy.speed = value / 100
         }
         tableView.reloadData()
         deviceModel.cloudy = cloudy

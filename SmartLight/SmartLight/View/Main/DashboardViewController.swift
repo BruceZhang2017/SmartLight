@@ -173,10 +173,20 @@ class DashboardViewController: BaseViewController {
             let start = dateStr.index(dateStr.startIndex, offsetBy: 11)
             let end = dateStr.index(dateStr.startIndex, offsetBy: 16)
             let time = String(dateStr[start..<end])
-            timeLabel.text = time
             let array = time.components(separatedBy: ":")
             if array.count == 2 {
-                currentTime = (Int(array[0]) ?? 0) * 60 + (Int(array[1]) ?? 0)
+                let hour = Int(array[0]) ?? 0
+                let minute = Int(array[1]) ?? 0
+                if Kit().getDeviceTimeSystemIs12() && hour > 12 {
+                    let h = hour - 12 > 9 ? "\((hour - 12))" : "0\(hour - 12)"
+                    let m = minute > 9 ? "\(minute)" : "0\(minute)"
+                    timeLabel.text = "\(h):\(m)"
+                } else {
+                    let h = hour > 9 ? "\(hour)" : "0\(hour)"
+                    let m = minute > 9 ? "\(minute)" : "0\(minute)"
+                    timeLabel.text = "\(h):\(m)"
+                }
+                currentTime = hour * 60 + minute
                 collectionView.reloadData()
                 NotificationCenter.default.post(name: Notification.Name("ControlViewController"), object: currentTime)
             }
@@ -234,7 +244,7 @@ class DashboardViewController: BaseViewController {
                 at: .centeredHorizontally,
                 animated: true)
             deviceNameLabel.text = model.groups[DeviceManager.sharedInstance.currentIndex].name
-            TCPSocketManager.sharedInstance.disconnect()
+            TCPSocketManager.sharedInstance.disconnectAll()
             UIApplication.shared.keyWindow?.showHUD("switching_devcie".localized())
             perform(#selector(handleReconnect), with: nil, afterDelay: 3)
         }
@@ -252,7 +262,7 @@ class DashboardViewController: BaseViewController {
                 at: .centeredHorizontally,
                 animated: true)
             deviceNameLabel.text = model.groups[current].name
-            TCPSocketManager.sharedInstance.disconnect()
+            TCPSocketManager.sharedInstance.disconnectAll()
             UIApplication.shared.keyWindow?.showHUD("switching_devcie".localized())
             perform(#selector(handleReconnect), with: nil, afterDelay: 3)
         }
@@ -359,7 +369,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
         let device = DeviceManager.sharedInstance.deviceListModel.groups[indexs[tag]]
         let value = device.deviceState
         let cTag = btnTag
-        switch cTag {
+        switch cTag { // 特殊处理：在全开/全关情况下，新月/闪电/多云不让点击
         case 2: // SCHEDUAL
             if result == 0 {
                 return
@@ -383,6 +393,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightSchedual(model: result > 0 ? 3 : 5, device: device, allOn: result > 0)
             collectionView.reloadData()
+            perform(#selector(self.closeLunnar), with: nil, afterDelay: 0.05)
         case 1: // ACCL
             let high = (value >> 4) & 0x0f
             device.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + 0x01
@@ -390,42 +401,105 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             TCPSocketManager.sharedInstance.lightSchedual(model: 4, device: device)
             collectionView.reloadData()
         case 3: // Lunnar
-            let low = value & 0x0f
-            let high = (value >> 4) & 0x0f
-            device.deviceState = (((result > 0 ? 0x04 : 0x00) + high & 0b0011) << 4) + low
-            if device.lunnar == nil {
-                device.lunnar = Lunnar()
+            if CheckDeviceState().checkCurrentDeviceStateIsAllOnOrAllOff() {
+                return
             }
-            
-            DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightEffect(type: 0, result: result + 1, device: device)
-            collectionView.reloadData()
+            setLunnar(value: value, result: result, device: device)
         case 4: // Lighting
-            let low = value & 0x0f
-            let high = (value >> 4) & 0x0f
-            device.deviceState = (((result > 0 ? 0x02 : 0x00) + high & 0b0101) << 4) + low
-            if device.lightning == nil {
-                device.lightning = Lightning()
+            if CheckDeviceState().checkCurrentDeviceStateIsAllOnOrAllOff() {
+                return
             }
-            
-            DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightEffect(type: 1, result: result + 1, device: device)
-            collectionView.reloadData()
+            setLighting(value: value, result: result, device: device)
         case 5: // Cloudy
-            let low = value & 0x0f
-            let high = (value >> 4) & 0x0f
-            device.deviceState = (((result > 0 ? 0x01 : 0x00) + high & 0b0110) << 4) + low
-            if device.cloudy == nil {
-                device.cloudy = Cloudy()
+            if CheckDeviceState().checkCurrentDeviceStateIsAllOnOrAllOff() {
+                return
             }
-            
-            DeviceManager.sharedInstance.save()
-            TCPSocketManager.sharedInstance.lightEffect(type: 2, result: result + 1, device: device)
-            collectionView.reloadData()
+            setCloud(value: value, result: result, device: device)
         default:
             print("todo")
         }
     }
     
+    @objc private func closeLunnar() {
+        let current = DeviceManager.sharedInstance.currentIndex
+        if current >= DeviceManager.sharedInstance.deviceListModel.groups.count {
+            return
+        }
+        let device = DeviceManager.sharedInstance.deviceListModel.groups[current]
+        let lunar = (device.deviceState >> 6) & 0x01
+        if lunar > 0 {
+            setLunnar(value: device.deviceState, result: 0, device: device)
+            perform(#selector(self.closeLighting), with: nil, afterDelay: 0.05)
+        } else {
+            closeLighting()
+        }
+        
+    }
+    
+    private func setLunnar(value: Int, result: Int, device: DeviceModel) {
+        let low = value & 0x0f
+        let high = (value >> 4) & 0x0f
+        device.deviceState = (((result > 0 ? 0x04 : 0x00) + high & 0b0011) << 4) + low
+        if device.lunnar == nil {
+            device.lunnar = Lunnar()
+        }
+        
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightEffect(type: 0, result: result + 1, device: device)
+        collectionView.reloadData()
+    }
+    
+    @objc private func closeLighting() {
+        let current = DeviceManager.sharedInstance.currentIndex
+        if current >= DeviceManager.sharedInstance.deviceListModel.groups.count {
+            return
+        }
+        let device = DeviceManager.sharedInstance.deviceListModel.groups[current]
+        let lighting = (device.deviceState >> 5) & 0x01
+        if lighting > 0 {
+            setLighting(value: device.deviceState, result: 0, device: device)
+            perform(#selector(self.closeCloud), with: nil, afterDelay: 0.05)
+        } else {
+            closeCloud()
+        }
+    }
+    
+    private func setLighting(value: Int, result: Int, device: DeviceModel) {
+        let low = value & 0x0f
+        let high = (value >> 4) & 0x0f
+        device.deviceState = (((result > 0 ? 0x02 : 0x00) + high & 0b0101) << 4) + low
+        if device.lightning == nil {
+            device.lightning = Lightning()
+        }
+        
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightEffect(type: 1, result: result + 1, device: device)
+        collectionView.reloadData()
+    }
+    
+    @objc private func closeCloud() {
+        let current = DeviceManager.sharedInstance.currentIndex
+        if current >= DeviceManager.sharedInstance.deviceListModel.groups.count {
+            return
+        }
+        let device = DeviceManager.sharedInstance.deviceListModel.groups[current]
+        let cloud = (device.deviceState >> 4) & 0x01
+        if cloud > 0 {
+            setCloud(value: device.deviceState, result: 0, device: device)
+        }
+    }
+    
+    private func setCloud(value: Int, result: Int, device: DeviceModel) {
+        let low = value & 0x0f
+        let high = (value >> 4) & 0x0f
+        device.deviceState = (((result > 0 ? 0x01 : 0x00) + high & 0b0110) << 4) + low
+        if device.cloudy == nil {
+            device.cloudy = Cloudy()
+        }
+        
+        DeviceManager.sharedInstance.save()
+        TCPSocketManager.sharedInstance.lightEffect(type: 2, result: result + 1, device: device)
+        collectionView.reloadData()
+    }
 }
 

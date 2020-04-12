@@ -442,7 +442,7 @@ class TopView: UIView {
         var h = time / 60
         let m = time % 60
         if h >= 12 {
-            return String(format: "%02d", h) + ":" + String(format: "%02d", m) + " " + "pm".localized()
+            return String(format: "%02d", h > 12 ? (h - 12) : h) + ":" + String(format: "%02d", m) + " " + "pm".localized()
         } else {
             if h == 0 {
                 h = 12

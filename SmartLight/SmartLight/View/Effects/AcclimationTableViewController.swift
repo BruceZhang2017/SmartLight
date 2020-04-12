@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import Toaster
 
 class AcclimationTableViewController: EffectsSettingTableViewController {
     
@@ -28,7 +29,8 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
         acclimation = deviceModel.acclimation ?? Acclimation()
         super.viewDidLoad()
         tableView.register(TableViewHeadView.classForCoder(), forHeaderFooterViewReuseIdentifier: "HEAD")
-        bottomView = BottomView(frame: CGRect(x: 0, y: 0, width: Dimension.screenWidth, height: 300))
+        bottomView = BottomView(frame: CGRect(x: 0, y: 0, width: Dimension.screenWidth, height: 200))
+        bottomView.drawHeight = 130
         tableView.tableFooterView = bottomView
         bottomView.drawLine(deviceModel: deviceModel)
     }
@@ -244,6 +246,9 @@ extension AcclimationTableViewController: CustomPickerViewControllerDelegate {
         DeviceManager.sharedInstance.save()
         handleAcclimation()
         bottomView.drawLine(deviceModel: deviceModel)
+        if acclimation.ramp * 2 > (acclimation.endTime - acclimation.startTime) / 60 {
+            Toast(text: "accl_ramp_time_invalid".localized()).show()
+        }
     }
 }
 

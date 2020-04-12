@@ -69,8 +69,17 @@ extension Int {
 }
 
 extension Data {
-func hexEncodedString() -> String {
-    return map { String(format: "%02hhx ", $0) }.joined()
+    func hexEncodedString() -> String {
+        return map { String(format: "%02hhx ", $0) }.joined()
     }
-    
+}
+
+extension Date {
+    static func is12Or24hour() -> Bool {
+        let formatStringForHours = DateFormatter.dateFormat(
+            fromTemplate: "j",
+            options: 0,
+            locale: Locale.current)
+        return formatStringForHours?.contains("a") ?? false
+    }
 }

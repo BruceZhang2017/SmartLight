@@ -72,6 +72,8 @@
 		9A3E1EA522F87CC900A24DB1 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9A3E1EA422F87CC900A24DB1 /* Settings.storyboard */; };
 		9A3ED57023CCC87E00876A0A /* AutoThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3ED56F23CCC87E00876A0A /* AutoThread.swift */; };
 		9A46AD4223AA7571004C6D32 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A46AD4123AA7571004C6D32 /* Reachability.swift */; };
+		9A4C80502442AFFE00383EC5 /* CheckDeviceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4C804F2442AFFE00383EC5 /* CheckDeviceState.swift */; };
+		9A4C80522442F30300383EC5 /* DeviceOTAManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4C80512442F30300383EC5 /* DeviceOTAManager.swift */; };
 		9A5B7EEF230446D30099E3A9 /* PatternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EEE230446D30099E3A9 /* PatternModel.swift */; };
 		9A5B7EF12304553A0099E3A9 /* PresetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */; };
 		9A5B7EF3230457050099E3A9 /* PatternListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B7EF2230457050099E3A9 /* PatternListModel.swift */; };
@@ -110,6 +112,8 @@
 		9AA1AC4822FC68870000F6D2 /* EffectsSettingCTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC4622FC68870000F6D2 /* EffectsSettingCTableViewCell.swift */; };
 		9AA1AC4922FC68870000F6D2 /* EffectsSettingCTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9AA1AC4722FC68870000F6D2 /* EffectsSettingCTableViewCell.xib */; };
 		9AA1AC4D22FD0C130000F6D2 /* EffectsSettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC4C22FD0C130000F6D2 /* EffectsSettingModel.swift */; };
+		9ABA55B0241CFE6C00A6E1F1 /* YModem.c in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA55AB241CFE6C00A6E1F1 /* YModem.c */; };
+		9ABA55B2241CFE6C00A6E1F1 /* YModemUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA55AD241CFE6C00A6E1F1 /* YModemUtil.m */; };
 		9AE39880238527CC00A2A632 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3987F238527CC00A2A632 /* BottomView.swift */; };
 		9AE398822385667800A2A632 /* QRCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE398812385667800A2A632 /* QRCodeHelper.swift */; };
 /* End PBXBuildFile section */
@@ -224,6 +228,8 @@
 		9A3E1EA422F87CC900A24DB1 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
 		9A3ED56F23CCC87E00876A0A /* AutoThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoThread.swift; sourceTree = "<group>"; };
 		9A46AD4123AA7571004C6D32 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		9A4C804F2442AFFE00383EC5 /* CheckDeviceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDeviceState.swift; sourceTree = "<group>"; };
+		9A4C80512442F30300383EC5 /* DeviceOTAManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceOTAManager.swift; sourceTree = "<group>"; };
 		9A5B7EEE230446D30099E3A9 /* PatternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternModel.swift; sourceTree = "<group>"; };
 		9A5B7EF02304553A0099E3A9 /* PresetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetViewController.swift; sourceTree = "<group>"; };
 		9A5B7EF2230457050099E3A9 /* PatternListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatternListModel.swift; sourceTree = "<group>"; };
@@ -263,6 +269,10 @@
 		9AA1AC4622FC68870000F6D2 /* EffectsSettingCTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsSettingCTableViewCell.swift; sourceTree = "<group>"; };
 		9AA1AC4722FC68870000F6D2 /* EffectsSettingCTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EffectsSettingCTableViewCell.xib; sourceTree = "<group>"; };
 		9AA1AC4C22FD0C130000F6D2 /* EffectsSettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsSettingModel.swift; sourceTree = "<group>"; };
+		9ABA55AA241CFE6C00A6E1F1 /* YModemUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YModemUtil.h; sourceTree = "<group>"; };
+		9ABA55AB241CFE6C00A6E1F1 /* YModem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = YModem.c; sourceTree = "<group>"; };
+		9ABA55AD241CFE6C00A6E1F1 /* YModemUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YModemUtil.m; sourceTree = "<group>"; };
+		9ABA55AF241CFE6C00A6E1F1 /* YModem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YModem.h; sourceTree = "<group>"; };
 		9AE3987F238527CC00A2A632 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
 		9AE398812385667800A2A632 /* QRCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeHelper.swift; sourceTree = "<group>"; };
 		CD261D01D98AF10D7C326555 /* Pods-SmartLight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartLight.release.xcconfig"; path = "Target Support Files/Pods-SmartLight/Pods-SmartLight.release.xcconfig"; sourceTree = "<group>"; };
@@ -483,6 +493,7 @@
 		9A3E1E8B22F85ACE00A24DB1 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				9ABA55A9241CFE6C00A6E1F1 /* YModem */,
 				9A211C8C23252E6800C36FC2 /* SmartConfig */,
 				9A1020182303D18F000F36D7 /* Scan */,
 			);
@@ -562,6 +573,7 @@
 				9A101FFB22FDBEDE000F36D7 /* BashboardCollectionViewCell.swift */,
 				9A3E1E8222F836C800A24DB1 /* BarValueView.swift */,
 				9A3E1E8422F836E500A24DB1 /* BarValueView.xib */,
+				9A4C804F2442AFFE00383EC5 /* CheckDeviceState.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -574,6 +586,7 @@
 				9A8900AB23215555009AF915 /* DeviceManager.swift */,
 				9AE398812385667800A2A632 /* QRCodeHelper.swift */,
 				9A8900B823239973009AF915 /* TCPSocketManager.swift */,
+				9A4C80512442F30300383EC5 /* DeviceOTAManager.swift */,
 				9A083AD42379803D0018D54D /* CurrentLightValueManager.swift */,
 				9A311C09238FEE6E0099EC02 /* MCLocation.swift */,
 				9A3ED56F23CCC87E00876A0A /* AutoThread.swift */,
@@ -639,6 +652,17 @@
 				9AA1AC4C22FD0C130000F6D2 /* EffectsSettingModel.swift */,
 			);
 			path = Effects;
+			sourceTree = "<group>";
+		};
+		9ABA55A9241CFE6C00A6E1F1 /* YModem */ = {
+			isa = PBXGroup;
+			children = (
+				9ABA55AA241CFE6C00A6E1F1 /* YModemUtil.h */,
+				9ABA55AD241CFE6C00A6E1F1 /* YModemUtil.m */,
+				9ABA55AF241CFE6C00A6E1F1 /* YModem.h */,
+				9ABA55AB241CFE6C00A6E1F1 /* YModem.c */,
+			);
+			path = YModem;
 			sourceTree = "<group>";
 		};
 		DF3FE0527742D0EBEA230E37 /* Frameworks */ = {
@@ -909,6 +933,8 @@
 				9A1020202303D26C000F36D7 /* LBXScanViewController.swift in Sources */,
 				9AE398822385667800A2A632 /* QRCodeHelper.swift in Sources */,
 				9A5B7F012307F7800099E3A9 /* AcclimationTableViewController.swift in Sources */,
+				9A4C80522442F30300383EC5 /* DeviceOTAManager.swift in Sources */,
+				9ABA55B2241CFE6C00A6E1F1 /* YModemUtil.m in Sources */,
 				9A211CFC2325317600C36FC2 /* ESPAES.m in Sources */,
 				9A1020242303D26C000F36D7 /* LBXScanLineAnimation.swift in Sources */,
 				9A101B6022F5C9400033E96B /* SmartLight.xcdatamodeld in Sources */,
@@ -918,6 +944,7 @@
 				9A101B5A22F5C9400033E96B /* DashboardViewController.swift in Sources */,
 				9A211CF32325317600C36FC2 /* ESPGuideCode.m in Sources */,
 				9A5B7EFD2307EFA70099E3A9 /* LightningTableViewController.swift in Sources */,
+				9ABA55B0241CFE6C00A6E1F1 /* YModem.c in Sources */,
 				9A10201523030026000F36D7 /* TouchBarValueView.swift in Sources */,
 				9A083AE3237C5C8A0018D54D /* Fan.swift in Sources */,
 				9A211CEF2325317600C36FC2 /* ESP_CRC8.m in Sources */,
@@ -927,6 +954,7 @@
 				9A79F63F22F66E8600487DC5 /* Dimension.swift in Sources */,
 				9A1020112302F296000F36D7 /* ControlViewController.swift in Sources */,
 				9A1020262303D26C000F36D7 /* LBXPermissions.swift in Sources */,
+				9A4C80502442AFFE00383EC5 /* CheckDeviceState.swift in Sources */,
 				9A1020212303D26C000F36D7 /* LBXScanView.swift in Sources */,
 				9A3E1E8122F830A600A24DB1 /* Images.swift in Sources */,
 				9A10200323005CD5000F36D7 /* SearchDeviceViewController.swift in Sources */,
@@ -1144,7 +1172,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1170,7 +1198,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

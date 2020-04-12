@@ -175,18 +175,25 @@ extension SearchDeviceViewController: UITableViewDelegate {
             viewControllers.remove(at: 1)
             navigationController?.viewControllers = viewControllers
         } else {
-            //self.performSegue(withIdentifier: .kSBSegueWIFIList, sender: self)
+            guard let bssid = results[indexPath.row].bssid, bssid.count > 4 else {
+                return
+            }
+            let mac = bssid.macStrToMacAddress()
             var isAdd = false
-            for device in model.groups {
-                if device.ip == results[indexPath.row].ip() {
-                    isAdd = true
-                    break
+            for (key, device) in model.groups.enumerated() {
+                if device.group == true {
+                
+                } else {
+                    if device.macAddress == mac {
+                        isAdd = true
+                        device.ip = results[indexPath.row].ip()
+                        model.groups[key] = device
+                        DeviceManager.sharedInstance.save()
+                        break
+                    }
                 }
             }
             if !isAdd {
-                guard let bssid = results[indexPath.row].bssid, bssid.count > 4 else {
-                    return
-                }
                 let device = DeviceModel() // 先添加一个设备
                 device.name = "\(bssid)"
                 device.macAddress = bssid.macStrToMacAddress()

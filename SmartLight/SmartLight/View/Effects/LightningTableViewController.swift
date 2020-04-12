@@ -40,12 +40,12 @@ class LightningTableViewController: EffectsSettingTableViewController {
         preTimer?.invalidate()
         preTimer = nil
         totalIndex = count
-        preTimer = Timer.scheduledTimer(timeInterval: Double(10) / Double(count), target: self, selector: #selector(handlePre), userInfo: nil, repeats: true)
+        preTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(handlePre), userInfo: nil, repeats: true)
         showHUD()
     }
     
     @objc private func handlePre() {
-        if currentIndex > totalIndex {
+        if currentIndex >= totalIndex {
             preTimer?.invalidate()
             preTimer = nil
             hideHUD()
@@ -93,6 +93,7 @@ class LightningTableViewController: EffectsSettingTableViewController {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
             }
+            cell.mSwitch.isUserInteractionEnabled = !CheckDeviceState().checkCurrentDeviceStateIsAllOnOrAllOff()
             if indexPath.row == 0 {
                 cell.titleLabel.text = "txt_enable".localized()
             } else if indexPath.row == 1 {
@@ -108,6 +109,7 @@ class LightningTableViewController: EffectsSettingTableViewController {
                 cell.titleLabel.text = "txt_lighting_frequency".localized()
                 cell.desLabel.text = "\(ligtning.frequency) " + "txt_time".localized()
             }
+            cell.selectionStyle = .none
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellBIdentifier, for: indexPath) as! EffectsSettingBTableViewCell
@@ -217,7 +219,7 @@ extension LightningTableViewController: EffectsSettingTableViewCellDelegate {
         deviceModel.deviceState = (((value ? 0x02 : 0x00) + high & 0b1101) << 4) + low
         DeviceManager.sharedInstance.save()
         if value {
-            PreviousFunction(count: ligtning.interval) // 先预览200ms一次
+            PreviousFunction(count: ligtning.frequency) // 先预览200ms一次
         } else {
             handleLightning()
         }

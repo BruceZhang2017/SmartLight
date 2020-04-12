@@ -26,6 +26,7 @@ class OTAViewController: BaseViewController {
     @IBOutlet weak var attentionLabel: UILabel!
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var rightLConstraint: NSLayoutConstraint!
+    private var bOTA = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +42,15 @@ class OTAViewController: BaseViewController {
         noteLabel.text = "txt_firmware_note".localized()
         upgradeNowButton.setTitle("txt_firmware_upgrade_now".localized(), for: .normal)
         attentionLabel.text = "txt_firmware_attention".localized()
+        
+        textField.text = "http://www.micmol.com/fw/fw.dpk"
+        
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileURL = documentsURL.appendingPathComponent("fw.bin")
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            bOTA = true
+            upgradeNowButton.backgroundColor = UIColor.hexToColor(hexString: "2A98D5")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,33 +59,39 @@ class OTAViewController: BaseViewController {
         self.navigationController?.navigationBar.tintColor = Color.main
     }
     
+    deinit {
+        TCPSocketManager.sharedInstance.disconnectOTASocket()
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .default
     }
     
     @IBAction func upgradeNow(_ sender: Any) {
-        
+        if !bOTA {
+            return
+        }
+        TCPSocketManager.sharedInstance.otaUpdate()
     }
     
     @IBAction func download(_ sender: Any) {
         textField.resignFirstResponder()
-        guard let url = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), url.count > 0 else {
-            Toast(text: "download_url_link".localized()).show()
-            return
-        }
+        let url = "http://www.woaiyijia.com/iot/micmol_firmware_upgrade.bin"
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let fileURL = documentsURL.appendingPathComponent("ota.data")
-            
+            let fileURL = documentsURL.appendingPathComponent("micmol.bin")
+
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
-        
-        Alamofire.download(url, to: destination).downloadProgress(closure: { (progress) in
+
+        Alamofire.download(url, headers: ["Charset": "UTF-8"],to: destination).downloadProgress(closure: { (progress) in
             print(progress.fractionCompleted)
-        }).response {[weak self] response in
+        }).response { [weak self] response in
             print(response)
             if response.error == nil {
-                self?.fwLabel.text = ""
+                Toast(text: "ota_download_sucess".localized()).show()
+                self?.bOTA = true
+                self?.upgradeNowButton.backgroundColor = UIColor.hexToColor(hexString: "2A98D5")
             }
         }
     }

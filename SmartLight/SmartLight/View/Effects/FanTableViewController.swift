@@ -88,6 +88,8 @@ class FanTableViewController: EffectsSettingTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellBIdentifier, for: indexPath) as! EffectsSettingBTableViewCell
         cell.delegate = self
         cell.mSlider.value = Float(fan.intensity) / Float(100)
+        cell.mSlider.minimumValueImage = UIImage(named: "乌龟")
+        cell.mSlider.maximumValueImage = UIImage(named: "兔子")
         return cell
     }
     

@@ -190,3 +190,6 @@
 "delete_mode" = "Delete this Pattern?";
 "switching_devcie" = "Switching device";
 "download_url_link" = "Please input URL";
+"ota_download_sucess" = "OTA download success!";
+"accl_ramp_time_invalid" = "Ramp time invalid";
+"time_s" = "S";

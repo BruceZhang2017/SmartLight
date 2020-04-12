@@ -21,49 +21,49 @@ class CurrentLightValueManager: NSObject {
         let state = deviceModel.deviceState
         let low = state & 0x0f
         let high = (state >> 4) & 0x0f
-        if low == 0  {
-            current = 0
-        } else if low == 1 { // ACCL
-            if let accl = deviceModel.acclimation {
-                if currentTime > accl.startTime && currentTime < accl.endTime {
-                    if currentTime < accl.startTime + accl.ramp * 60 {
-                        current = CGFloat(accl.intesity[index] * (currentTime - accl.startTime) / (accl.ramp * 60))
-                    } else if currentTime > accl.endTime - accl.ramp * 60 {
-                        current = CGFloat(accl.intesity[index] * (accl.endTime - currentTime) / (accl.ramp * 60))
-                    } else {
-                        current = CGFloat(accl.intesity[index])
-                    }
-                }
-            }
-            
-        } else if low == 2 { // 全开
-            current = 100
-        } else if low == 4 { // 自动模式
-            if let pattern = deviceModel.pattern {
-                for (key, item) in pattern.items.enumerated() {
-                    if key == pattern.items.count - 1 && item.time <= currentTime {
-                        current = CGFloat(item.intensity[index]) * CGFloat(1440 - currentTime) / CGFloat(1440 - item.time)
-                        break
-                    }
-                    if item.time > currentTime {
-                        if key > 0 {
-                            let pre = pattern.items[key - 1]
-                            current = CGFloat(item.intensity[index] - pre.intensity[index]) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.intensity[index])
-                            break
-                        } else {
-                            current = CGFloat(item.intensity[index]) * CGFloat(currentTime) / CGFloat(item.time)
-                            break
-                        }
-                    }
-                }
-            }
-        } else if low == 8 { // 手动模式
-            if let pattern = deviceModel.pattern {
-                if let manual = pattern.manual {
-                    current = CGFloat(manual.intensity[index])
-                }
-            }
-        }
+//        if low == 0  {
+//            current = 0
+//        } else if low == 1 { // ACCL
+//            if let accl = deviceModel.acclimation {
+//                if currentTime > accl.startTime && currentTime < accl.endTime {
+//                    if currentTime < accl.startTime + accl.ramp * 60 {
+//                        current = CGFloat(accl.intesity[index] * (currentTime - accl.startTime) / (accl.ramp * 60))
+//                    } else if currentTime > accl.endTime - accl.ramp * 60 {
+//                        current = CGFloat(accl.intesity[index] * (accl.endTime - currentTime) / (accl.ramp * 60))
+//                    } else {
+//                        current = CGFloat(accl.intesity[index])
+//                    }
+//                }
+//            }
+//
+//        } else if low == 2 { // 全开
+//            current = 100
+//        } else if low == 4 { // 自动模式
+//            if let pattern = deviceModel.pattern {
+//                for (key, item) in pattern.items.enumerated() {
+//                    if key == pattern.items.count - 1 && item.time <= currentTime {
+//                        current = CGFloat(item.intensity[index]) * CGFloat(1440 - currentTime) / CGFloat(1440 - item.time)
+//                        break
+//                    }
+//                    if item.time > currentTime {
+//                        if key > 0 {
+//                            let pre = pattern.items[key - 1]
+//                            current = CGFloat(item.intensity[index] - pre.intensity[index]) * CGFloat(currentTime - pre.time) / CGFloat(item.time - pre.time) + CGFloat(pre.intensity[index])
+//                            break
+//                        } else {
+//                            current = CGFloat(item.intensity[index]) * CGFloat(currentTime) / CGFloat(item.time)
+//                            break
+//                        }
+//                    }
+//                }
+//            }
+//        } else if low == 8 { // 手动模式
+//            if let pattern = deviceModel.pattern {
+//                if let manual = pattern.manual {
+//                    current = CGFloat(manual.intensity[index])
+//                }
+//            }
+//        }
         
         if (high >> 2) & 0x01 == 1 { // 新月Lunar
             if index == 1 {
@@ -99,9 +99,9 @@ class CurrentLightValueManager: NSObject {
             }
         }
         
-        if (high >> 3) & 0x01 == 1 { // 全关
-            current = 0
-        }
+//        if (high >> 3) & 0x01 == 1 { // 全关
+//            current = 0
+//        }
         //print("当前\(index)当前值为：\(current)")
         return current
     }

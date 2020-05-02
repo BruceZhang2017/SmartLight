@@ -20,8 +20,7 @@ class DatePickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        doneButton.setTitle("txt_done".localized(), for: .normal)
     }
 
     @IBAction func valueChanged(_ sender: Any) {

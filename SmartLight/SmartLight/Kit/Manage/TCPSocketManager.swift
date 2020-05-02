@@ -506,11 +506,22 @@ class TCPSocketManager: NSObject {
     }
     
     func otaUpdate() {
+        if otaSocket != nil {
+            let ip = otaSocket?.userData as? String ?? ""
+            if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
+                if util == nil {
+                    util = YModemUtil(1024)
+                    util?.delegate = self
+                }
+                sendData(state: OrderStatusC)
+                return
+            }
+        }
         send(value: "[UPGRADE]")
     }
     
     func sendData(state: OrderStatus) {
-        util?.setFirmwareHandleOTADataWith(state, fileName: "fw.bin", completion: { (current, total, msg) in
+        util?.setFirmwareHandleOTADataWith(state, fileName: "micmol.bin", completion: { (current, total, msg) in
             
         })
     }
@@ -519,7 +530,7 @@ class TCPSocketManager: NSObject {
         if data.count == 0 {
             return
         }
-        if data[0] == 0x06 && data[1] == 0x43 {
+        if data[0] == 0x43 {
             sendData(state: OrderStatusFirst)
         } else if data[0] == 0x06 {
             sendData(state: OrderStatusACK)
@@ -531,20 +542,12 @@ class TCPSocketManager: NSObject {
 
 extension TCPSocketManager: GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
-        log.info("Socket连接建立成功")
         guard let ip = sock.userData as? String else {
             return
         }
-        if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
-            log.info("Socket连接建立成功 OTA")
-            if util == nil {
-                util = YModemUtil(1024)
-                util?.delegate = self
-            }
-            sendData(state: OrderStatusC)
-            return
-        }
-        
+        log.info("Socket连接建立成功: \(ip)")
+        otaSocket = sock
+        otaSocket?.userData = ip
         DeviceManager.sharedInstance.connectStatus[ip] = 2
         shake(value: shakeValue)
     }
@@ -645,7 +648,7 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
             temperature = Int(t) ?? 0
         } else if value.contains("[UPGRADE]") {
             DeviceOTAManager.sharedInstance.deviceOTAList[ip] = true
-            DeviceManager.sharedInstance.save()
+            DeviceOTAManager.sharedInstance.saveCache()
             perform(#selector(disconnectAllDevices), with: nil, afterDelay: 6)
         }
     }
@@ -662,6 +665,31 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
 
 extension TCPSocketManager: YModemUtilDelegate {
     func onWriteBleData(_ data: Data!) {
-        otaSocket?.write(data, withTimeout: -1, tag: 0)
+        if data.count <= 0 {
+            return
+        }
+        var value = false
+        var lData = Data()
+        for (i, b) in data.enumerated() {
+            if value == true {
+                value = false
+                continue
+            }
+            if i < data.count - 1 {
+                if b == 0x0D && data[i + 1] == 0x0A {
+                    lData.append(0x0D)
+                    lData.append(0x01)
+                    lData.append(0x0A)
+                    lData.append(0x02)
+                    value = true
+                    continue
+                }
+            }
+            lData.append(b.byteSwapped)
+        }
+        lData.append(0x0D)
+        lData.append(0x0A)
+        log.info("发送的数据： \(lData.hexEncodedString())")
+        otaSocket?.write(lData, withTimeout: -1, tag: 0)
     }
 }

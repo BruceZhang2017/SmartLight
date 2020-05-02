@@ -112,14 +112,23 @@ class BottomView: UIView {
         for i in 0..<colors.count {
             let shapeLayer = CAShapeLayer()
             let path = UIBezierPath()
-            path.move(to: CGPoint(x: 0, y: drawHeight))
             let h = accl.intesity[i]
-            path.addLine(to: CGPoint(x: timeToLeft(value: accl.startTime), y: drawHeight))
             let value = drawHeight * CGFloat(100 - h) / CGFloat(100)
-            path.addLine(to: CGPoint(x: timeToLeft(value: accl.startTime + accl.ramp * 60), y: value))
-            path.addLine(to: CGPoint(x: timeToLeft(value: accl.endTime - accl.ramp * 60), y: value))
-            path.addLine(to: CGPoint(x: timeToLeft(value: accl.endTime), y: drawHeight))
-            path.addLine(to: CGPoint(x: Dimension.screenWidth - 40, y: drawHeight))
+            if accl.startTime < accl.endTime {
+                path.move(to: CGPoint(x: 0, y: drawHeight))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.startTime), y: drawHeight))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.startTime + accl.ramp * 60), y: value))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.endTime - accl.ramp * 60), y: value))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.endTime), y: drawHeight))
+                path.addLine(to: CGPoint(x: Dimension.screenWidth - 40, y: drawHeight))
+            } else {
+                path.move(to: CGPoint(x: 0, y: value))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.endTime - accl.ramp * 60), y: value))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.endTime), y: drawHeight))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.startTime), y: drawHeight))
+                path.addLine(to: CGPoint(x: timeToLeft(value: accl.startTime + accl.ramp * 60), y: value))
+                path.addLine(to: CGPoint(x: Dimension.screenWidth - 40, y: value))
+            }
             shapeLayer.path = path.cgPath
             shapeLayer.fillColor = UIColor.clear.cgColor
             shapeLayer.strokeColor = colors[i].cgColor

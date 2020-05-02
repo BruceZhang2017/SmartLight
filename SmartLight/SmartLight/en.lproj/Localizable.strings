@@ -45,7 +45,7 @@
 "txt_enable"="Enable";
 "txt_acclimation"="Acclimation";
 "txt_lunnar"="Lunar";
-"txt_lighting"="Lighting";
+"txt_lighting"="Lightning";
 "txt_cloudy"="Cloudy";
  
 "txt_welcome"="Welcome!";
@@ -162,7 +162,7 @@
 "txt_time_invalid"="The end time should late on start time";
 "txt_ramp_invalid"="Ramp time invalid";
 "txt_preview_done"="Preview done";
-"txt_preview_ongoing"="Preview ongoing...";
+"txt_preview_ongoing"="DEMOING...";
  
 "txt_lighting_interval"="Interval";
  

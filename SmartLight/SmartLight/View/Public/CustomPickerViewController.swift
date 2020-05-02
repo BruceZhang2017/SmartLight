@@ -21,8 +21,7 @@ class CustomPickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        doneButton.setTitle("txt_done".localized(), for: .normal)
     }
     
     @IBAction func done(_ sender: Any) {

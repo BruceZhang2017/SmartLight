@@ -204,8 +204,8 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString* path = [documentsDirectory stringByAppendingPathComponent:room_name];
     
-    file = [NSMutableData  dataWithContentsOfFile:path];
-    uint32_t length = (uint32_t)file.length;
+    file = [NSMutableData dataWithContentsOfFile:path];
+    uint32_t length = (uint32_t)(file.length - 32);
     
     // 发送SOH数据包
     // 生成包
@@ -230,11 +230,12 @@
 - (NSArray *)preparePacketWithFileName:(NSString *)filename{
     NSString *room_name = filename;
     // 文件大小
-    NSMutableData *file = [[NSMutableData alloc] init];
+    NSMutableData *fileB = [[NSMutableData alloc] init];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString* path = [documentsDirectory stringByAppendingPathComponent:room_name];
-    file = [NSMutableData dataWithContentsOfFile:path];
+    fileB = [NSMutableData dataWithContentsOfFile:path];
+    NSData *file = [fileB subdataWithRange:NSMakeRange(32, fileB.length - 32)];
     uint32_t size = file.length>=sendSize?(sendSize):(PACKET_SIZE);
     // 拆包
     int index = 0;

@@ -28,7 +28,7 @@ class DashboardViewController: BaseViewController {
     var clockTimer: Timer!
     var currentTime = 0 // 当前时间
     var indexs: [Int] = []
-    var currentIndex = 0
+    var currentIndex = 0 // 当前的坐标
     var scan: LBXScanViewController!
     private var reach: Reachability?
     
@@ -40,8 +40,8 @@ class DashboardViewController: BaseViewController {
         setLeftNavigationItem()
         setRightNavigationItem()
         setTitleView()
-        timeLabelTopLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : 20
-        bottomLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : 0
+        timeLabelTopLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : (Dimension.screenWidth > 375 ? 30 : 20)
+        bottomLConstraint.constant = AppDelegate.isSameToIphoneX() ? 40 : (Dimension.screenWidth > 375 ? 40 : 10)
         startClock()
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
@@ -50,6 +50,7 @@ class DashboardViewController: BaseViewController {
         }
         monitorNetwork()
         NotificationCenter.default.addObserver(self, selector: #selector(handleNoti(notification:)), name: Notification.Name("DashboardViewController"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleScroll(notification:)), name: Notification.Name("Dashboard"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,13 +63,13 @@ class DashboardViewController: BaseViewController {
             navigationItem.leftBarButtonItem?.isEnabled = false
             navigationItem.rightBarButtonItem?.isEnabled = false
             welcomeView.isHidden = false
-            navigationController?.tabBarController?.tabBar.isUserInteractionEnabled = false
-            guard let items = navigationController?.tabBarController?.tabBar.items else {
-                return
-            }
-            for item in items {
-                item.isEnabled = false
-            }
+            //navigationController?.tabBarController?.tabBar.isUserInteractionEnabled = false
+//            guard let items = navigationController?.tabBarController?.tabBar.items else {
+//                return
+//            }
+//            for item in items {
+//                item.isEnabled = false
+//            }
         } else {
             if current >= model.groups.count {
                 return
@@ -277,6 +278,52 @@ class DashboardViewController: BaseViewController {
         currentIndex = 0
         DeviceManager.sharedInstance.currentIndex = 0
         collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+    }
+    
+    @objc private func handleScroll(notification: Notification) {
+        let index = notification.object as? Int ?? 0
+        if index == DeviceManager.sharedInstance.currentIndex {
+            return
+        }
+        if index >= DeviceManager.sharedInstance.deviceListModel.groups.count {
+            return
+        }
+        let model = DeviceManager.sharedInstance.deviceListModel.groups[index]
+        if model.superModel < 0 {
+            for (k, i) in indexs.enumerated() {
+                if i == index {
+                    currentIndex = k
+                    scrollToSpecialDevice()
+                    return
+                }
+            }
+        }
+        if model.superModel > 0 {
+            for (i, m) in DeviceManager.sharedInstance.deviceListModel.groups.enumerated() {
+                if m.group && m.superModel == model.superModel {
+                    for (k, j) in indexs.enumerated() {
+                        if j == i {
+                            currentIndex = k
+                            scrollToSpecialDevice()
+                            return
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func scrollToSpecialDevice() {
+        DeviceManager.sharedInstance.currentIndex = indexs[currentIndex]
+        let current = DeviceManager.sharedInstance.currentIndex
+        collectionView.scrollToItem(
+            at: IndexPath(item: currentIndex, section: 0),
+            at: .centeredHorizontally,
+            animated: true)
+        let model = DeviceManager.sharedInstance.deviceListModel
+        deviceNameLabel.text = model.groups[current].name
+        TCPSocketManager.sharedInstance.disconnectAll()
+        perform(#selector(handleReconnect), with: nil, afterDelay: 3)
     }
 }
 

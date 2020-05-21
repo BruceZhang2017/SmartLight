@@ -79,9 +79,7 @@ class SearchDeviceViewController: BaseViewController {
         }
         alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
-            guard let pwd = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), pwd.count > 0 else {
-                return
-            }
+            let pwd = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             self?.saveWIFI(ssid: ssid, pwd: pwd)
         }))
         present(alert, animated: true, completion: nil)
@@ -124,7 +122,7 @@ class SearchDeviceViewController: BaseViewController {
         device.cloudy = cloudy
         
         let fan = Fan()
-        fan.enable = false
+        fan.enable = 2
         fan.startTime = 10 * 60
         fan.endTime = 16 * 60
         fan.intensity = 60

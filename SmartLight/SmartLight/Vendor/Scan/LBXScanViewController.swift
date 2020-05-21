@@ -219,7 +219,7 @@ open class LBXScanViewController: UIViewController, UIImagePickerControllerDeleg
     }
     
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func showMsg(title:String?,message:String?){

@@ -39,6 +39,7 @@
         //Send Head Package
         case OrderStatusC:{
             //msgg = @"开始发送头包";
+            NSLog(@"发送第一包数据，包含OTA文件名称");
             NSData *data_first = [self prepareFirstPacketWithFileName:filename];
             if([self.delegate respondsToSelector:@selector(onWriteBleData:)]){
                 [self.delegate onWriteBleData:data_first];
@@ -49,8 +50,8 @@
             
         //Send First Package
         case OrderStatusFirst:{
-            if(self.status == OTAStatusFirstOrder){
-                //msgg=@"开始发送第一包";
+            if(self.status == OTAStatusFirstOrder) {
+                NSLog(@"开始发送第一包");
                 // 正式包数组 获取所有拆解包放入数组中存储
                 if (index_packet != index_packet_cache) {
                     if (!self.packetArray) {
@@ -61,6 +62,7 @@
                     //写入蓝牙数据
                     if([self.delegate respondsToSelector:@selector(onWriteBleData:)]){
                         [self.delegate onWriteBleData:data];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"OTAViewController" object:@(self.packetArray.count * 1000 + index_packet)];
                     }
                     index_packet_cache = index_packet;
                     self.status = OTAStatusBinOrder;
@@ -73,6 +75,7 @@
                     NSData *data = [self prepareEndPacket];
                     if([self.delegate respondsToSelector:@selector(onWriteBleData:)]){
                         [self.delegate onWriteBleData:data];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"OTAViewController" object:@(self.packetArray.count * 1000 + index_packet)];
                     }
                     index_packet = OTAUPEND;
                 }
@@ -95,6 +98,7 @@
                         //拆包发送
                         if([self.delegate respondsToSelector:@selector(onWriteBleData:)]){
                             [self.delegate onWriteBleData:data];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"OTAViewController" object:@(self.packetArray.count * 1000 + index_packet)];
                         }
                         [NSThread sleepForTimeInterval:0.02];
                     }
@@ -107,8 +111,11 @@
                     //msgg=@"准备结束第一次EOT";
                     if([self.delegate respondsToSelector:@selector(onWriteBleData:)]){
                         [self.delegate onWriteBleData:data23];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"OTAViewController" object:@(-1)];
                     }
                     self.status = OTAStatusEOT;
+                    NSLog(@"升级成功");
+                    
                 }
             }
             break;
@@ -163,7 +170,7 @@
             Byte *sub_file_byte = (Byte *)[sub_file_data bytes];
             uint8_t *p_packet;
             p_packet = (uint8_t *)malloc(sub_size+5);
-            PreparePacket(sub_file_byte, p_packet, index,sendSize, (uint32_t)sub_file_data.length);
+            PreparePacket(sub_file_byte, p_packet,sendSize,index, (uint32_t)sub_file_data.length);
             
             NSData *data_ = [NSData dataWithBytes:p_packet length:sizeof(uint8_t)*(sub_size+5)];
             
@@ -254,7 +261,7 @@
             Byte *sub_file_byte = (Byte *)[sub_file_data bytes];
             uint8_t *p_packet;
             p_packet = (uint8_t *)malloc(sub_size+5);
-            PreparePacket(sub_file_byte, p_packet, index,sendSize, (uint32_t)sub_file_data.length);
+            PreparePacket(sub_file_byte, p_packet,sendSize,index, (uint32_t)sub_file_data.length);
             
             NSData *data_ = [NSData dataWithBytes:p_packet length:sizeof(uint8_t)*(sub_size+5)];
             

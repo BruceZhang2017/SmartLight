@@ -24,6 +24,9 @@ class LightningTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if DeviceManager.sharedInstance.deviceListModel.groups.count == 0 {
+            return
+        }
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         ligtning = deviceModel.lightning ?? Lightning()
@@ -61,7 +64,7 @@ class LightningTableViewController: EffectsSettingTableViewController {
                 value[j] = ligtning.intensity
             } else {
                 let manager = CurrentLightValueManager()
-                value[j] = Int(manager.calCurrent(deviceModel: deviceModel, currentTime: time, index: j))
+                value[j] = Int(manager.calCurrentB(deviceModel: deviceModel, currentTime: time, index: j))
             }
         }
         TCPSocketManager.sharedInstance.lightPreview(value: value, tag: 1)
@@ -71,10 +74,16 @@ class LightningTableViewController: EffectsSettingTableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         if section == 0 {
             return 5
         }

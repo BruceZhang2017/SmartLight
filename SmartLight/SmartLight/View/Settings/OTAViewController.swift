@@ -16,41 +16,31 @@ import Alamofire
 
 class OTAViewController: BaseViewController {
 
-    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var upgradeFirmwareALabel: UILabel!
     @IBOutlet weak var upgradeFirmwareBLabel: UILabel!
-    @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var fwLabel: UILabel!
     @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var upgradeNowButton: UIButton!
     @IBOutlet weak var attentionLabel: UILabel!
-    @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var rightLConstraint: NSLayoutConstraint!
     private var bOTA = false
+    private var bOTAing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        downloadButton.layer.borderColor = Color.main.cgColor
-        downloadButton.layer.borderWidth = 0.5
-        textField.backgroundColor = UIColor.white
-        textField.layer.borderColor = Color.main.cgColor
-        textField.layer.borderWidth = 0.5
-        
-        titleLabel.text = "txt_firmware_hint".localized()
         upgradeFirmwareALabel.text = "txt_firewareupgrade".localized()
         upgradeFirmwareBLabel.text = "txt_firewareupgrade".localized()
         noteLabel.text = "txt_firmware_note".localized()
         upgradeNowButton.setTitle("txt_firmware_upgrade_now".localized(), for: .normal)
+        upgradeNowButton.backgroundColor = UIColor.hexToColor(hexString: "2A98D5")
         attentionLabel.text = "txt_firmware_attention".localized()
-        
-        textField.text = "http://www.micmol.com/fw/fw.dpk"
         
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileURL = documentsURL.appendingPathComponent("fw.bin")
         if FileManager.default.fileExists(atPath: fileURL.path) {
             bOTA = true
-            upgradeNowButton.backgroundColor = UIColor.hexToColor(hexString: "2A98D5")
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name("OTAViewController"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +51,20 @@ class OTAViewController: BaseViewController {
     
     deinit {
         TCPSocketManager.sharedInstance.disconnectOTASocket()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func handleNotification(_ notification: Notification) {
+        let count = notification.object as? NSNumber
+        let value = count?.intValue ?? 0
+        let total = Dimension.screenWidth - 40
+        if value < 0 {
+            rightLConstraint.constant = 0
+        } else {
+            let max = value / 1000
+            let current = value % 1000 + 1
+            rightLConstraint.constant = CGFloat(CGFloat(max - current) * total / CGFloat(max))
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -68,14 +72,18 @@ class OTAViewController: BaseViewController {
     }
     
     @IBAction func upgradeNow(_ sender: Any) {
+        if bOTAing == true {
+            return
+        }
         if !bOTA {
+            download()
             return
         }
         TCPSocketManager.sharedInstance.otaUpdate()
+        bOTAing = true
     }
     
-    @IBAction func download(_ sender: Any) {
-        textField.resignFirstResponder()
+    func download() {
         let url = "http://www.woaiyijia.com/iot/micmol_firmware_upgrade.bin"
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -83,15 +91,18 @@ class OTAViewController: BaseViewController {
 
             return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
         }
-
+        view.showHUD()
         Alamofire.download(url, headers: ["Charset": "UTF-8"],to: destination).downloadProgress(closure: { (progress) in
             print(progress.fractionCompleted)
         }).response { [weak self] response in
+            self?.view.hideHUD()
             print(response)
             if response.error == nil {
-                Toast(text: "ota_download_sucess".localized()).show()
                 self?.bOTA = true
-                self?.upgradeNowButton.backgroundColor = UIColor.hexToColor(hexString: "2A98D5")
+                TCPSocketManager.sharedInstance.otaUpdate()
+                self?.bOTAing = true
+            } else {
+                Toast(text: "txt_firewareupgrade_fail".localized()).show()
             }
         }
     }

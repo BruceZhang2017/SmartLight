@@ -23,6 +23,9 @@ class LunnarTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if DeviceManager.sharedInstance.deviceListModel.groups.count == 0 {
+            return
+        }
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         lunnar = deviceModel.lunnar ?? Lunnar()
@@ -70,10 +73,16 @@ class LunnarTableViewController: EffectsSettingTableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         if section == 0 {
             return 3
         }

@@ -1,0 +1,14 @@
+/* 
+  InfoPlist.strings
+  SmartLight
+
+  Created by ANKER on 2020/5/9.
+  Copyright © 2020 PDP-ACC. All rights reserved.
+*/
+
+NSLocationAlwaysAndWhenInUseUsageDescription = "请允许APP在使用期间访问位置，用以查找和连接设备。";
+NSLocationAlwaysUsageDescription = "请允许APP在使用期间访问位置，用以查找和连接设备。";
+NSLocationWhenInUseUsageDescription = "请允许APP在使用期间访问位置，用以查找和连接设备。";
+NSPhotoLibraryAddUsageDescription = "请“允许”访问相册，用于导入图片。";
+NSPhotoLibraryUsageDescription = "请“允许”访问相册，用于导入图片。";
+NSCameraUsageDescription = "请“允许”访问相机，用于扫描图片。";

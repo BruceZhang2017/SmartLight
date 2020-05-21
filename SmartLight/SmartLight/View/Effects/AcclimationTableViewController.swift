@@ -24,11 +24,16 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
     var bottomView: BottomView!
 
     override func viewDidLoad() {
-        deviceListModel = DeviceManager.sharedInstance.deviceListModel
-        deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
-        acclimation = deviceModel.acclimation ?? Acclimation()
+        if DeviceManager.sharedInstance.deviceListModel.groups.count > 0 {
+            deviceListModel = DeviceManager.sharedInstance.deviceListModel
+            deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
+            acclimation = deviceModel.acclimation ?? Acclimation()
+        }
         super.viewDidLoad()
         tableView.register(TableViewHeadView.classForCoder(), forHeaderFooterViewReuseIdentifier: "HEAD")
+        if DeviceManager.sharedInstance.deviceListModel.groups.count == 0 {
+            return
+        }
         bottomView = BottomView(frame: CGRect(x: 0, y: 0, width: Dimension.screenWidth, height: 200))
         bottomView.drawHeight = 130
         tableView.tableFooterView = bottomView
@@ -37,6 +42,9 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if DeviceManager.sharedInstance.deviceListModel.groups.count == 0 {
+            return
+        }
         if deviceModel.deviceType == 3 {
             colors = [Color.bar6, Color.bar2, Color.bar5, Color.yellow]
         } else {
@@ -92,10 +100,16 @@ class AcclimationTableViewController: EffectsSettingTableViewController {
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         if section == 0 {
             return 4
         }
@@ -246,8 +260,14 @@ extension AcclimationTableViewController: CustomPickerViewControllerDelegate {
         DeviceManager.sharedInstance.save()
         handleAcclimation()
         bottomView.drawLine(deviceModel: deviceModel)
-        if acclimation.ramp * 2 > (acclimation.endTime - acclimation.startTime) / 60 {
-            Toast(text: "accl_ramp_time_invalid".localized()).show()
+        if acclimation.endTime > acclimation.startTime {
+            if acclimation.ramp * 2 > (acclimation.endTime - acclimation.startTime) / 60 {
+                Toast(text: "accl_ramp_time_invalid".localized()).show()
+            }
+        } else {
+            if acclimation.ramp * 2 > (acclimation.endTime + 24 * 60 - acclimation.startTime) / 60 {
+                Toast(text: "accl_ramp_time_invalid".localized()).show()
+            }
         }
     }
 }

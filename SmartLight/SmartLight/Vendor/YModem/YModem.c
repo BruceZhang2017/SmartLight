@@ -47,6 +47,10 @@ void PrepareIntialPacket(uint8_t *p_data, const uint8_t *p_file_name, uint32_t l
     /* padding with zeros */
     for (j = i; j < PACKET_SIZE + PACKET_DATA_INDEX; j++)
     {
+        if (j == i) {
+            p_data[j] = 0x20;
+            continue;
+        }
         p_data[j] = 0;
     }
     

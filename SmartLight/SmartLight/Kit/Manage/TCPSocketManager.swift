@@ -23,6 +23,7 @@ class TCPSocketManager: NSObject {
     private var bSelfDisconneced = false // 自己主动断开
     private var otaSocket: GCDAsyncSocket?
     private var util: YModemUtil?
+    private var bSendOTAHead = false
     
     public func connectDeivce() {
         let model = DeviceManager.sharedInstance.deviceListModel
@@ -141,6 +142,7 @@ class TCPSocketManager: NSObject {
     @objc func disconnectAllDevices() {
         bSelfDisconneced = true
         disconnectAll()
+        print("2秒钟后执行回连")
         perform(#selector(reconnectDevice), with: nil, afterDelay: 2)
     }
     
@@ -156,7 +158,7 @@ class TCPSocketManager: NSObject {
                 }
             }
         }
-        
+        print("查找到的ip值为：\(ip)")
         socket.userData = ip
         otaSocket = socket
         connect(ip, socket: socket)
@@ -309,8 +311,11 @@ class TCPSocketManager: NSObject {
         heartTimer?.invalidate()
         heartTimer = nil
         heartTimer = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(sendHeart), userInfo: nil, repeats: true)
-        heartTimer?.fire()
         RunLoop.current.add(heartTimer!, forMode: .common)
+    }
+    
+    func getTemperature() {
+        send(value: "[TP]")
     }
     
     @objc func sendHeart() {
@@ -353,7 +358,9 @@ class TCPSocketManager: NSObject {
             // 如:0830,0930,50,30
             content += ",\(device.cloudy?.startTime ?? 0),\(device.cloudy?.endTime ?? 0),\(device.cloudy?.intensity ?? 0),\(device.cloudy?.speed ?? 0)]"
         } else if type == 5 { // Fan
-            content += ",\((device.fan?.enable ?? false) ? 0 : 1),\(device.fan?.startTime ?? 0),\(device.fan?.endTime ?? 0),\(device.fan?.intensity ?? 0)]"
+            let enable = device.fan?.enable ?? 0
+            let intensity = device.fan?.intensity ?? 0
+            content += ",\(enable),\(device.fan?.startTime ?? 0),\(device.fan?.endTime ?? 0),\(enable > 0 ? intensity : 0)]"
         }
         send(value: content)
     }
@@ -384,6 +391,7 @@ class TCPSocketManager: NSObject {
         if array.count <= 0 {
             return
         }
+        var temIndex = 0
         let deviceListModel = DeviceManager.sharedInstance.deviceListModel
         let current = DeviceManager.sharedInstance.currentIndex
         let device = deviceListModel.groups[current]
@@ -393,98 +401,92 @@ class TCPSocketManager: NSObject {
         if array.count > 2 {
             device.deviceState = Int(array[2]) ?? 0 // 设备状态
         }
- 
+        temIndex = 2
         if array.count > 20 {
             let count = Int(array[3]) ?? 0 // 所有灯光控制点数目
+            temIndex = 3
             if count > 0 {
-                let manualAllOnAllOff = Int(array[4].replacingOccurrences(of: "{", with: "")) ?? 0
-                if manualAllOnAllOff == 2 {
-                    var model: PatternModel? = device.pattern
-                    if model == nil {
-                         model = PatternModel()
-                    }
-                    model?.isManual = (device.deviceState >> 3 & 0x01) > 0
-                    var itemModel: PatternItemModel? = model?.manual
-                    if itemModel == nil {
-                        itemModel = PatternItemModel()
-                    }
-                    for i in 0..<6 {
-                        if i != 5 {
-                            itemModel?.intensity[i] = Int(array[5 + i]) ?? 0
-                        } else {
-                            itemModel?.intensity[i] = Int(array[5 + i].replacingOccurrences(of: "}", with: "")) ?? 0
-                        }
-                    }
-                    device.pattern = model
+                temIndex += 1
+                let tem = temIndex
+                while !array[temIndex].contains("}") {
+                    temIndex += 1
                 }
+                parseForManual(device: device, array: Array(array[tem...temIndex]))
             }
             if count > 1 {
-                var model: Acclimation? = device.acclimation
-                if model == nil {
-                     model = Acclimation()
+                temIndex += 1
+                let tem = temIndex
+                while !array[temIndex].contains("}") {
+                    temIndex += 1
                 }
-                model?.startTime = Int(array[11].replacingOccurrences(of: "{", with: "")) ?? 0
-                model?.endTime = Int(array[12]) ?? 0
-                model?.ramp = Int(array[13]) ?? 0
-                for i in 0..<6 {
-                    if i != 5 {
-                        model?.intesity[i] = Int(array[14 + i]) ?? 0
-                    } else {
-                        model?.intesity[i] = Int(array[14 + i].replacingOccurrences(of: "}", with: "")) ?? 0
-                    }
-                }
-                device.acclimation = model
+                parseForAccl(device: device, array: Array(array[tem...temIndex]))
             }
             if count > 2 {
-                var model: PatternModel? = device.pattern
-                if model == nil {
-                    model = PatternModel()
-                }
-                var values: [PatternItemModel] = []
-                while values.count < count - 2 {
-                    let model: PatternItemModel = PatternItemModel()
-                    model.time = Int(array[20 + values.count * 7].replacingOccurrences(of: "{", with: "")) ?? 0
-                    for j in 0..<6 {
-                        model.intensity[j] = Int(array[21 + values.count * 7 + j].replacingOccurrences(of: "}", with: "")) ?? 0
+                var temArray: [[String]] = []
+                for _ in 0..<count-2 {
+                    temIndex += 1
+                    let tem = temIndex
+                    while !array[temIndex].contains("}") {
+                        temIndex += 1
                     }
-                    values.append(model)
+                    temArray.append(Array(array[tem...temIndex]))
                 }
-                model?.items = values
-                device.pattern = model
+                parseForAuto(device: device, array: temArray)
             }
-            var temIndex = 19 + 7 * max(0, (count - 2))
             if array.count >= temIndex + 4 {
+                temIndex += 1
+                let tem = temIndex
+                while !array[temIndex].contains("}") {
+                    temIndex += 1
+                }
+                let tArray = Array(array[tem...temIndex])
                 let lunnar = Lunnar()
-                lunnar.startTime = Int(array[temIndex + 2]) ?? 0
-                lunnar.endTime = Int(array[temIndex + 3]) ?? 0
-                lunnar.intensity = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
+                lunnar.startTime = Int(tArray[1]) ?? 0
+                lunnar.endTime = Int(tArray[2]) ?? 0
+                lunnar.intensity = Int(tArray[3].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
                 device.lunnar = lunnar
             }
-            temIndex += 4
             if array.count >= temIndex + 6 {
+                temIndex += 1
+                let tem = temIndex
+                while !array[temIndex].contains("}") {
+                    temIndex += 1
+                }
+                let tArray = Array(array[tem...temIndex])
                 let lighting = Lightning()
-                lighting.startTime = Int(array[temIndex + 2]) ?? 0
-                lighting.endTime = Int(array[temIndex + 3]) ?? 0
-                lighting.interval = Int(array[temIndex + 4]) ?? 0
-                lighting.frequency = Int(array[temIndex + 5]) ?? 0
-                lighting.intensity = Int(array[temIndex + 6].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
+                lighting.startTime = Int(tArray[1]) ?? 0
+                lighting.endTime = Int(tArray[2]) ?? 0
+                lighting.interval = Int(tArray[3]) ?? 0
+                lighting.frequency = Int(tArray[4]) ?? 0
+                lighting.intensity = Int(tArray[5].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
                 device.lightning = lighting
             }
-            temIndex += 6
             if array.count >= temIndex + 5 {
+                temIndex += 1
+                let tem = temIndex
+                while !array[temIndex].contains("}") {
+                    temIndex += 1
+                }
+                let tArray = Array(array[tem...temIndex])
                 let cloudy = Cloudy()
-                cloudy.startTime = Int(array[temIndex + 2]) ?? 0
-                cloudy.endTime = Int(array[temIndex + 3]) ?? 0
-                cloudy.intensity = Int(array[temIndex + 4]) ?? 0
-                cloudy.speed = Int(array[temIndex + 5].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
+                cloudy.startTime = Int(tArray[1]) ?? 0
+                cloudy.endTime = Int(tArray[2]) ?? 0
+                cloudy.intensity = Int(tArray[3]) ?? 0
+                cloudy.speed = Int(tArray[4].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
                 device.cloudy = cloudy
             }
-            temIndex += 5
             if array.count >= temIndex + 4 {
+                temIndex += 1
+                let tem = temIndex
+                while !array[temIndex].contains("}") {
+                    temIndex += 1
+                }
+                let tArray = Array(array[tem...temIndex])
                 let fan = Fan()
-                fan.startTime = Int(array[temIndex + 2]) ?? 0
-                fan.endTime = Int(array[temIndex + 3]) ?? 0
-                fan.intensity = Int(array[temIndex + 4].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
+                fan.enable = Int(tArray[0]) ?? 0
+                fan.startTime = Int(tArray[1]) ?? 0
+                fan.endTime = Int(tArray[2]) ?? 0
+                fan.intensity = Int(tArray[3].replacingOccurrences(of: "}", with: "").replacingOccurrences(of: "]", with: "")) ?? 0
                 device.fan = fan
             }
             
@@ -512,9 +514,9 @@ class TCPSocketManager: NSObject {
                 if util == nil {
                     util = YModemUtil(1024)
                     util?.delegate = self
+                    sendData(state: OrderStatusC)
+                    return
                 }
-                sendData(state: OrderStatusC)
-                return
             }
         }
         send(value: "[UPGRADE]")
@@ -526,12 +528,17 @@ class TCPSocketManager: NSObject {
         })
     }
     
-    func handleOTAData(_ data: Data) {
+    @objc func handleOTAData(_ data: Data) {
         if data.count == 0 {
             return
         }
-        if data[0] == 0x43 {
-            sendData(state: OrderStatusFirst)
+        if data[0] == 0x43 || (data.count > 1 && data[1] == 0x43) {
+            if bSendOTAHead {
+                sendData(state: OrderStatusFirst)
+                return
+            }
+            bSendOTAHead = true
+            otaUpdate()
         } else if data[0] == 0x06 {
             sendData(state: OrderStatusACK)
         } else if data[0] == 0x15 {
@@ -548,6 +555,11 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
         log.info("Socket连接建立成功: \(ip)")
         otaSocket = sock
         otaSocket?.userData = ip
+        if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true { // 进入OTA流程
+            print("准备OTA逻辑")
+            sock.readData(withTimeout: -1, tag: 0)
+            return
+        }
         DeviceManager.sharedInstance.connectStatus[ip] = 2
         shake(value: shakeValue)
     }
@@ -573,7 +585,6 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
                 let temIP = "\(array[0]).\(array[1]).\(array[2]).\((Int(array[3]) ?? 0) + 1)"
                 DeviceOTAManager.sharedInstance.deviceOTAList[ip] = false
                 DeviceOTAManager.sharedInstance.deviceOTAList[temIP] = true
-                DeviceOTAManager.sharedInstance.saveCache()
                 sock.userData = temIP
                 sock.delegate = self
                 connect(temIP, socket: sock)
@@ -617,7 +628,7 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
             return
         }
         if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
-            handleOTAData(data)
+            perform(#selector(handleOTAData(_:)), with: data, afterDelay: 1)
             return
         }
         if value.contains("[HS]") { // 握手
@@ -641,15 +652,19 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
                 firmwareVersion = String(array[1])
             }
             reportProfile()
-        } else if value.contains("[TP,") {
+        } else if value.contains("[TP") {
             let start = value.index(value.startIndex, offsetBy: 4)
             let end = value.index(value.endIndex, offsetBy: -1)
-            let t = String(value[start...end])
+            let t = String(value[start..<end])
+            print("获取到的温度：\(t)")
             temperature = Int(t) ?? 0
         } else if value.contains("[UPGRADE]") {
+            print("正在OTA中的设备的IP地址为：\(ip)")
+            DeviceOTAManager.sharedInstance.deviceOTAList = [:]
             DeviceOTAManager.sharedInstance.deviceOTAList[ip] = true
-            DeviceOTAManager.sharedInstance.saveCache()
             perform(#selector(disconnectAllDevices), with: nil, afterDelay: 6)
+        } else if value.contains("[WPU") {
+            getTemperature()
         }
     }
     
@@ -690,6 +705,67 @@ extension TCPSocketManager: YModemUtilDelegate {
         lData.append(0x0D)
         lData.append(0x0A)
         log.info("发送的数据： \(lData.hexEncodedString())")
+        log.info("发送的数据的总长度： \(lData.count)")
         otaSocket?.write(lData, withTimeout: -1, tag: 0)
+    }
+    
+    
+    private func parseForManual(device: DeviceModel, array: [String]) {
+        let manualAllOnAllOff = Int(array[0].replacingOccurrences(of: "{", with: "")) ?? 0
+        if manualAllOnAllOff == 2 {
+            var model: PatternModel? = device.pattern
+            if model == nil {
+                 model = PatternModel()
+            }
+            model?.isManual = (device.deviceState >> 3 & 0x01) > 0
+            var itemModel: PatternItemModel? = model?.manual
+            if itemModel == nil {
+                itemModel = PatternItemModel()
+            }
+            for i in 0..<6 {
+                if i != 5 {
+                    itemModel?.intensity[i] = Int(array[1 + i]) ?? 0
+                } else {
+                    itemModel?.intensity[i] = Int(array[1 + i].replacingOccurrences(of: "}", with: "")) ?? 0
+                }
+            }
+            device.pattern = model
+        }
+    }
+    
+    private func parseForAccl(device: DeviceModel, array: [String]) {
+        var model: Acclimation? = device.acclimation
+        if model == nil {
+             model = Acclimation()
+        }
+        model?.startTime = Int(array[0].replacingOccurrences(of: "{", with: "")) ?? 0
+        model?.endTime = Int(array[1]) ?? 0
+        model?.ramp = Int(array[2]) ?? 0
+        for i in 0..<6 {
+            if i != 5 {
+                model?.intesity[i] = Int(array[3 + i]) ?? 0
+            } else {
+                model?.intesity[i] = Int(array[3 + i].replacingOccurrences(of: "}", with: "")) ?? 0
+            }
+        }
+        device.acclimation = model
+    }
+    
+    private func parseForAuto(device: DeviceModel, array: [[String]]) {
+        var model: PatternModel? = device.pattern
+        if model == nil {
+            model = PatternModel()
+        }
+        var values: [PatternItemModel] = []
+        for i in 0..<array.count {
+            let model: PatternItemModel = PatternItemModel()
+            model.time = Int(array[i][0].replacingOccurrences(of: "{", with: "")) ?? 0
+            for j in 0..<6 {
+                model.intensity[j] = Int(array[i][1 + j].replacingOccurrences(of: "}", with: "")) ?? 0
+            }
+            values.append(model)
+        }
+        model?.items = values
+        device.pattern = model
     }
 }

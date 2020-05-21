@@ -98,7 +98,7 @@ class DeviceListViewController: BaseViewController {
         }
         alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "txt_save".localized(), style: .default, handler: {[weak alert, weak self] (action) in
-            guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+            guard let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), name.count > 0 else {
                 return
             }
             let model = DeviceModel()
@@ -146,7 +146,7 @@ class DeviceListViewController: BaseViewController {
         device.cloudy = cloudy
         
         let fan = Fan()
-        fan.enable = false
+        fan.enable = 2
         fan.startTime = 10 * 60
         fan.endTime = 16 * 60
         fan.intensity = 60
@@ -185,6 +185,9 @@ class DeviceListViewController: BaseViewController {
                 if child > 0 {
                     return
                 }
+                if item.superModel < 0 {
+                    return
+                }
                 guard let item = self?.model.groups.remove(at: self!.selectedIndex - 1) else {
                     return
                 }
@@ -193,9 +196,6 @@ class DeviceListViewController: BaseViewController {
                         DeviceManager.sharedInstance.connectStatus[ip] = 0
                         TCPSocketManager.sharedInstance.disconnect(ip: ip)
                     }
-                }
-                if item.superModel < 0 {
-                    return
                 }
                 for (index, sItem) in self!.model.groups.enumerated() {
                     if sItem.superModel == item.superModel && sItem.group == true {
@@ -316,7 +316,7 @@ extension DeviceListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellIdentifier, for: indexPath) as! DeviceListTableViewCell
-        cell.nameButton?.setTitle( model.groups[indexPath.row].name, for: .normal)
+        cell.nameButton?.setTitle(model.groups[indexPath.row].name, for: .normal)
         cell.arrowImageView.isHidden = !model.groups[indexPath.row].group
         cell.stateImageView.isHidden = !isEdit
         let left = model.groups[indexPath.row].superModel >= 0 && model.groups[indexPath.row].group == false ? 15 : 0
@@ -353,6 +353,8 @@ extension DeviceListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if !isEdit {
+            navigationController?.popToRootViewController(animated: true)
+            NotificationCenter.default.post(name: Notification.Name("Dashboard"), object: indexPath.row)
             return
         }
         if selectedIndex - 1 == indexPath.row {

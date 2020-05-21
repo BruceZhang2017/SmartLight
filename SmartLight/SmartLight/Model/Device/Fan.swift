@@ -13,7 +13,7 @@
 import UIKit
 
 class Fan: NSObject, NSCoding {
-    var enable = false
+    var enable = 0 // 0 关闭 1 自动 2 手动
     var startTime = 0
     var endTime = 0
     var intensity = 0
@@ -31,7 +31,7 @@ class Fan: NSObject, NSCoding {
     
     required convenience init?(coder aDecoder: NSCoder) {
         self.init()
-        enable = aDecoder.decodeBool(forKey: "enable")
+        enable = aDecoder.decodeInteger(forKey: "enable")
         startTime = aDecoder.decodeInteger(forKey: "startTime")
         endTime = aDecoder.decodeInteger(forKey: "endTime")
         intensity = aDecoder.decodeInteger(forKey: "intensity")

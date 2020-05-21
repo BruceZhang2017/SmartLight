@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import Localize_Swift
 
 class DatePickerViewController: UIViewController {
 
@@ -21,6 +22,14 @@ class DatePickerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         doneButton.setTitle("txt_done".localized(), for: .normal)
+        let currentLanguage = Localize.currentLanguage()
+        if currentLanguage.count > 0 {
+            if currentLanguage.contains("zh") {
+                datePicker.locale = Locale(identifier: "zh_CN")
+            } else {
+                datePicker.locale = Locale(identifier: "en_US")
+            }
+        }
     }
 
     @IBAction func valueChanged(_ sender: Any) {

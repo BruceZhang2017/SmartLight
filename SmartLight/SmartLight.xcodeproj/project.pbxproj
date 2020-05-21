@@ -114,6 +114,7 @@
 		9AA1AC4D22FD0C130000F6D2 /* EffectsSettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA1AC4C22FD0C130000F6D2 /* EffectsSettingModel.swift */; };
 		9ABA55B0241CFE6C00A6E1F1 /* YModem.c in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA55AB241CFE6C00A6E1F1 /* YModem.c */; };
 		9ABA55B2241CFE6C00A6E1F1 /* YModemUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA55AD241CFE6C00A6E1F1 /* YModemUtil.m */; };
+		9AC8A671246670FF005D5388 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9AC8A673246670FF005D5388 /* InfoPlist.strings */; };
 		9AE39880238527CC00A2A632 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE3987F238527CC00A2A632 /* BottomView.swift */; };
 		9AE398822385667800A2A632 /* QRCodeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE398812385667800A2A632 /* QRCodeHelper.swift */; };
 /* End PBXBuildFile section */
@@ -273,6 +274,8 @@
 		9ABA55AB241CFE6C00A6E1F1 /* YModem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = YModem.c; sourceTree = "<group>"; };
 		9ABA55AD241CFE6C00A6E1F1 /* YModemUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YModemUtil.m; sourceTree = "<group>"; };
 		9ABA55AF241CFE6C00A6E1F1 /* YModem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YModem.h; sourceTree = "<group>"; };
+		9AC8A672246670FF005D5388 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9AC8A67424667105005D5388 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		9AE3987F238527CC00A2A632 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
 		9AE398812385667800A2A632 /* QRCodeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeHelper.swift; sourceTree = "<group>"; };
 		CD261D01D98AF10D7C326555 /* Pods-SmartLight.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartLight.release.xcconfig"; path = "Target Support Files/Pods-SmartLight/Pods-SmartLight.release.xcconfig"; sourceTree = "<group>"; };
@@ -349,6 +352,7 @@
 				9A101B6122F5C9410033E96B /* Assets.xcassets */,
 				9A101B6322F5C9410033E96B /* LaunchScreen.storyboard */,
 				9A101B6622F5C9410033E96B /* Info.plist */,
+				9AC8A673246670FF005D5388 /* InfoPlist.strings */,
 				9A5B883923C20724009CE2CE /* GoogleService-Info.plist */,
 				9A083AD22379625B0018D54D /* Localizable.strings */,
 				9A101B5E22F5C9400033E96B /* SmartLight.xcdatamodeld */,
@@ -798,6 +802,7 @@
 				9AA1AC3F22FC64C80000F6D2 /* EffectsSettingTableViewCell.xib in Resources */,
 				9A101B6222F5C9410033E96B /* Assets.xcassets in Resources */,
 				9A3E1E8522F836E500A24DB1 /* BarValueView.xib in Resources */,
+				9AC8A671246670FF005D5388 /* InfoPlist.strings in Resources */,
 				9A1020282303D506000F36D7 /* CodeScan.bundle in Resources */,
 				9AA1AC4322FC67160000F6D2 /* EffectsSettingBTableViewCell.xib in Resources */,
 				9A1020132302F38D000F36D7 /* Control.storyboard in Resources */,
@@ -1043,6 +1048,15 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		9AC8A673246670FF005D5388 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9AC8A672246670FF005D5388 /* en */,
+				9AC8A67424667105005D5388 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1172,7 +1186,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = M756U7F837;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1197,9 +1211,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SmartLight/SmartLight.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
-				DEVELOPMENT_TEAM = M756U7F837;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = HJSFJBT72N;
 				INFOPLIST_FILE = SmartLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1207,8 +1222,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.anker.SmartLightDev;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zhangxiaofei.SmartLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "MicMol Distribution";
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartLight/Kit/ObjectC/SmartLight-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

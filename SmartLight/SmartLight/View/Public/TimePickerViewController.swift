@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import Localize_Swift
 
 class TimePickerViewController: UIViewController {
 
@@ -22,6 +23,14 @@ class TimePickerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         doneButton.setTitle("txt_done".localized(), for: .normal)
+        let currentLanguage = Localize.currentLanguage()
+        if currentLanguage.count > 0 {
+            if currentLanguage.contains("zh") {
+                timePicker.locale = Locale(identifier: "zh_CN")
+            } else {
+                timePicker.locale = Locale(identifier: "en_US")
+            }
+        }
     }
     
     @IBAction func valueChanged(_ sender: Any) {

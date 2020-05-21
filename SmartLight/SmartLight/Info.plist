@@ -28,24 +28,24 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>请点击“允许”以允许访问</string>
+	<string>请“允许”访问相机，用于扫描图片。</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>请允许APP始终访问位置</string>
+	<string>请允许APP在使用期间访问位置，用以查找和连接设备。</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>请允许APP访问位置</string>
+	<string>请允许APP在使用期间访问位置，用以查找和连接设备。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>请允许APP在使用期间访问位置</string>
+	<string>请允许APP在使用期间访问位置，用以查找和连接设备。</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>请允许访问您的相册</string>
+	<string>请“允许”访问相册，用于导入图片。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>请允许APP访问相册</string>
+	<string>请“允许”访问相册，用于导入图片。</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
-	<true/>
+	<false/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

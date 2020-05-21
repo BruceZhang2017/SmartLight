@@ -176,6 +176,9 @@ class BashboardCollectionViewCell: UICollectionViewCell {
                 }
             }
         }
+        if tag >= 3 && buttons[1].isSelected {
+            return
+        }
         delegate?.handleMiddleButtonTap(btnTag: tag, tag: self.tag, result: button.isSelected ? 0 : 1)
     }
     

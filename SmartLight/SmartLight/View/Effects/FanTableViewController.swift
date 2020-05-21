@@ -13,7 +13,6 @@
 import UIKit
 
 class FanTableViewController: EffectsSettingTableViewController {
-    
     var deviceListModel: DeviceListModel!
     var deviceModel: DeviceModel!
     var fan: Fan!
@@ -25,6 +24,9 @@ class FanTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if DeviceManager.sharedInstance.deviceListModel.groups.count == 0 {
+            return
+        }
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         fan = deviceModel.fan ?? Fan()
@@ -38,16 +40,22 @@ class FanTableViewController: EffectsSettingTableViewController {
     }
     
     private func handleFan() {
-        TCPSocketManager.sharedInstance.lightEffect(type: 5, result: fan.enable ? 2 : 1, device: deviceModel)
+        TCPSocketManager.sharedInstance.lightEffect(type: 5, result: fan.enable, device: deviceModel)
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         if section == 0 {
             return 4
         }
@@ -62,11 +70,11 @@ class FanTableViewController: EffectsSettingTableViewController {
             if indexPath.row == 0 {
                 cell.mSwitch.isHidden = false
                 cell.desLabel.isHidden = true
-                cell.mSwitch.isOn = fan.enable
+                cell.mSwitch.isOn = fan.enable == 1
             } else if indexPath.row == 1 {
                 cell.mSwitch.isHidden = false
                 cell.desLabel.isHidden = true
-                cell.mSwitch.isOn = !fan.enable
+                cell.mSwitch.isOn = fan.enable == 2
             } else {
                 cell.mSwitch.isHidden = true
                 cell.desLabel.isHidden = false
@@ -87,7 +95,7 @@ class FanTableViewController: EffectsSettingTableViewController {
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: .kCellBIdentifier, for: indexPath) as! EffectsSettingBTableViewCell
         cell.delegate = self
-        cell.mSlider.value = Float(fan.intensity) / Float(100)
+        cell.mSlider.value = Float(min(100, fan.intensity)) / Float(100)
         cell.mSlider.minimumValueImage = UIImage(named: "乌龟")
         cell.mSlider.maximumValueImage = UIImage(named: "兔子")
         return cell
@@ -100,7 +108,7 @@ class FanTableViewController: EffectsSettingTableViewController {
             headView.contentLabel.text = ""
         } else {
             headView.titleLabel.text = "txt_fan_speed".localized().uppercased()
-            headView.contentLabel.text = "\(fan.intensity)%"
+            headView.contentLabel.text = "\(min(100, fan.intensity))%"
         }
         return headView
     }
@@ -161,9 +169,23 @@ extension FanTableViewController: EffectsSettingBTableViewCellDelegate {
 extension FanTableViewController: EffectsSettingTableViewCellDelegate {
     func valueChanged(_ value: Bool, tag: Int) {
         if tag == 0 {
-            fan.enable = value
+            if value {
+                fan.enable = 1
+            } else {
+                if fan.enable == 2 {
+                    return
+                }
+                fan.enable = 0
+            }
         } else {
-            fan.enable = !value
+            if value {
+                fan.enable = 2
+            } else {
+                if fan.enable == 1 {
+                    return
+                }
+                fan.enable = 0
+            }
         }
         tableView.reloadData()
         deviceModel.fan = fan

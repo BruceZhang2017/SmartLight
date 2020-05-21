@@ -80,7 +80,7 @@ class DeviceManager: NSObject {
         
         if device.fan == nil {
             let fan = Fan()
-            fan.enable = false
+            fan.enable = 2
             fan.startTime = 10 * 60
             fan.endTime = 16 * 60
             fan.intensity = 60

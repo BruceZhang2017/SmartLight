@@ -23,6 +23,9 @@ class CloudyTableViewController: EffectsSettingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if DeviceManager.sharedInstance.deviceListModel.groups.count == 0 {
+            return
+        }
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
         deviceModel = deviceListModel.groups[DeviceManager.sharedInstance.currentIndex]
         cloudy = deviceModel.cloudy ?? Cloudy()
@@ -52,20 +55,29 @@ class CloudyTableViewController: EffectsSettingTableViewController {
             handleLightEffect() // 发送真实的SCHEDULE
             return
         }
-        let s2e = cloudy.endTime - cloudy.startTime
+        var s2e = 0
+        var end = 0 // 结束时间
+        if cloudy.endTime > cloudy.startTime {
+            s2e = cloudy.endTime - cloudy.startTime
+            end = cloudy.endTime
+        } else {
+            s2e = 24 * 60 - cloudy.startTime
+            end = 24 * 60
+        }
         let duration = s2e / totalIndex
         var value = [0, 0, 0, 0, 0, 0]
         let time = cloudy.startTime + currentIndex * duration
+        var value1 = 0
+        if time < (end + cloudy.startTime) / 2 {
+            value1 = cloudy.intensity * (time - cloudy.startTime) / (s2e / 2)
+        } else {
+            value1 = cloudy.intensity * (end - time) / (s2e / 2)
+        }
         for j in 0..<value.count {
             if j == 1 {
-                if time < (cloudy.endTime + cloudy.startTime) / 2 {
-                    value[j] = cloudy.intensity * (time - cloudy.startTime) / (s2e / 2)
-                } else {
-                    value[j] = cloudy.intensity * (cloudy.endTime - time) / (s2e / 2)
-                }
+                value[j] = value1
             } else {
-                let manager = CurrentLightValueManager()
-                value[j] = Int(manager.calCurrent(deviceModel: deviceModel, currentTime: time, index: j))
+                value[j] = cloudy.intensity - value1
             }
         }
         TCPSocketManager.sharedInstance.lightPreview(value: value, tag: 1)
@@ -75,10 +87,16 @@ class CloudyTableViewController: EffectsSettingTableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if deviceModel == nil {
+            return 0
+        }
         if section == 0 {
             return 3
         } else if section == 1 {
@@ -117,12 +135,12 @@ class CloudyTableViewController: EffectsSettingTableViewController {
         cell.delegate = self
         cell.tag = indexPath.section
         if indexPath.section == 1 {
-            cell.mSlider.value = Float(cloudy.intensity) / Float(100)
+            cell.mSlider.value = Float(min(100, cloudy.intensity)) / Float(100)
         } else {
             cell.mSlider.minimumValueImage = UIImage(named: "乌龟")
             cell.mSlider.maximumValueImage = UIImage(named: "兔子")
-            cell.mSlider.minimumValue = 10
-            cell.mSlider.maximumValue = 120
+            cell.mSlider.minimumValue = 1
+            cell.mSlider.maximumValue = 30
             cell.mSlider.value = Float(cloudy.speed)
         }
         return cell
@@ -135,10 +153,10 @@ class CloudyTableViewController: EffectsSettingTableViewController {
             headView.contentLabel.text = ""
         } else if section == 1 {
             headView.titleLabel.text = "txt_intensity".localized().uppercased()
-            headView.contentLabel.text = "\(cloudy.intensity)%"
+            headView.contentLabel.text = "\(min(100, cloudy.intensity))%"
         }else {
             headView.titleLabel.text = "txt_speed".localized().uppercased()
-            headView.contentLabel.text = "\(cloudy.speed)\("time_s".localized())"
+            headView.contentLabel.text = "\(min(30, cloudy.speed))\("time_s".localized())"
         }
         return headView
     }

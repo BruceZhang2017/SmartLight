@@ -17,7 +17,7 @@
  
 "txt_quicksetup"="Quick Setup";
  
-"txt_enterpassword"="Enter Password";
+"txt_enterpassword"="Enter Router's Wi-Fi Password";
 "txt_updatepassword"="Update Password";
  
 "txt_dashboard"="Dashboard";
@@ -61,6 +61,7 @@
 "txt_deviceinfo"="Device Information";
 "txt_firewareversion"="Firmware Version";
 "txt_firewareupgrade"="Upgrade Firmware";
+"txt_firewareupgrade_fail"="Upgrade Firmware Fail";
  
 "txt_languages_list"="多语⾔";
 "txt_english"="English";
@@ -180,7 +181,7 @@
 "light_effect_settings" = "Effect settings";
 "other_settings" = "Other Devices";
 "album" = "Album";
-"txt_fan_attention" = "Attentions:\n\n1. Auto mode: The cooling fan will run according to the following settings;\n  Water Temperature < 23C - Fan speed 0%\n  Water Temperature > 24C - Fan speed 25%\n  Water Temperature > 26C - Fan speed 50%\n  Water Temperature > 28C - Fan speed 75%\n  Water Temperature > 30C - Fan speed 100%\n\n2. Make sure the temperature sensor is underwater,otherwise the cooling fan will not work.";
+"txt_fan_attention" = "Attentions:\n\n1. Auto mode: The cooling fan will run according to the following settings;\n  Water Temperature < 23C - Fan speed 0%\n  Water Temperature > 24C - Fan speed 25%\n  Water Temperature > 26C - Fan speed 50%\n  Water Temperature > 28C - Fan speed 75%\n  Water Temperature > 30C - Fan speed 100%\n\n2. Make sure the temperature sensor is underwater, otherwise the cooling fan will not work.";
 
 "am" = "AM";
 "pm" = "PM";
@@ -193,3 +194,4 @@
 "ota_download_sucess" = "OTA download success!";
 "accl_ramp_time_invalid" = "Ramp time invalid";
 "time_s" = "S";
+"ota_top_tip" = "Note: Please make sure your phone is connected the network.";

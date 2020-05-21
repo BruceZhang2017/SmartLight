@@ -15,24 +15,4 @@ import UIKit
 class DeviceOTAManager: NSObject {
     static let sharedInstance = DeviceOTAManager()
     var deviceOTAList: [String: Bool] = [:]
-    
-    override init() {
-        super.init()
-        readCache()
-    }
-    
-    func readCache() {
-        if deviceOTAList.count == 0 {
-            if let list = UserDefaults.standard.dictionary(forKey: "DeviceOTA") as? [String: Bool] {
-                deviceOTAList = list
-            }
-        }
-    }
-    
-    func saveCache() {
-        if deviceOTAList.count > 0 {
-            UserDefaults.standard.set(deviceOTAList, forKey: "DeviceOTA")
-            UserDefaults.standard.synchronize()
-        }
-    }
 }

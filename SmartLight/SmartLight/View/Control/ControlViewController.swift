@@ -59,6 +59,9 @@ class ControlViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if DeviceManager.sharedInstance.deviceListModel.groups.count == 0 {
+            return
+        }
         title = "txt_control".localized()
         self.navigationController?.navigationBar.barTintColor = Color.main
         deviceListModel = DeviceManager.sharedInstance.deviceListModel
@@ -81,10 +84,12 @@ class ControlViewController: BaseViewController {
         super.viewDidAppear(animated)
         if currentTime == 0 {
             clock()
-            let touchView = bottomView.viewWithTag(100) as! TouchBarValueView
-            touchView.setValue(0)
+            let touchView = bottomView.viewWithTag(100) as? TouchBarValueView
+            touchView?.setValue(0)
         }
-        
+        if deviceModel == nil {
+            return
+        }
         let state = deviceModel.deviceState
         let low = state & 0x0f
         if low == 8 {
@@ -377,6 +382,9 @@ class ControlViewController: BaseViewController {
     }
 
     @IBAction func valueChanged(_ sender: Any) {
+        if currentPattern == nil {
+            return
+        }
         endDetectionTimer()
         currentPattern.isManual = segmentedControl.selectedSegmentIndex != 0
         topView.isHidden = segmentedControl.selectedSegmentIndex != 0
@@ -399,6 +407,9 @@ class ControlViewController: BaseViewController {
     }
     
     @objc private func handleEvent(_ sender: Any) {
+        if currentPattern == nil {
+            return
+        }
         guard let button = sender as? UIButton else {
             return
         }
@@ -432,7 +443,12 @@ class ControlViewController: BaseViewController {
                 currentItem = currentItem + 1
             } else {
                 currentPattern.items.append(item)
-                currentItem = currentPattern.items.count - 1
+                if currentPattern.items.count > 0 {
+                    currentItem = currentPattern.items.count - 1
+                } else {
+                    currentItem = 0
+                }
+                
             }
             topView.floatView.isHidden = false
             topView.left = topView.timeToLeft(value: item.time)
@@ -468,7 +484,7 @@ class ControlViewController: BaseViewController {
                 if currentItem > 0 {
                     let pre = topView.timeToLeft(value: currentPattern.items[currentItem - 1].time)
                     print("左移：\(pre)")
-                    if topView.left - w >= pre + 40 {
+                    if topView.left - w <= pre {
                         return
                     }
                     topView.left -= w
@@ -497,7 +513,7 @@ class ControlViewController: BaseViewController {
                 if currentItem < currentPattern.items.count - 1 {
                     let pre = topView.timeToLeft(value: currentPattern.items[currentItem + 1].time)
                     print("右移：\(pre)")
-                    if topView.left + w + 40 >= pre {
+                    if topView.left + w >= pre {
                         return
                     }
                     topView.left += w
@@ -719,6 +735,9 @@ extension ControlViewController: TouchBarValueViewDelegate {
 
 extension ControlViewController: TopViewDelegate {
     func touchValue(_ pointX: CGFloat) {
+        if currentItem < 0 {
+            return
+        }
         if currentItem >= currentPattern.items.count {
             return
         }
@@ -741,6 +760,9 @@ extension ControlViewController: TopViewDelegate {
     }
     
     func touchCurrent(_ current: Int) {
+        if currentPattern == nil {
+            return
+        }
         currentItem = current
         if currentItem >= currentPattern.items.count {
             return
@@ -758,6 +780,9 @@ extension ControlViewController: TopViewDelegate {
     }
     
     func readBeforeValue() -> Int {
+        if currentPattern == nil {
+            return 0
+        }
         if currentItem - 1 >= 0 {
             return currentPattern.items[currentItem - 1].time
         }
@@ -765,6 +790,9 @@ extension ControlViewController: TopViewDelegate {
     }
     
     func readAfterValue() -> Int {
+        if currentPattern == nil {
+            return 0
+        }
         if currentItem + 1 < currentPattern.items.count {
             return currentPattern.items[currentItem + 1].time
         }

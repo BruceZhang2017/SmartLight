@@ -25,12 +25,13 @@ class OTAViewController: BaseViewController {
     @IBOutlet weak var rightLConstraint: NSLayoutConstraint!
     private var bOTA = false
     private var bOTAing = false
+    private var bCanOTA = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         upgradeFirmwareALabel.text = "txt_firewareupgrade".localized()
         upgradeFirmwareBLabel.text = "txt_firewareupgrade".localized()
-        noteLabel.text = "txt_firmware_note".localized()
+        noteLabel.text = "ota_top_tip".localized()
         upgradeNowButton.setTitle("txt_firmware_upgrade_now".localized(), for: .normal)
         upgradeNowButton.backgroundColor = UIColor.hexToColor(hexString: "2A98D5")
         attentionLabel.text = "txt_firmware_attention".localized()
@@ -41,6 +42,7 @@ class OTAViewController: BaseViewController {
             bOTA = true
         }
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: Notification.Name("OTAViewController"), object: nil)
+        fwLabel.text = "current_version".localized() + (firmwareVersion.count > 0 ? firmwareVersion : "0.00")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +74,14 @@ class OTAViewController: BaseViewController {
     }
     
     @IBAction func upgradeNow(_ sender: Any) {
+        if !bCanOTA {
+            getNewestVersion()
+            return
+        }
+        showAlert()
+    }
+    
+    private func startOTA() {
         if bOTAing == true {
             return
         }
@@ -81,6 +91,22 @@ class OTAViewController: BaseViewController {
         }
         TCPSocketManager.sharedInstance.otaUpdate()
         bOTAing = true
+    }
+    
+    func getNewestVersion() {
+        Alamofire.request("http://www.woaiyijia.com/iot/micmol.json").responseJSON { [weak self] (response) in
+            guard let dic = response.value as? [String: String] else {
+                return
+            }
+            let ver = dic["ver"] ?? ""
+            if ver.count > 0 {
+                self?.fwLabel.text = "new_version".localized() + ver
+                self?.bCanOTA = true
+            } else {
+                self?.fwLabel.text = "no_new_version".localized()
+            }
+            
+        }
     }
     
     func download() {
@@ -104,6 +130,19 @@ class OTAViewController: BaseViewController {
             } else {
                 Toast(text: "txt_firewareupgrade_fail".localized()).show()
             }
+        }
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "ota_attention".localized(), message: "ota_attention_message".localized(), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "txt_cancel".localized(), style: .cancel, handler: { (action) in
+            
+        }))
+        alert.addAction(UIAlertAction(title: "txt_confirm".localized(), style: .default, handler: { [weak self] (action) in
+            self?.startOTA()
+        }))
+        present(alert, animated: true) {
+            
         }
     }
 }

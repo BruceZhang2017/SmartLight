@@ -179,4 +179,10 @@
 "ota_download_sucess" = "OTA下载成功!";
 "accl_ramp_time_invalid" = "斜坡时间无效";
 "time_s" = "秒";
-"ota_top_tip" = "注意: 请确保您的手机已联网";
+"ota_top_tip" = "请检查是否有可下载的新固件, 并确保您的手机已连接到网络。";
+"current_version" = "当前版本 V";
+"no_new_version" = "没有可用的新版本!";
+"new_version" = "最新版本 V";
+"ota_attention" = "注意！";
+"ota_attention_message" = "请确保设备已连接到手机上固件将自动安装，请不要在升级过程中关闭设备电源，否则会损坏设备。";
+"ota_device_connect_tip" = "请先连接设备";

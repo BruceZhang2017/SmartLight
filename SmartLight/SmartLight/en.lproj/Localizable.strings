@@ -194,4 +194,10 @@
 "ota_download_sucess" = "OTA download success!";
 "accl_ramp_time_invalid" = "Ramp time invalid";
 "time_s" = "S";
-"ota_top_tip" = "Note: Please make sure your phone is connected the network.";
+"ota_top_tip" = "Please check if there is new firmware available, and make sure your phone is connected the network.";
+"current_version" = "Current Version V";
+"no_new_version" = "No new Version Available!";
+"new_version" = "New Version V";
+"ota_attention" = "ATTENTION!";
+"ota_attention_message" = "Please make sure the device is connected on your phone the firmware will installing automatic, please DO NOT power off of your device under upgrading, or will destroy your device.";
+"ota_device_connect_tip" = "Please connect device first!";

@@ -62,7 +62,7 @@ class TableViewHeaderView: UIView {
             $0.textColor = UIColor.white
             $0.font = UIFont.systemFont(ofSize: 16)
             $0.textAlignment = .center
-            $0.text = "\(temperature)C"
+            $0.text = "\(temperature)℃"
         }
         bView.addSubview(temperatureCLabel)
         temperatureCLabel.snp.makeConstraints {
@@ -75,7 +75,7 @@ class TableViewHeaderView: UIView {
             $0.textColor = UIColor.white
             $0.font = UIFont.systemFont(ofSize: 16)
             $0.textAlignment = .center
-            $0.text = "\(32 + temperature)F"
+            $0.text = "\(Int(32 + Double(temperature) * 1.8))℉"
         }
         bView.addSubview(temperatureFLabel)
         temperatureFLabel.snp.makeConstraints {

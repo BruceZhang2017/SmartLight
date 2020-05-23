@@ -442,8 +442,7 @@ extension DashboardViewController: BashboardCollectionViewCellDelegate {
             collectionView.reloadData()
             perform(#selector(self.closeLunnar), with: nil, afterDelay: 0.05)
         case 1: // ACCL
-            let high = (value >> 4) & 0x0f
-            device.deviceState = ((high >= 8 ? (high - 8) : high) << 4) + 0x01
+            device.deviceState = 0x01
             DeviceManager.sharedInstance.save()
             TCPSocketManager.sharedInstance.lightSchedual(model: 4, device: device)
             collectionView.reloadData()

@@ -18,7 +18,7 @@ import XCGLogger
 import Firebase
 
 let log = XCGLogger.default
-var temperature = 0
+var temperature = 25
 var firmwareVersion = ""
 var wifiName = ""
 

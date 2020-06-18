@@ -24,7 +24,6 @@ class SearchDeviceViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         topLabel.text = "txt_deviceslist_top".localized()
-        //results = [ESPTouchResult(isSuc: true, andBssid: "000000000000", andInetAddrData: Data(repeating: 0x00, count: 3))]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,10 +58,10 @@ class SearchDeviceViewController: BaseViewController {
     
     /// 初始化SmartConfig
     private func initializeSmartConfig() {
-        if controller == nil {
-            controller = ESPController(delegate: self)
-        }
-        controller?.tapConfirmForResults()
+            if controller == nil {
+                controller = ESPController(delegate: self)
+            }
+            controller?.tapConfirmForResults()
     }
     
     private func clearSmartConfig() {

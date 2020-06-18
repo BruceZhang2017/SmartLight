@@ -11,6 +11,7 @@
 	
 
 import UIKit
+import Toaster
 
 class EffectsTableViewController: UITableViewController {
     
@@ -60,6 +61,10 @@ class EffectsTableViewController: UITableViewController {
     // MARK: - Action
     
     @objc private func pushToMenu() {
+        if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
+            Toast(text: "ap_mode_can_not_use".localized()).show()
+            return
+        }
         let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceList) as! DeviceListViewController
         navigationController?.pushViewController(viewController, animated: true)

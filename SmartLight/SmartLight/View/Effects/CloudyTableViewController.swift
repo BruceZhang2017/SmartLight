@@ -55,23 +55,12 @@ class CloudyTableViewController: EffectsSettingTableViewController {
             handleLightEffect() // 发送真实的SCHEDULE
             return
         }
-        var s2e = 0
-        var end = 0 // 结束时间
-        if cloudy.endTime > cloudy.startTime {
-            s2e = cloudy.endTime - cloudy.startTime
-            end = cloudy.endTime
-        } else {
-            s2e = 24 * 60 - cloudy.startTime
-            end = 24 * 60
-        }
-        let duration = s2e / totalIndex
         var value = [0, 0, 0, 0, 0, 0]
-        let time = cloudy.startTime + currentIndex * duration
         var value1 = 0
-        if time < (end + cloudy.startTime) / 2 {
-            value1 = cloudy.intensity * (time - cloudy.startTime) / (s2e / 2)
+        if currentIndex < totalIndex / 2 {
+            value1 = cloudy.intensity * currentIndex / (totalIndex / 2)
         } else {
-            value1 = cloudy.intensity * (end - time) / (s2e / 2)
+            value1 = cloudy.intensity * (totalIndex - currentIndex) / (totalIndex / 2)
         }
         for j in 0..<value.count {
             if j == 1 {
@@ -234,7 +223,7 @@ extension CloudyTableViewController: EffectsSettingTableViewCellDelegate {
         deviceModel.deviceState = (((value ? 0x01 : 0x00) + high & 0b1110) << 4) + low
         DeviceManager.sharedInstance.save()
         if value {
-            PreviousFunction(count: 50) // 先预览200ms一次
+            PreviousFunction(count: 100) // 先预览100ms一次
         } else {
             handleLightEffect()
         }

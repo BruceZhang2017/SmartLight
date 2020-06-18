@@ -57,6 +57,9 @@ extension Int {
             if h > 12 {
                 return "\(String(format: "%02i", h - 12)):\(String(format: "%02i", m)) " + "pm".localized()
             } else {
+                if h == 12 {
+                    return "\(String(format: "%02i", h)):\(String(format: "%02i", m)) " + "pm".localized()
+                }
                 if h == 0 {
                     h = 12
                 }

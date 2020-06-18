@@ -13,6 +13,7 @@
 import UIKit
 import SafariServices
 import Localize_Swift
+import Toaster
 
 class SettingsTableViewController: UITableViewController {
     
@@ -74,6 +75,10 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Action
     
     @objc private func pushToMenu() {
+        if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
+            Toast(text: "ap_mode_can_not_use".localized()).show()
+            return
+        }
         let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceList) as! DeviceListViewController
         navigationController?.pushViewController(viewController, animated: true)

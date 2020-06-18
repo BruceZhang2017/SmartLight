@@ -24,6 +24,7 @@ class TCPSocketManager: NSObject {
     private var otaSocket: GCDAsyncSocket?
     private var util: YModemUtil?
     private var bSendOTAHead = false
+    private var otaRetry = false
     
     public func connectDeivce() {
         let model = DeviceManager.sharedInstance.deviceListModel
@@ -203,7 +204,7 @@ class TCPSocketManager: NSObject {
     }
     
     /// 握手
-    func shake(value: Int) {
+    private func shake(value: Int) {
         send(value: "[HS,\(value)]")
     }
     
@@ -218,7 +219,7 @@ class TCPSocketManager: NSObject {
         let wifiList = UserDefaults.standard.object(forKey: .kWIFIPWD) as? [String : String] ?? [:]
         print("wifiList: \(wifiList)")
         let password = wifiList[ssid] ?? ""
-        if ssid == "SmartLEDLight" {
+        if ssid == "SmartLEDLight" { // 密码为12345678
             return
         }
         send(value: "[WPU,\(ssid),\(password)]")
@@ -310,7 +311,7 @@ class TCPSocketManager: NSObject {
     func startHeartTimer() {
         heartTimer?.invalidate()
         heartTimer = nil
-        heartTimer = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(sendHeart), userInfo: nil, repeats: true)
+        heartTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(sendHeart), userInfo: nil, repeats: true)
         RunLoop.current.add(heartTimer!, forMode: .common)
     }
     
@@ -320,7 +321,12 @@ class TCPSocketManager: NSObject {
     
     @objc func sendHeart() {
         if otaSocket != nil {
-            return
+            guard let ip = otaSocket?.userData as? String else {
+                return
+            }
+            if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
+                return
+            }
         }
         send(value: "[HB]")
     }
@@ -391,8 +397,12 @@ class TCPSocketManager: NSObject {
         if array.count <= 0 {
             return
         }
+        
         var temIndex = 0
         let deviceListModel = DeviceManager.sharedInstance.deviceListModel
+        if deviceListModel.groups.count == 0 {
+            return
+        }
         let current = DeviceManager.sharedInstance.currentIndex
         let device = deviceListModel.groups[current]
         if array.count > 1 {
@@ -507,7 +517,27 @@ class TCPSocketManager: NSObject {
         
     }
     
-    func otaUpdate() {
+    func otaUpdateAgain() {
+        print("otaUpdateAgain")
+        otaRetry = true
+        send(value: "[UPGRADE]")
+        perform(#selector(disconnectAndReconnect), with: nil, afterDelay: 10)
+    }
+    
+    @objc private func disconnectAndReconnect() {
+        if !otaRetry {
+            return
+        }
+        guard let ip = otaSocket?.userData as? String else {
+            return
+        }
+        DeviceOTAManager.sharedInstance.deviceOTAList = [:]
+        DeviceOTAManager.sharedInstance.deviceOTAList[ip] = true
+        DeviceOTAManager.sharedInstance.saveOTAState(ip: ip)
+        perform(#selector(disconnectAllDevices), with: nil, afterDelay: 2)
+    }
+    
+    @objc private func otaUpdate() {
         if otaSocket != nil {
             let ip = otaSocket?.userData as? String ?? ""
             if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
@@ -519,7 +549,6 @@ class TCPSocketManager: NSObject {
                 }
             }
         }
-        send(value: "[UPGRADE]")
     }
     
     func sendData(state: OrderStatus) {
@@ -529,6 +558,7 @@ class TCPSocketManager: NSObject {
     }
     
     @objc func handleOTAData(_ data: Data) {
+        print("处理OTA返回数据")
         if data.count == 0 {
             return
         }
@@ -553,69 +583,75 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
             return
         }
         log.info("Socket连接建立成功: \(ip)")
+        if DeviceManager.sharedInstance.connectStatus[ip] == 2 {
+            return
+        }
         otaSocket = sock
         otaSocket?.userData = ip
-        if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true { // 进入OTA流程
+        DeviceManager.sharedInstance.connectStatus[ip] = 2
+        if DeviceOTAManager.sharedInstance.getOTAState(ip: ip) { // 进入OTA流程
             print("准备OTA逻辑")
+            DeviceOTAManager.sharedInstance.deviceOTAList[ip] = true
             sock.readData(withTimeout: -1, tag: 0)
             return
         }
-        DeviceManager.sharedInstance.connectStatus[ip] = 2
         shake(value: shakeValue)
     }
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
+        print("SOCKET 断开连接")
         if let error = err as NSError? {
             log.info("断开连接信息: \(error.code) \(error.domain)")
+            if error.code == 7 {
+                return
+            }
         }
         if bSelfDisconneced {
             return
         }
-        if err != nil {
-            guard let ip = sock.userData as? String else {
-                return
-            }
-            if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
-                log.info("Socket连接建立失败 OTA")
-                let array = ip.components(separatedBy: ".")
-                if array.count == 4 && (Int(array[3]) ?? 0) >= 255 {
-                    print("OTA失败")
-                    return
-                }
-                let temIP = "\(array[0]).\(array[1]).\(array[2]).\((Int(array[3]) ?? 0) + 1)"
-                DeviceOTAManager.sharedInstance.deviceOTAList[ip] = false
-                DeviceOTAManager.sharedInstance.deviceOTAList[temIP] = true
-                sock.userData = temIP
-                sock.delegate = self
-                connect(temIP, socket: sock)
-                return
-            }
-            DeviceManager.sharedInstance.connectStatus[ip] = 0
-            if sockets.count == 0 {
-                return
-            }
-            if ip == "" {
-                return
-            }
-            let name = ESPTools.getCurrentWiFiSsid() ?? ""
-            if name.count == 0 {
-                return
-            }
-            var a = false
-            for socket in sockets {
-                let ipB = socket.userData as? String ?? ""
-                if ipB == ip {
-                    a = true
-                    break
-                }
-            }
-            if a == false {
-                return
-            }
-            
-            sock.delegate = self
-            connect(ip, socket: sock)
+        guard let ip = sock.userData as? String else {
+            return
         }
+        if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
+            log.info("Socket连接建立失败 OTA")
+            let array = ip.components(separatedBy: ".")
+            if array.count == 4 && (Int(array[3]) ?? 0) >= 255 {
+                print("OTA失败")
+                return
+            }
+            let temIP = "\(array[0]).\(array[1]).\(array[2]).\((Int(array[3]) ?? 0) + 1)"
+            DeviceOTAManager.sharedInstance.deviceOTAList[ip] = false
+            DeviceOTAManager.sharedInstance.deviceOTAList[temIP] = true
+            sock.userData = temIP
+            sock.delegate = self
+            connect(temIP, socket: sock)
+            return
+        }
+        DeviceManager.sharedInstance.connectStatus[ip] = 0
+        if sockets.count == 0 {
+            return
+        }
+        if ip == "" {
+            return
+        }
+        let name = ESPTools.getCurrentWiFiSsid() ?? ""
+        if name.count == 0 {
+            return
+        }
+        var a = false
+        for socket in sockets {
+            let ipB = socket.userData as? String ?? ""
+            if ipB == ip {
+                a = true
+                break
+            }
+        }
+        if a == false {
+            return
+        }
+        
+        sock.delegate = self
+        connect(ip, socket: sock)
     }
     
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
@@ -623,10 +659,10 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
         guard let value = String(data: data, encoding: String.Encoding.utf8) else {
             return
         }
-        log.info("Socket返回的字符串值：{\(value)}")
         guard let ip = sock.userData as? String else {
             return
         }
+        log.info("Socket返回的字符串值：{\(value)}")
         if DeviceOTAManager.sharedInstance.deviceOTAList[ip] == true {
             perform(#selector(handleOTAData(_:)), with: data, afterDelay: 1)
             return
@@ -638,8 +674,8 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
             }
         } else if value.contains("[TU]") { // 更新时间
             getVersion()
-        } else if value.contains("[HB]") { // 心跳
-            
+        } else if value.contains("[HB") { // 心跳
+            print("接受到心跳数据")
         } else if value.contains("[LS]") { // 灯光预设
             
         } else if value.contains("[RP") {
@@ -660,11 +696,15 @@ extension TCPSocketManager: GCDAsyncSocketDelegate {
             temperature = Int(t) ?? 0
         } else if value.contains("[UPGRADE]") {
             print("正在OTA中的设备的IP地址为：\(ip)")
+            otaRetry = false
             DeviceOTAManager.sharedInstance.deviceOTAList = [:]
             DeviceOTAManager.sharedInstance.deviceOTAList[ip] = true
+            DeviceOTAManager.sharedInstance.saveOTAState(ip: ip)
             perform(#selector(disconnectAllDevices), with: nil, afterDelay: 6)
         } else if value.contains("[WPU") {
             getTemperature()
+        } else {
+            print("解析无用数据")
         }
     }
     

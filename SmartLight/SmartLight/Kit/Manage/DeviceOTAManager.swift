@@ -15,4 +15,20 @@ import UIKit
 class DeviceOTAManager: NSObject {
     static let sharedInstance = DeviceOTAManager()
     var deviceOTAList: [String: Bool] = [:]
+    
+    func saveOTAState(ip: String) {
+        UserDefaults.standard.set(true, forKey: ip)
+        UserDefaults.standard.synchronize()
+    }
+    
+    func clearOTAState() {
+        for (ip, _) in deviceOTAList {
+            UserDefaults.standard.set(false, forKey: ip)
+        }
+        deviceOTAList = [:]
+    }
+    
+    func getOTAState(ip: String) -> Bool {
+        return UserDefaults.standard.bool(forKey: ip)
+    }
 }

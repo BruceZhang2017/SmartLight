@@ -13,6 +13,7 @@
 import UIKit
 import EFQRCode
 import Localize_Swift
+import Toaster
 
 class DashboardViewController: BaseViewController {
     
@@ -26,7 +27,8 @@ class DashboardViewController: BaseViewController {
     @IBOutlet weak var timeLabelTopLConstraint: NSLayoutConstraint!
     @IBOutlet weak var bottomLConstraint: NSLayoutConstraint!
     var clockTimer: Timer!
-    var currentTime = 0 // 当前时间
+    private var currentTime = 0 // 当前时间
+    private var currentTimeSecond = 0 // 当前时间秒
     var indexs: [Int] = []
     var currentIndex = 0 // 当前的坐标
     var scan: LBXScanViewController!
@@ -63,13 +65,6 @@ class DashboardViewController: BaseViewController {
             navigationItem.leftBarButtonItem?.isEnabled = false
             navigationItem.rightBarButtonItem?.isEnabled = false
             welcomeView.isHidden = false
-            //navigationController?.tabBarController?.tabBar.isUserInteractionEnabled = false
-//            guard let items = navigationController?.tabBarController?.tabBar.items else {
-//                return
-//            }
-//            for item in items {
-//                item.isEnabled = false
-//            }
         } else {
             if current >= model.groups.count {
                 return
@@ -142,6 +137,9 @@ class DashboardViewController: BaseViewController {
         print("当前网络状体：\(reachability.connection.description)")
         if reachability.connection == Reachability.Connection.wifi {
             let name = ESPTools.getCurrentWiFiSsid() ?? ""
+            if name != "SmartLEDLight" {
+                DeviceManager.sharedInstance.clearDirectConnection() // 清空直连设备
+            }
             if wifiName != "" && wifiName != name {
                 TCPSocketManager.sharedInstance.connectDeivce()
             } else if wifiName == "" {
@@ -172,12 +170,13 @@ class DashboardViewController: BaseViewController {
         let dateStr = dateFormatter.string(from: Date())
         if dateStr.count > 16 {
             let start = dateStr.index(dateStr.startIndex, offsetBy: 11)
-            let end = dateStr.index(dateStr.startIndex, offsetBy: 16)
+            let end = dateStr.endIndex
             let time = String(dateStr[start..<end])
             let array = time.components(separatedBy: ":")
-            if array.count == 2 {
+            if array.count >= 2 {
                 let hour = Int(array[0]) ?? 0
                 let minute = Int(array[1]) ?? 0
+                let second = Int(array[2]) ?? 0
                 if Kit().getDeviceTimeSystemIs12() && hour > 12 {
                     let h = hour - 12 > 9 ? "\((hour - 12))" : "0\(hour - 12)"
                     let m = minute > 9 ? "\(minute)" : "0\(minute)"
@@ -188,6 +187,7 @@ class DashboardViewController: BaseViewController {
                     timeLabel.text = "\(h):\(m)"
                 }
                 currentTime = hour * 60 + minute
+                currentTimeSecond = currentTime * 60 + second
                 collectionView.reloadData()
                 NotificationCenter.default.post(name: Notification.Name("ControlViewController"), object: currentTime)
             }
@@ -195,6 +195,10 @@ class DashboardViewController: BaseViewController {
     }
     
     @objc private func pushToMenu() {
+        if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" {
+            Toast(text: "ap_mode_can_not_use".localized()).show()
+            return
+        }
         let storyboard = UIStoryboard(name: .kSBNameDevice, bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: .kSBIDDeviceList) as! DeviceListViewController
         navigationController?.pushViewController(viewController, animated: true)
@@ -349,7 +353,7 @@ extension DashboardViewController: UICollectionViewDataSource {
         let device = DeviceManager.sharedInstance.deviceListModel.groups[indexs[indexPath.row]]
         cell.initBarValueViews(deviceModel: device)
         cell.initBtnViews(deviceModel: device)
-        cell.refreshUI(deviceModel: device, currentTime: currentTime)
+        cell.refreshUI(deviceModel: device, currentTime: currentTimeSecond)
         cell.refreshButton(deviceModel: device)
         cell.tag = indexPath.row
         cell.delegate = self

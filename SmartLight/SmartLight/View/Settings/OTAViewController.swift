@@ -26,13 +26,14 @@ class OTAViewController: BaseViewController {
     private var bOTA = false
     private var bOTAing = false
     private var bCanOTA = false
+    private var newVer = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         upgradeFirmwareALabel.text = "txt_firewareupgrade".localized()
         upgradeFirmwareBLabel.text = "txt_firewareupgrade".localized()
         noteLabel.text = "ota_top_tip".localized()
-        upgradeNowButton.setTitle("txt_firmware_upgrade_now".localized(), for: .normal)
+        upgradeNowButton.setTitle("check_new_version".localized(), for: .normal)
         upgradeNowButton.backgroundColor = UIColor.hexToColor(hexString: "2A98D5")
         attentionLabel.text = "txt_firmware_attention".localized()
         
@@ -62,10 +63,16 @@ class OTAViewController: BaseViewController {
         let total = Dimension.screenWidth - 40
         if value < 0 {
             rightLConstraint.constant = 0
+            DeviceOTAManager.sharedInstance.clearOTAState()
         } else {
             let max = value / 1000
             let current = value % 1000 + 1
             rightLConstraint.constant = CGFloat(CGFloat(max - current) * total / CGFloat(max))
+            var progress = Int(100 * current / max)
+            if progress > 95 {
+                progress = 100
+            }
+            upgradeFirmwareBLabel.text = "txt_firewareupgrade".localized() + " \(progress)%"
         }
     }
     
@@ -89,7 +96,11 @@ class OTAViewController: BaseViewController {
             download()
             return
         }
-        TCPSocketManager.sharedInstance.otaUpdate()
+        if firmwareVersion.count > 0 && firmwareVersion == newVer {
+            Toast(text: "ota_no_need_tip".localized()).show()
+            return
+        }
+        TCPSocketManager.sharedInstance.otaUpdateAgain()
         bOTAing = true
     }
     
@@ -102,10 +113,11 @@ class OTAViewController: BaseViewController {
             if ver.count > 0 {
                 self?.fwLabel.text = "new_version".localized() + ver
                 self?.bCanOTA = true
+                self?.upgradeNowButton.setTitle("txt_firmware_upgrade_now".localized(), for: .normal)
             } else {
                 self?.fwLabel.text = "no_new_version".localized()
             }
-            
+            self?.newVer = ver
         }
     }
     
@@ -125,7 +137,7 @@ class OTAViewController: BaseViewController {
             print(response)
             if response.error == nil {
                 self?.bOTA = true
-                TCPSocketManager.sharedInstance.otaUpdate()
+                TCPSocketManager.sharedInstance.otaUpdateAgain()
                 self?.bOTAing = true
             } else {
                 Toast(text: "txt_firewareupgrade_fail".localized()).show()

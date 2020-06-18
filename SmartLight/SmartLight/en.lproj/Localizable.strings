@@ -201,3 +201,6 @@
 "ota_attention" = "ATTENTION!";
 "ota_attention_message" = "Please make sure the device is connected on your phone the firmware will installing automatic, please DO NOT power off of your device under upgrading, or will destroy your device.";
 "ota_device_connect_tip" = "Please connect device first!";
+"check_new_version" = "Check New Version";
+"ota_no_need_tip" = "It is the latest version without upgrading";
+"ap_mode_can_not_use" = "Unavailable at AP Mode";

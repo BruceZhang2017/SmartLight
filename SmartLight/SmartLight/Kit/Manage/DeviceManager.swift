@@ -17,6 +17,7 @@ class DeviceManager: NSObject {
     var currentIndex = 0 // 当前设备编号
     var connectStatus: [String : Int] = [:]
     var deviceListModel: DeviceListModel = DeviceListModel()
+    private var bDirectConnection = false
     
     override init() {
         super.init()
@@ -24,9 +25,55 @@ class DeviceManager: NSObject {
         for device in deviceListModel.groups {
             setDeviceDefaultValue(device: device)
         }
+        if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" && deviceListModel.groups.count == 0 {
+            let device = DeviceModel() // 先添加一个设备
+            device.name = "SmartLEDLight"
+            device.macAddress = ""
+            device.ip = "192.168.4.1"
+            device.deviceState = 0x00
+            device.deviceType = 3
+            setDeviceDefaultValue(device: device)
+            deviceListModel.groups.append(device)
+            bDirectConnection = true
+        }
+    }
+    
+    func clearDirectConnection() {
+        if !bDirectConnection {
+            return
+        }
+        if deviceListModel.groups.count > 1 {
+            return
+        }
+        if deviceListModel.groups[0].name != "SmartLEDLight" {
+            return
+        }
+        if deviceListModel.groups[0].ip != "192.168.4.1" {
+            return
+        }
+        deviceListModel.groups.removeAll()
+        bDirectConnection = false
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        guard let tab = delegate.window?.rootViewController as? UITabBarController else {
+            return
+        }
+        tab.selectedIndex = 0
+        guard let controllers = tab.viewControllers, controllers.count > 0 else {
+            return
+        }
+        for controller in controllers {
+            if let nav = controller as? UINavigationController {
+                nav.popToRootViewController(animated: false)
+            }
+        }
     }
     
     func save() {
+        if ESPTools.getCurrentWiFiSsid() == "SmartLEDLight" { // 如果是直连，不要保存
+            return
+        }
         let data = NSKeyedArchiver.archivedData(withRootObject: deviceListModel)
         UserDefaults.standard.set(data, forKey: "devices")
         UserDefaults.standard.synchronize()

@@ -186,3 +186,6 @@
 "ota_attention" = "注意！";
 "ota_attention_message" = "请确保设备已连接到手机上固件将自动安装，请不要在升级过程中关闭设备电源，否则会损坏设备。";
 "ota_device_connect_tip" = "请先连接设备";
+"check_new_version" = "检查新版本";
+"ota_no_need_tip" = "已是最新版本不需升级";
+"ap_mode_can_not_use" = "直连模式下不可用";
